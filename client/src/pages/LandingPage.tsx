@@ -9,10 +9,23 @@ const LandingPage = () => {
                     <div className="z-1 text-center absolute w-full my-70 flex flex-col justify-center items-center">
                         <h1 className="text-2xl sm:text-3xl md:text-3xl w-4/10 lg:text-4xl xl:text-5xl text-white font-bold">Unlimited movies, TV shows, and more</h1>
                         <p className="text-sm sm:text-base md:text-lg w-4/10 lg:text-xl xl:text-xl mt-5 text-white font-medium">Starts at ₪32.90. Cancel anytime.</p>
-                        <p className="text-white mt-7">Ready to watch? Enter your email to create or restart your membership.</p>
-                        <div>
-                            <input className="input validator bg-0" type="email" required placeholder="mail@site.com" />
-                            <div className="validator-hint">Enter valid email address</div>
+                        <p className="text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
+                        <div className="flex flex-row justufy-center items-start gap-2">
+                            
+                            <div className="relative">
+                                <input id="email" name="email" type="text" className="peer border-1 rounded p-4 border-gray-500 text-white placeholder-transparent focus:outline-none focus:border-rose-600 w-80" placeholder="john@doe.com" />
+                                <label htmlFor="email" className="absolute left-4 -top-0.5 text-white text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-white peer-placeholder-shown:top-3 peer-focus:-top-0.5 peer-focus:text-white peer-focus:text-sm">Email address</label>
+                            </div>
+
+                            {/* <div>
+                                <input className="input validator bg-transparent py-7 w-70" type="email" required placeholder="mail@site.com" />
+                                <div className="validator-hint">Enter valid email address</div>
+                            </div> */ }
+                            <button className="btn border-none bg-[rgb(229,9,20)] hover:bg-[rgb(200,0,10)] h-auto p-4.5 text-white shadow text-base">
+                                Get Started {` >`}
+                            </button>
+
+
                         </div>
                     </div>
                     <img
