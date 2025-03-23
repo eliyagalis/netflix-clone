@@ -1,3 +1,4 @@
+import ArchWithGradient from "../components/landing-page/ArchWithGradient"
 import Header from "../components/shared/Header"
 
 const LandingPage = () => {
@@ -77,8 +78,9 @@ const LandingPage = () => {
                         className="brightness-30 z-0 w-full h-full object-cover"
                         src="https://assets.nflxext.com/ffe/siteui/vlv3/f6e7f6df-6973-46ef-b98f-12560d2b3c69/web/IL-en-20250317-TRIFECTA-perspective_253c970d-8a6c-4257-b0b0-66a78d743927_large.jpg"
                     />
-
+                    
                 </div>
+                <ArchWithGradient />
             </div>
         </>
     )
