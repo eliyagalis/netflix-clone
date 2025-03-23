@@ -1,6 +1,6 @@
 const Footer = () => {
     return (
-        <footer className=" w-9/10 mx-auto footer sm:footer-horizontal text-neutral-content">
+        <footer className="w-7/10 mx-auto footer sm:footer-horizontal text-neutral-content">
             <nav>
                 <a className="link link-hover">Branding</a>
                 <a className="link link-hover">Design</a>
@@ -14,7 +14,7 @@ const Footer = () => {
                 <a className="link link-hover">Press kit</a>
             </nav>
             <nav>
-                \    <a className="link link-hover">Terms of use</a>
+                <a className="link link-hover">Terms of use</a>
                 <a className="link link-hover">Privacy policy</a>
                 <a className="link link-hover">Cookie policy</a>
             </nav>

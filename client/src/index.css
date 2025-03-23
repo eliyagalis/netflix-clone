@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.myStroke {
+    -webkit-text-stroke: 1px white;
+    text-stroke: 2px black;
+    text-shadow: 3px 0px 7px black;
+}
