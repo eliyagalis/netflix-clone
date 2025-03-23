@@ -3,7 +3,8 @@ import { Request, Response } from 'express';
 import {config} from 'dotenv';
 import cors from 'cors';
 import axios from 'axios';
-import { microServiceMiddleware } from '../routers/microservicesRouters';
+import { microServiceMiddleware } from '../middleware/microservicesMiddleware';
+import { errorHandler } from '../middleware/errorHandler';
 // import { createProxyMiddleware } from 'http-proxy-middleware';
 config();
 const app:Application=express();
@@ -12,8 +13,12 @@ const port=process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors({origin:true,credentials:true}));
-
 microServiceMiddleware(app);
+app.use(errorHandler);
+
+app.listen(port,()=>{
+    console.log(`API Gateway is running on port ${port}`);
+});
 
 // const API_URL="https://api.themoviedb.org/3";
 // app.get('/movies/popular',async(req:Request,res:Response):Promise<any>=>{
@@ -31,8 +36,3 @@ microServiceMiddleware(app);
 //         return res.status(500).json({message:"Internal Server Error", movies:[]});
 //     }
 // });
-
-app.listen(port,()=>{
-    console.log(`API Gateway is running on port ${port}`);
-});
-
