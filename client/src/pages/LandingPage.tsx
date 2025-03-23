@@ -6,16 +6,61 @@ const LandingPage = () => {
             <div>
                 <Header />
                 <div className="w-full h-150 overflow-hidden">
-                    <div className="z-1 text-center absolute w-full my-70 flex flex-col justify-center items-center">
-                        <h1 className="text-2xl sm:text-3xl md:text-3xl w-4/10 lg:text-4xl xl:text-5xl text-white font-bold">Unlimited movies, TV shows, and more</h1>
-                        <p className="text-sm sm:text-base md:text-lg w-4/10 lg:text-xl xl:text-xl mt-5 text-white font-medium">Starts at ₪32.90. Cancel anytime.</p>
+                    <div className="z-1 text-center absolute w-full
+                        my-50 flex flex-col items-center">
+                        <h1 className="text-3xl sm:text-3xl md:text-4xl 
+                            w-5/10 lg:text-5xl xl:text-6xl text-white font-bold">
+                            Unlimited movies, TV shows, and more
+                        </h1>
+                        <p className="text-xs sm:text-base md:text-lg w-4/10 
+                            lg:text-xl xl:text-2xl mt-5 text-white font-medium">
+                            Starts at ₪32.90. Cancel anytime.
+                        </p>
                         <p className="text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
                         <div className="flex flex-row justufy-center items-start gap-2">
-                            
+
                             <div className="relative">
-                                <input id="email" name="email" type="text" className="peer border-1 rounded p-4 border-gray-500 text-white placeholder-transparent focus:outline-none focus:border-rose-600 w-80" placeholder="john@doe.com" />
-                                <label htmlFor="email" className="absolute left-4 -top-0.5 text-white text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-white peer-placeholder-shown:top-3 peer-focus:-top-0.5 peer-focus:text-white peer-focus:text-sm">Email address</label>
+                                <input
+                                    id="email" name="email" type="email" required
+                                    className="peer border-2 rounded p-4 w-80 text-white placeholder-transparent focus:outline-none 
+                                        border-gray-500 focus:border-gray-500 peer-empty:border-gray-500 
+                                        peer-invalid:border-red-500 peer-valid:border-green-500"
+                                    placeholder="john@doe.com"
+                                />
+                                <label
+                                    htmlFor="email"
+                                    className="absolute left-4 -top-0.5 text-white text-sm transition-all 
+                                        peer-placeholder-shown:text-base peer-placeholder-shown:text-white 
+                                        peer-placeholder-shown:top-4 peer-focus:-top-0.5 peer-focus:text-white peer-focus:text-sm">
+                                    Email address
+                                </label>
+                                <p className="text-red-500 text-sm mt-1 invisible peer-empty:invisible peer-invalid:visible">
+                                    Invalid email format
+                                </p>
                             </div>
+
+                            {/*                             
+                            <div className="relative">
+                                <input id="email" name="email" type="email" required
+                                    className="peer border-2 rounded p-4 w-100 text-white 
+                                    placeholder-transparent focus:outline-none 
+                                    border-gray-500 focus:border-rose-600 
+                                    peer-empty:border-gray-500 
+                                    peer-invalid:border-red-500 peer-valid:border-green-500"
+                                    placeholder="john@doe.com"
+                                />
+                                <label
+                                    htmlFor="email"
+                                    className="absolute left-4 -top-1 text-white text-sm transition-all 
+                                    peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-300 
+                                    peer-placeholder-shown:top-4 peer-focus:-top-1 
+                                    peer-focus:text-gray-300 peer-focus:text-sm">
+                                    Email address
+                                </label>
+                                <p className="text-red-500 text-sm mt-1 peer-empty:invisible peer-invalid:visible">
+                                    Invalid email format
+                                </p>
+                            </div> */}
 
                             {/* <div>
                                 <input className="input validator bg-transparent py-7 w-70" type="email" required placeholder="mail@site.com" />
