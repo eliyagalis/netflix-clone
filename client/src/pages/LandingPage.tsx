@@ -89,12 +89,13 @@ const LandingPage = () => {
                         className={`fixed inset-0 bg-[rgba(0,0,0,0.5)] z-60 flex items-center justify-center transition-opacity duration-300 ${floatingPoster ? "opacity-100 scale-100" : "opacity-0 scale-95"
                             }`}>
                     </div>
-                    <div className="rounded-2xl z-100 fixed inset-0 bg-[rgb(24,24,24)] w-2/3 h-[80vh] m-auto my-10 overflow-y-auto transition-transform duration-300 transform scale-100">
+                    <div className="rounded-2xl z-100 fixed inset-0 bg-[rgb(24,24,24)] w-3/5 h-[80vh] m-auto my-10 overflow-y-auto transition-transform duration-300 transform scale-100">
                         <div className="relative">
                             <img className="w-full h-[70vh] object-cover" src={floatingPoster.src} />
                             <button className="btn btn-ghost btn-circle text-2xl font-thin 
                                     absolute top-1 right-1 text-white hover:bg-gray-400 border-0"
                                 onClick={()=>setFloatingPoster(null)}
+                                title="close"
                             >
                                 X</button>
                             <div className="absolute bottom-0 w-full h-30 
@@ -104,7 +105,7 @@ const LandingPage = () => {
                         </div>
                         <div className="py-4 px-8 text-white">
                             <div className="text-3xl font-medium">{floatingPoster.title}</div>
-                            <div className="text-lg">{floatingPoster.description}</div>
+                            <div className="text-lg py-2">{floatingPoster.description}</div>
                             <button className="btn border-none bg-[rgb(229,9,20)] hover:bg-[rgb(200,0,10)] 
                                     h-auto px-6 py-3 text-white shadow text-xl my-8">
                                 Get Started {` >`}
