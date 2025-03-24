@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import ArchWithGradient from "../components/landing-page/ArchWithGradient"
+import ArchWithGradient from "../components/landing-page/ArchWithGradient";
 import CollapseQuestion from "../components/landing-page/CollapseQuestion";
-import LandingForm from "../components/landing-page/LandingForm";
 import Carousel from "../components/shared/Carousel";
-import Footer from "../components/shared/Footer"
-import Header from "../components/shared/Header"
+import Footer from "../components/shared/Footer";
+import Header from "../components/shared/Header";
+import { Helmet } from 'react-helmet';
+import { Link } from "react-router-dom";
+import CustomInput from "../components/shared/CustomInput";
 
 const LandingPage = () => {
 
@@ -82,7 +84,21 @@ const LandingPage = () => {
 
     return (
         <div className="bg-black w-full min-h-screen">
-            <Header />
+            <Helmet>
+                <title>Netflix - Watch TV Shows Online, Watch Movies Online</title>
+                <meta name="keywords" content="Netflix Israel, watch movies online, stream TV shows, Netflix Originals, online streaming, best movies in Israel" />
+                <meta property="og:title" content="Netflix Israel | Watch Movies & TV Shows Online" />
+                <meta property="og:description" content="Enjoy unlimited streaming of movies and TV shows on Netflix Israel. Watch anytime, anywhere!" />
+                <meta property="og:image" content="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/227_Netflix_logo-512.png" />
+                <meta name="robots" content="index, follow" />
+            </Helmet>
+
+            <Header>
+                <Link to="/login" className="btn border-none bg-[rgb(229,9,20)] hover:bg-[rgb(200,0,10)] h-auto p-3 pt-2 pb-2 text-white shadow">
+                    Sign In
+                </Link>
+            </Header>
+
             {floatingPoster &&
                 <div>
                     <div onClick={() => setFloatingPoster(null)}
@@ -94,13 +110,13 @@ const LandingPage = () => {
                             <img className="w-full h-[70vh] object-cover" src={floatingPoster.src} />
                             <button className="btn btn-ghost btn-circle text-2xl font-thin 
                                     absolute top-1 right-1 text-white hover:bg-gray-400 border-0"
-                                onClick={()=>setFloatingPoster(null)}
+                                onClick={() => setFloatingPoster(null)}
                                 title="close"
                             >
                                 X</button>
                             <div className="absolute bottom-0 w-full h-30 
                                     bg-gradient-to-t from-[rgb(24,24,24)] to-transparent"
-                                
+
                             ></div>
                         </div>
                         <div className="py-4 px-8 text-white">
@@ -113,6 +129,7 @@ const LandingPage = () => {
                         </div>
                     </div>
                 </div>}
+
             <div className="w-full h-170 overflow-hidden">
                 <div className="z-1 text-center absolute w-full 
                         mt-45 flex flex-col items-center">
@@ -126,7 +143,17 @@ const LandingPage = () => {
                     </p>
                     <p className="text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
 
-                    <LandingForm />
+                    {/* form section */}
+                    <form className="w-full flex flex-row flex-wrap justify-center items-start gap-x-2 mt-1 mb-10">
+                        <div className="relative w-100 pb-10">
+                            <CustomInput required={true} placeholder="Email address" error="Enter valid email address" />
+                        </div>
+                        <Link to="/login" type="submit" className="btn border-none bg-[rgb(229,9,20)] xl:text-xl sm:text-2xl
+                                    hover:bg-[rgb(200,0,10)] h-auto px-6 py-3 text-white shadow">
+                            Get Started {` >`}
+                        </Link>
+                    </form>
+
                     <ArchWithGradient />
                 </div>
 
@@ -187,7 +214,17 @@ const LandingPage = () => {
                 <CollapseQuestion />
                 <br />
                 <p className="text-center text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
-                <LandingForm />
+                
+                {/* form section */}
+                <form className="w-full flex flex-row flex-wrap justify-center items-start gap-x-2 mt-1 mb-10">
+                    <div className="relative w-100 pb-10">
+                        <CustomInput required={true} placeholder="Email address" error="Enter valid email address" />
+                    </div>
+                    <Link to="/login" type="submit" className="btn border-none bg-[rgb(229,9,20)] xl:text-xl sm:text-2xl
+                                    hover:bg-[rgb(200,0,10)] h-auto px-6 py-3 text-white shadow">
+                        Get Started {` >`}
+                    </Link>
+                </form>
             </div>
             <Footer />
         </div>

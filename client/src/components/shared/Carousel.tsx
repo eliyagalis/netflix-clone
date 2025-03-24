@@ -9,7 +9,6 @@ const Carousel = ({ movies, setFloatingPoster }: { movies: Array<Movie>, setFloa
         setFloatingPoster(m);
     };
 
-
     return (
         <div className="relative flex items-center px-10">
             {/* Left Arrow */}
