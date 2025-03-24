@@ -1,4 +1,6 @@
 import ArchWithGradient from "../components/landing-page/ArchWithGradient"
+import CollapseQuestion from "../components/landing-page/CollapseQuestion";
+import LandingForm from "../components/landing-page/LandingForm";
 import Carousel from "../components/shared/Carousel";
 import Footer from "../components/shared/Footer"
 import Header from "../components/shared/Header"
@@ -38,37 +40,11 @@ const LandingPage = () => {
                     </p>
                     <p className="text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
 
-                    {/* form section */}
-                    <div className="w-full flex flex-row flex-wrap justify-center items-start gap-x-2 mt-1 mb-10">
-                        <div className="relative w-80">
-                            <input type="email" required id="floatingInput" placeholder=" "
-                                className="validator input peer pb-5.5 pt-8 text-lg w-full 
-                                                placeholder-transparent bg-[rgba(34,34,34,0.5)] text-white 
-                                                font-medium border-1 border-gray-500"
-                            />
-                            <label
-                                htmlFor="floatingInput"
-                                className="absolute font-normal left-3 top-1 text-xs text-gray-300 
-                                            transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-lg 
-                                            peer-placeholder-shown:text-gray-300 peer-focus:top-1 peer-focus:text-xs 
-                                            peer-focus:text-gray-300"
-                            >
-                                Email address
-                            </label>
-                            <div className="absolute validator-hint text-left flex items-center gap-2">
-                                <span className="whitespace-nowrap">Enter valid email address</span>
-                            </div>
-                        </div>
-
-                        <button className="btn border-none bg-[rgb(229,9,20)] hover:bg-[rgb(200,0,10)] 
-                                h-auto px-6 py-3 text-white shadow text-2xl">
-                            Get Started {` >`}
-                        </button>
-
-                    </div>
+                    <LandingForm />
                     <ArchWithGradient />
-
                 </div>
+
+                {/* Background */}
                 <div className="relative mx-auto max-w-470">
                     <img
                         className="brightness-30 z-5 w-full max-w-450 h-170 object-cover mx-auto border-l-2 border-r-2 border-[rgb(255,104,34)]"
@@ -84,19 +60,47 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            <div className="relative text-white z-50 w-8/10 max-w-350 mx-auto">
+            <div className="relative text-white z-50 w-8/10 max-w-350 mx-auto mb-12">
                 <h1 className="text-2xl font-medium">Trending Now</h1>
                 <Carousel movies={movies} />
-            </div>
-
-            <div className="relative text-white z-50 w-8/10 max-w-350 mx-auto">
+                <br />
                 {/* More Reasons to Join */}
                 <h1 className="text-2xl font-medium">More Reasons to Join</h1>
-                <div className="h-60 p-4 mb-10 w-full border-1 border-dotted border-white">
+                <div className="mb-12 py-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Enjoy on your TV</h1>
+                            <p>Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.</p>
+                        </div>
+                    </div>
 
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Download your shows to watch offline</h1>
+                            <p>Save your favorites easily and always have something to watch.</p>
+                        </div>
+                    </div>
 
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Watch everywhere</h1>
+                            <p>Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.</p>
+                        </div>
+                    </div>
+
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Create profiles for kids</h1>
+                            <p className="text-base">Send kids on adventures with their favorite characters in a space made just for them — free with your membership.</p>
+                        </div>
+                    </div>
                 </div>
-
+                <br />
+                <h1 className="text-2xl font-medium">Frequently Asked Questions</h1>
+                <CollapseQuestion />
+                <br/>
+                <p className="text-center text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
+                <LandingForm />
             </div>
             <Footer />
         </div>

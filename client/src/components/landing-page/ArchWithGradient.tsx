@@ -1,6 +1,6 @@
 const ArchWithGradientTailwind = () => {
     return (
-        <div className="w-full relative mt-20">
+        <div className="w-full relative mt-10">
             {/* Red Arch */}
             <div className="absolute rounded-[50%] z-10 w-full h-22 bg-[rgb(229,9,20)] shadow 
                 left-1/2 transform -translate-x-1/2" 
