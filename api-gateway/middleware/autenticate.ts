@@ -14,7 +14,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         return next(new Error("user unauthorized"));
     }
     else {
-        req.user={id: userId.id};
+        console.log(req);
+        // req.user={id: userId.id};
         next();
     }
 }

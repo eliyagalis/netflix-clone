@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction, ErrorRequestHandler } from 'express';
 class CustomError extends Error {
   status: number;
   constructor(message: string, status: number) {
@@ -7,10 +7,10 @@ class CustomError extends Error {
     this.message = message;
   }
 }
-export const errorHandler=(err:Error,req:Request,res:Response,next:NextFunction):Response=>{
-    if(err instanceof CustomError)
-    {
-        return res.status(err.status).json({message:err.message});
+export const errorHandler:ErrorRequestHandler = (err: Error, req: any, res: any, next: NextFunction) => {
+    if (err instanceof CustomError) {
+        return res.status(err.status).json({ message: err.message });
+    } else {
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-    return res.status(500).json({message:"Internal Server Error"});
 }
