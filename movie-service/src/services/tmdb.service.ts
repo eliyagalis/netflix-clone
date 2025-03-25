@@ -1,6 +1,9 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { injectable } from 'inversify';
+import { MovieDetails, MovieResponse } from '../interfaces/IMovieable';
+import { getOrSetCache } from '../utils/redis.cache';
+import { handleApiRequest } from '../utils/sideFunctionLogic';
 
 
 dotenv.config();
@@ -8,45 +11,14 @@ dotenv.config();
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
-export interface Movie {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  release_date: string;
-  vote_average: number;
-  vote_count: number;
-  genre_ids: number[];
-}
 
-export interface MovieDetails extends Movie {
-  genres: { id: number; name: string }[];
-  runtime: number;
-  status: string;
-  tagline: string | null;
-  budget: number;
-  revenue: number;
-  production_companies: {
-    id: number;
-    name: string;
-    logo_path: string | null;
-  }[];
-}
-
-export interface MovieResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
 @injectable()
 export class TMDBService {
-  private static instance:TMDBService|null;
+
   private apiUrl: string;
   private apiKey: string;
 
-  private constructor() {
+  constructor() {
     if (!TMDB_API_KEY) {
       throw new Error('TMDB API key is missing');
     }
@@ -54,12 +26,7 @@ export class TMDBService {
     this.apiUrl = TMDB_BASE_URL || 'https://api.themoviedb.org/3';
     this.apiKey = TMDB_API_KEY;
   }
-  public static getInstance(){
-    if(!TMDBService.instance){
-      this.instance= new TMDBService();
-    }
-    return this.instance;
-  }
+ 
 
   private async makeRequest<T>(endpoint: string, params: Record<string, any> = {}): Promise<T> {
     try {
@@ -80,12 +47,12 @@ export class TMDBService {
   }
 
   async getPopularMovies(page: number = 1): Promise<MovieResponse> {
-
-    return this.makeRequest<MovieResponse>('/movie/popular', { page });
+    return await handleApiRequest<MovieResponse>("popularMovies",()=>this.makeRequest<MovieResponse>('/movie/popular', { page }));
+    
   }
 
   async getTopRatedMovies(page: number = 1): Promise<MovieResponse> {
-    return this.makeRequest<MovieResponse>('/movie/top_rated', { page });
+    return await handleApiRequest<MovieResponse>("topRatedMovies",()=>this.makeRequest<MovieResponse>('/movie/top_rated', { page }));
   }
 
   // async getNowPlayingMovies(page: number = 1): Promise<MovieResponse> {
@@ -93,26 +60,31 @@ export class TMDBService {
   // }
 
   async getUpcomingMovies(page: number = 1): Promise<MovieResponse> {
-    return this.makeRequest<MovieResponse>('/movie/upcoming', { page });
+    return await handleApiRequest<MovieResponse>("upComingMovies",()=>this.makeRequest<MovieResponse>('/movie/upcoming', { page }));
   }
 
   async getMovieDetails(movieId: number): Promise<MovieDetails> {
-    return this.makeRequest<MovieDetails>(`/movie/${movieId}`);
+    return await handleApiRequest<MovieDetails>(`movieIdDetail:${movieId}`,()=>this.makeRequest<MovieDetails>(`/movie/${movieId}`));
   }
 
   async searchMovies(query: string, page: number = 1): Promise<MovieResponse> {
-    return this.makeRequest<MovieResponse>('/search/movie', { query, page });
+    return await handleApiRequest<MovieResponse>(`searchMovies: ${query}`,()=>this.makeRequest<MovieResponse>('/search/movie', { query, page }));
   }
 
   async getMoviesByGenre(genreId: number, page: number = 1): Promise<MovieResponse> {
-    return this.makeRequest<MovieResponse>('/discover/movie', { 
+    return await handleApiRequest<MovieResponse>(`moviesByGenre: ${genreId}`,()=>{this.makeRequest<MovieResponse>('/discover/movie', { 
       with_genres: genreId,
       page
-    });
+    })});
+
+    // return this.makeRequest<MovieResponse>('/discover/movie', { 
+    //   with_genres: genreId,
+    //   page
+    // });
   }
 
   async getSimilarMovies(movieId: number, page: number = 1): Promise<MovieResponse> {
-    return this.makeRequest<MovieResponse>(`/movie/${movieId}/similar`, { page });
+    return await handleApiRequest<MovieResponse>(`similarMoviesById: ${movieId}`,()=>this.makeRequest<MovieResponse>(`/movie/${movieId}/similar`, { page }))
   }
 
   getImageUrl(path: string | null, size: string = 'w500'): string | null {

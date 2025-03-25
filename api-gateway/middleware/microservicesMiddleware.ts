@@ -69,7 +69,7 @@ export const microServiceMiddleware=(app:Application):void=>
         pathRewrite:(path,req)=>{return `/api/v1/movies/${req.path}`}
     }))
     app.use('*',(req:Request,res:Response,next:NextFunction)=>{
-        console.log("somethimg went wrong, Moving to user service...");
+        console.log("somethimg went wrong, Moving to error handler...");
         next(errorHandler)
     })
 }

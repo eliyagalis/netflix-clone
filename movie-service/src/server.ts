@@ -17,6 +17,7 @@ app.use("/api/v1/movies/genres",genreRouter);
 app.use("*",(req,res)=>{
   console.log(req.path)
   console.log("not workingggg")
+  res.status(404).json({message:"route not found"});
 })
 app.listen(PORT, () => {
   console.log(`Movies microservice running on port ${PORT}`);

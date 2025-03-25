@@ -1,21 +1,22 @@
 import { Request, Response } from 'express';
-import tmdbService, { TMDBService } from '../services/tmdb.service';
 import { handleError } from '../utils/handle-error-request';
 import { inject, injectable } from "inversify";
+import ITmdbService from '../interfaces/ITmdbService';
+import { TOKENS } from '../tokens';
 
 @injectable()
-export class MovieController {
-  constructor(@inject(TMDBService))
+export default class MovieController {
+  constructor(@inject(TOKENS.ITmdbService) private tmdbService:ITmdbService){}
   // Get popular movies
   async getPopularMovies(req: Request, res: Response): Promise<void> {
     try {
       const page = Number(req.query.page) || 1;
-      const data = await tmdbService.getPopularMovies(page);
+      const data = await this.tmdbService.getPopularMovies(page);
       
       const movies = data.results.map(movie => ({
         ...movie,
-        poster_url: tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       }));
 
       res.json({
@@ -33,12 +34,12 @@ export class MovieController {
   async getTopRatedMovies(req: Request, res: Response): Promise<void> {
     try {
       const page = Number(req.query.page) || 1;
-      const data = await tmdbService.getTopRatedMovies(page);
+      const data = await this.tmdbService.getTopRatedMovies(page);
       
       const movies = data.results.map(movie => ({
         ...movie,
-        poster_url: tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       }));
 
       res.json({
@@ -56,12 +57,12 @@ export class MovieController {
   // async getNowPlayingMovies(req: Request, res: Response): Promise<void> {
   //   try {
   //     const page = Number(req.query.page) || 1;
-  //     const data = await tmdbService.getNowPlayingMovies(page);
+  //     const data = await this.tmdbService.getNowPlayingMovies(page);
       
   //     const movies = data.results.map(movie => ({
   //       ...movie,
-  //       poster_url: tmdbService.getImageUrl(movie.poster_path),
-  //       backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+  //       poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+  //       backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
   //     }));
 
   //     res.json({
@@ -79,12 +80,12 @@ export class MovieController {
   async getUpcomingMovies(req: Request, res: Response): Promise<void> {
     try {
       const page = Number(req.query.page) || 1;
-      const data = await tmdbService.getUpcomingMovies(page);
+      const data = await this.tmdbService.getUpcomingMovies(page);
       
       const movies = data.results.map(movie => ({
         ...movie,
-        poster_url: tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       }));
 
       res.json({
@@ -107,12 +108,12 @@ export class MovieController {
         return;
       }
 
-      const movie = await tmdbService.getMovieDetails(movieId);
+      const movie = await this.tmdbService.getMovieDetails(movieId);
       
       res.json({
         ...movie,
-        poster_url: tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       });
     } catch (error) {
       handleError(res,error);
@@ -129,12 +130,12 @@ export class MovieController {
       }
 
       const page = Number(req.query.page) || 1;
-      const data = await tmdbService.searchMovies(query, page);
+      const data = await this.tmdbService.searchMovies(query, page);
       
       const movies = data.results.map(movie => ({
         ...movie,
-        poster_url: tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       }));
 
       res.json({
@@ -158,12 +159,12 @@ export class MovieController {
       }
 
       const page = Number(req.query.page) || 1;
-      const data = await tmdbService.getMoviesByGenre(genreId, page);
+      const data = await this.tmdbService.getMoviesByGenre(genreId, page);
       
       const movies = data.results.map(movie => ({
         ...movie,
-        poster_url: tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       }));
 
       res.json({
@@ -187,12 +188,12 @@ export class MovieController {
       }
 
       const page = Number(req.query.page) || 1;
-      const data = await tmdbService.getSimilarMovies(movieId, page);
+      const data = await this.tmdbService.getSimilarMovies(movieId, page);
       
       const movies = data.results.map(movie => ({
         ...movie,
-        poster_url: tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: tmdbService.getImageUrl(movie.backdrop_path)
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       }));
 
       res.json({
@@ -207,4 +208,3 @@ export class MovieController {
   }
 }
 
-export default new MovieController();
