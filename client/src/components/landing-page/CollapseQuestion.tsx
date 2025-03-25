@@ -1,34 +1,37 @@
 
 const CollapseQuestion = () => {
+
     return (
         <div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-none my-1 border border-black collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-base border-b border-black hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
                     What is Netflix?
                 </div>
-                <div className="collapse-content text-2xl">
-                    <div className="p-4 ">
+                
+                <div className="collapse-content text-2xl rounded-t-full">
+                    <div className="p-4">
                         Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.
                         <br /><br />
                         You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price. There's always something new to discover and new TV shows and movies are added every week!
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-none my-1 border border-black collapse-plus ">
+            
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-base border-b border-black hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
                     How much does Netflix cost?
                 </div>
-                <div className="collapse-content text-2xl">
+                <div className="collapse-content text-2xl rounded-t-full">
                     <div className="p-4 ">
                         Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from ₪32.90 to ₪69.90 a month. No extra costs, no contracts.
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-none my-1 border border-black collapse-plus ">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-base border-b border-black hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
                     Where can I watch Netflix?
                 </div>
                 <div className="collapse-content text-2xl">
@@ -39,9 +42,9 @@ const CollapseQuestion = () => {
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-none my-1 border border-black collapse-plus ">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-base border-b border-black hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
                     How do I cancel?
                 </div>
                 <div className="collapse-content text-2xl">
@@ -50,9 +53,9 @@ const CollapseQuestion = () => {
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-none my-1 border border-black collapse-plus ">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-base border-b border-black hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
                     What can I watch on Netflix?
                 </div>
                 <div className="collapse-content text-2xl">
@@ -61,9 +64,9 @@ const CollapseQuestion = () => {
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-none my-1 border border-black collapse-plus ">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-base border-b border-black hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
                     Is Netflix good for kids?
                 </div>
                 <div className="collapse-content text-2xl">

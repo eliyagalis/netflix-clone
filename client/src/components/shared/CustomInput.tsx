@@ -10,7 +10,7 @@ const CustomInput:React.FC<CustomInputProps> = ({placeholder, error, required}) 
     return (
         <div>
             <input type="email" required={required} id="floatingInput" placeholder=" "
-                className="validator input peer pb-5.5 pt-8 text-lg w-full 
+                className="validator input peer pb-5.5 pt-8 text-lg w-full rounded-full
                             placeholder-transparent bg-[rgba(34,34,34,0.5)] text-white 
                             font-medium border-1 border-gray-500"
             />
@@ -24,7 +24,7 @@ const CustomInput:React.FC<CustomInputProps> = ({placeholder, error, required}) 
                 {placeholder}
             </label>
             <div className="absolute validator-hint text-left flex items-center gap-2">
-                <span className="whitespace-nowrap text-sm">{error}Enter valid email address</span>
+                <span className="whitespace-nowrap text-sm">{error}</span>
             </div>
         </div>
     )

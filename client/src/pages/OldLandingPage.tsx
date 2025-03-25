@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from "react-router-dom";
 import CustomInput from "../components/shared/CustomInput";
 
-const LandingPage = () => {
+const OldLandingPage = () => {
 
     interface Movie {
         src: string,
@@ -122,16 +122,10 @@ const LandingPage = () => {
                         <div className="py-4 px-8 text-white">
                             <div className="text-3xl font-medium">{floatingPoster.title}</div>
                             <div className="text-lg py-2">{floatingPoster.description}</div>
-
-                            <form className="w-full flex flex-row flex-wrap items-start gap-x-2 mt-1 mb-10">
-                                <div className="relative w-100 pb-10">
-                                    <CustomInput required={true} placeholder="Email address" error="Enter valid email address" />
-                                </div>
-                                <Link to="/login" type="submit" className="btn border-none rounded-full bg-[rgb(229,9,20)] xl:text-xl sm:text-2xl
-                                    hover:bg-[rgb(200,0,10)] h-auto px-6 py-3 text-white shadow">
-                                    Get Started {` >`}
-                                </Link>
-                            </form>
+                            <button className="btn border-none bg-[rgb(229,9,20)] hover:bg-[rgb(200,0,10)] 
+                                    h-auto px-6 py-3 text-white shadow text-xl my-8">
+                                Get Started {` >`}
+                            </button>
                         </div>
                     </div>
                 </div>}
@@ -154,7 +148,7 @@ const LandingPage = () => {
                         <div className="relative w-100 pb-10">
                             <CustomInput required={true} placeholder="Email address" error="Enter valid email address" />
                         </div>
-                        <Link to="/login" type="submit" className="btn border-none rounded-full bg-[rgb(229,9,20)] xl:text-xl sm:text-2xl
+                        <Link to="/login" type="submit" className="btn border-none bg-[rgb(229,9,20)] xl:text-xl sm:text-2xl
                                     hover:bg-[rgb(200,0,10)] h-auto px-6 py-3 text-white shadow">
                             Get Started {` >`}
                         </Link>
@@ -163,99 +157,78 @@ const LandingPage = () => {
                     <ArchWithGradient />
                 </div>
 
-
-                <div className="absolute inset-0 w-full backdrop-blur-2xl pointer-events-none">
-                    <div className="relative w-full h-full">
-                        <img
-                            className="brightness-70 w-full h-full object-cover"
-                            src="https://assets.nflxext.com/ffe/siteui/vlv3/f6e7f6df-6973-46ef-b98f-12560d2b3c69/web_tall_panel/IL-he-20250317-TRIFECTA-perspective_e464361a-1661-4e44-8041-b488522b0f87_large.jpg"
-                            alt="Netflix Background"
-                        />
-                        <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-[rgb(0,0,0)] to-transparent"></div>
-                    </div>
-                </div>
-
-                <div className="absolute inset-0 w-full backdrop-blur-3xl pointer-events-none">
-                    <div className="relative w-full h-full">
-                        <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-[rgb(0,0,0)] to-transparent"></div>
-                    </div>
-                </div>
-
-
-
                 {/* Background */}
-                <div className="relative mx-auto max-w-470 top-20">
+                <div className="relative mx-auto max-w-470">
                     <img
-                        className="brightness-30 z-10 w-[95%] max-w-450 h-170 object-cover rounded-t-3xl mx-auto border-l-2 border-r-2 border-[rgb(255,104,34)] "
-                        src="https://assets.nflxext.com/ffe/siteui/vlv3/f6e7f6df-6973-46ef-b98f-12560d2b3c69/web_tall_panel/IL-he-20250317-TRIFECTA-perspective_e464361a-1661-4e44-8041-b488522b0f87_large.jpg"
+                        className="brightness-30 z-5 w-full max-w-450 h-170 object-cover mx-auto border-l-2 border-r-2 border-[rgb(255,104,34)]"
+                        src="https://assets.nflxext.com/ffe/siteui/vlv3/f6e7f6df-6973-46ef-b98f-12560d2b3c69/web/IL-en-20250317-TRIFECTA-perspective_253c970d-8a6c-4257-b0b0-66a78d743927_large.jpg"
                     />
+                    <div className="absolute inset-0 w-full h-full pointer-events-none">
+                        {/* Left Shadow */}
+                        <div className="absolute z-0 top-0 left-460 w-1/8 opacity-40 h-full bg-gradient-to-l from-transparent to-[rgba(229,9,20,0.7)]"></div>
 
-
+                        {/* Right Shadow */}
+                        <div className="absolute z-0 top-0 right-460 w-1/8 opacity-40 h-full bg-gradient-to-l from-[rgba(229,9,20,0.7)] to-transparent"></div>
+                    </div>
                 </div>
             </div>
 
-                <div className="relative text-white z-50 w-8/10 max-w-350 mx-auto mb-12">
-                    <h1 className="text-2xl font-medium">Trending Now</h1>
-                    <Carousel movies={movies} setFloatingPoster={(res: Movie) => setFloatingPoster(res)} />
+            <div className="relative text-white z-50 w-8/10 max-w-350 mx-auto mb-12">
+                <h1 className="text-2xl font-medium">Trending Now</h1>
+                <Carousel movies={movies} setFloatingPoster={(res: Movie) => setFloatingPoster(res)} />
 
-                    <br />
-                    {/* More Reasons to Join */}
-                    <h1 className="text-2xl font-medium">More Reasons to Join</h1>
-                    <div className="mb-12 py-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                        <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
-                            <div className="card-body box-sizing">
-                                <h1 className="card-title text-2xl font-bold">Enjoy on your TV</h1>
-                                <p>Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.</p>
-                            </div>
-                        </div>
-
-                        <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
-                            <div className="card-body box-sizing">
-                                <h1 className="card-title text-2xl font-bold">Download your shows to watch offline</h1>
-                                <p>Save your favorites easily and always have something to watch.</p>
-                            </div>
-                        </div>
-
-                        <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
-                            <div className="card-body box-sizing">
-                                <h1 className="card-title text-2xl font-bold">Watch everywhere</h1>
-                                <p>Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.</p>
-                            </div>
-                        </div>
-
-                        <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
-                            <div className="card-body box-sizing">
-                                <h1 className="card-title text-2xl font-bold">Create profiles for kids</h1>
-                                <p className="text-base">Send kids on adventures with their favorite characters in a space made just for them — free with your membership.</p>
-                            </div>
+                <br />
+                {/* More Reasons to Join */}
+                <h1 className="text-2xl font-medium">More Reasons to Join</h1>
+                <div className="mb-12 py-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Enjoy on your TV</h1>
+                            <p>Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.</p>
                         </div>
                     </div>
-                    <br />
+
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Download your shows to watch offline</h1>
+                            <p>Save your favorites easily and always have something to watch.</p>
+                        </div>
                     </div>
 
-            <div className="relative w-full">
-                    <div className="relative text-white z-50 w-8/10 max-w-350 mx-auto mb-12">
-
-                    <h1 className="text-2xl font-medium">Frequently Asked Questions</h1>
-                    <CollapseQuestion />
-                    <br />
-                    <p className="text-center text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
-
-                    {/* form section */}
-                    <form className="w-full flex flex-row flex-wrap justify-center items-start gap-x-2 mt-1 mb-10">
-                        <div className="relative w-100 pb-10">
-                            <CustomInput required={true} placeholder="Email address" error="Enter valid email address" />
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Watch everywhere</h1>
+                            <p>Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.</p>
                         </div>
-                        <Link to="/login" type="submit" className="btn border-none bg-[rgb(229,9,20)] xl:text-xl sm:text-2xl
-                                    hover:bg-[rgb(200,0,10)] h-auto px-6 py-3 text-white shadow">
-                            Get Started {` >`}
-                        </Link>
-                    </form>
+                    </div>
+
+                    <div className="card rounded-xl shadow bg-gradient-to-br from-[rgba(9,0,90,0.5)] via-[#1d182e] to-[rgba(32,14,24,1)] p-1">
+                        <div className="card-body box-sizing">
+                            <h1 className="card-title text-2xl font-bold">Create profiles for kids</h1>
+                            <p className="text-base">Send kids on adventures with their favorite characters in a space made just for them — free with your membership.</p>
+                        </div>
+                    </div>
                 </div>
+                <br />
+                <h1 className="text-2xl font-medium">Frequently Asked Questions</h1>
+                <CollapseQuestion />
+                <br />
+                <p className="text-center text-white mt-7 mb-3">Ready to watch? Enter your email to create or restart your membership.</p>
+                
+                {/* form section */}
+                <form className="w-full flex flex-row flex-wrap justify-center items-start gap-x-2 mt-1 mb-10">
+                    <div className="relative w-100 pb-10">
+                        <CustomInput required={true} placeholder="Email address" error="Enter valid email address" />
+                    </div>
+                    <Link to="/login" type="submit" className="btn border-none bg-[rgb(229,9,20)] xl:text-xl sm:text-2xl
+                                    hover:bg-[rgb(200,0,10)] h-auto px-6 py-3 text-white shadow">
+                        Get Started {` >`}
+                    </Link>
+                </form>
             </div>
             <Footer />
         </div>
     )
 }
 
-export default LandingPage
+export default OldLandingPage
