@@ -1,9 +1,11 @@
-import React from 'react'
+import {useState} from 'react'
+import Header from '../components/shared/Header'
 
 const SignUpPage = () => {
-  return (
-<div className="relative w-80 h-40 bg-blue-500 clip-curve"></div>
-  )
+    return (
+        <div>
+            <Header border={true}>Sign In</Header>
+        </div>)
 }
 
 export default SignUpPage

@@ -3,13 +3,13 @@ const CollapseQuestion = () => {
 
     return (
         <div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white duration-300">
                     What is Netflix?
                 </div>
                 
-                <div className="collapse-content text-2xl rounded-t-full">
+                <div className="collapse-content text-xl rounded-t-full">
                     <div className="p-4">
                         Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.
                         <br /><br />
@@ -18,23 +18,23 @@ const CollapseQuestion = () => {
                 </div>
             </div>
             
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
                     How much does Netflix cost?
                 </div>
-                <div className="collapse-content text-2xl rounded-t-full">
+                <div className="collapse-content text-xl rounded-t-full">
                     <div className="p-4 ">
                         Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from ₪32.90 to ₪69.90 a month. No extra costs, no contracts.
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
                     Where can I watch Netflix?
                 </div>
-                <div className="collapse-content text-2xl">
+                <div className="collapse-content text-xl">
                     <div className="p-4 ">
                         Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles.
                         <br /><br />
@@ -42,34 +42,34 @@ const CollapseQuestion = () => {
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
                     How do I cancel?
                 </div>
-                <div className="collapse-content text-2xl">
+                <div className="collapse-content text-xl">
                     <div className="p-4 ">
                         Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime.
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
                     What can I watch on Netflix?
                 </div>
-                <div className="collapse-content text-2xl">
+                <div className="collapse-content text-xl">
                     <div className="p-4 ">
                         Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want.
                     </div>
                 </div>
             </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-7 text-2xl font-semibold border-2 rounded-2xl border-gray-700 hover:bg-[rgb(45,45,70)] transition-colors duration-300 text-white">
+                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
                     Is Netflix good for kids?
                 </div>
-                <div className="collapse-content text-2xl">
+                <div className="collapse-content text-xl">
                     <div className="p-4 ">
                         The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space.
                         <br /><br />
@@ -77,7 +77,6 @@ const CollapseQuestion = () => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }
