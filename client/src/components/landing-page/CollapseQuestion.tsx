@@ -1,79 +1,29 @@
+import React from "react";
 
-const CollapseQuestion = () => {
+type CollapseQuestionProps = {
+    title: string;
+    subtitle1: string;
+    subtitle2?: string;
+}
+
+const CollapseQuestion:React.FC<CollapseQuestionProps> = ({title, subtitle1, subtitle2}) => {
 
     return (
         <div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
+            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(60,60,60)] transition-all duration-300 collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white duration-300">
-                    What is Netflix?
+                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(70,70,70)] text-white duration-300">
+                    {title}
                 </div>
                 
                 <div className="collapse-content text-xl rounded-t-full">
                     <div className="p-4">
-                        Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.
-                        <br /><br />
-                        You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price. There's always something new to discover and new TV shows and movies are added every week!
-                    </div>
-                </div>
-            </div>
-            
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
-                <input type="checkbox" />
-                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
-                    How much does Netflix cost?
-                </div>
-                <div className="collapse-content text-xl rounded-t-full">
-                    <div className="p-4 ">
-                        Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from ₪32.90 to ₪69.90 a month. No extra costs, no contracts.
-                    </div>
-                </div>
-            </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
-                <input type="checkbox" />
-                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
-                    Where can I watch Netflix?
-                </div>
-                <div className="collapse-content text-xl">
-                    <div className="p-4 ">
-                        Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles.
-                        <br /><br />
-                        You can also download your favorite shows with the iOS or Android app. Use downloads to watch while you're on the go and without an internet connection. Take Netflix with you anywhere.
-                    </div>
-                </div>
-            </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
-                <input type="checkbox" />
-                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
-                    How do I cancel?
-                </div>
-                <div className="collapse-content text-xl">
-                    <div className="p-4 ">
-                        Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime.
-                    </div>
-                </div>
-            </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
-                <input type="checkbox" />
-                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
-                    What can I watch on Netflix?
-                </div>
-                <div className="collapse-content text-xl">
-                    <div className="p-4 ">
-                        Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want.
-                    </div>
-                </div>
-            </div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(50,50,50)] transition-all duration-300 collapse-plus">
-                <input type="checkbox" />
-                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(60,60,60)] text-white">
-                    Is Netflix good for kids?
-                </div>
-                <div className="collapse-content text-xl">
-                    <div className="p-4 ">
-                        The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space.
-                        <br /><br />
-                        Kids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don’t want kids to see.
+                        {subtitle1}
+                        {subtitle2 && 
+                            <div>
+                                <br />
+                                {subtitle2}                    
+                            </div>}
                     </div>
                 </div>
             </div>

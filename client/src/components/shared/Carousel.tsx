@@ -18,10 +18,10 @@ const Carousel = ({ movies, setFloatingPoster }: { movies: Array<Movie>, setFloa
     };
 
     return (
-        <div className="relative flex items-center px-10">
+        <div className="relative flex items-center px-0">
             {/* Left Arrow */}
             <button 
-                className="btn absolute left-0 z-10 w-2 py-15 bg-[rgba(70,70,70,0.95)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
+                className="btn absolute -left-0 z-10 w-2 py-15 bg-[rgba(145,145,145,0.5)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
                 onClick={() => scrollCarousel("left")}
             >
                 <i className="fa-solid fa-chevron-left"></i>
@@ -30,7 +30,7 @@ const Carousel = ({ movies, setFloatingPoster }: { movies: Array<Movie>, setFloa
             {/* Carousel */}
             <div 
                 ref={carouselRef} 
-                className="carousel carousel-start h-70 rounded-box overflow-x-scroll scroll-smooth p-4"
+                className="carousel carousel-start rounded-box overflow-x-scroll scroll-smooth p-4 h-50 sm:h-50 md:h-60 lg:h-70"
             >
                 {movies.map((m: Movie, index: number) => (
                     <div 
@@ -51,7 +51,7 @@ const Carousel = ({ movies, setFloatingPoster }: { movies: Array<Movie>, setFloa
 
             {/* Right Arrow */}
             <button 
-                className="btn absolute right-0 z-10 w-2 py-15 bg-[rgba(70,70,70,0.95)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
+                className="btn absolute -right-0 z-10 w-2 py-15 bg-[rgba(145,145,145,0.5)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
                 onClick={() => scrollCarousel("right")}
             >
                 <i className="fa-solid fa-chevron-right"></i>
