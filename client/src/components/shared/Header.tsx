@@ -1,17 +1,29 @@
+import React from "react";
+import { images } from "../../data/images";
 
-const Header = () => {
-    return (
-        <header className="relative bg-black z-10 flex justify-center max-w-350 mx-auto">
-            <div className="absolute w-8/10 mx-10 my-5 flex items-center justify-between">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" 
-                alt="logo" 
-                className="w-36" />
-                <button className="btn border-none bg-[rgb(229,9,20)] hover:bg-[rgb(200,0,10)] h-auto p-3 pt-2 pb-2 text-white shadow">
-                    Sign In
-                </button>
-            </div>
-        </header>
-    )
+interface HeaderProps {
+    children?: React.ReactNode;
+    border?: boolean;
 }
 
-export default Header
+const Header: React.FC<HeaderProps> = ({ children, border = false }) => {
+    return (
+        <header className={`relative z-10 flex justify-center mx-auto w-full left-0 top-0 ${border ? "border-b-[0.5px] border-[rgb(230,230,230)]" : ""} overflow-hidden`}>
+            <div className="w-full px-5 sm:px-8 md:px-10 my-5 flex items-center justify-between">
+                <div className="flex items-center">
+                    <img src={images.logo.src}
+                        alt={images.logo.alt}
+                        className="hidden lg:block w-36 max-w-full" />
+
+                    <img src={images.smallLogo.src}
+                        alt={images.smallLogo.alt}
+                        className="block lg:hidden w-7 sm:w-6 max-w-full" />
+                </div>
+
+                {children && <div>{children}</div>}
+            </div>
+        </header>
+    );
+};
+
+export default Header;
