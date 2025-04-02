@@ -4,7 +4,7 @@ type CardProps = {
     title: string;
     subtitle: string;
     plans?: boolean;
-    bulletPoints?: Array<string>;
+    bulletPoints?: Array<{ id: number; bp: string }>;
     additional?: string;
     count: number;
     price?: string;
@@ -19,23 +19,24 @@ const palette: Array<string> = [
 const Card: React.FC<CardProps> = ({ title, subtitle, plans, bulletPoints, price, count }) => {
     return (
         <div className={`card shadow border-2
-                ${plans ? `bg-gradient-to-br ${palette[count]} border-[rgba(60,60,60,0.5)] 
-                hover:scale-[1.02] transition-all duration-300 cursor-pointer rounded-2xl`
+                ${plans ? `customTransition border-[rgba(60,60,60,0.5)] 
+                hover:scale-[1.02] cursor-pointer rounded-2xl bg-gradient-to-br ${palette[count]}`
                 : "bg-[rgb(45,45,45)] border-[rgb(60,60,60)] rounded-xl"}`
         }>
-            {plans && count === 2 && <div className='absolute font-medium right-0 px-2 bg-[rgba(230,230,230,0.5)] rounded-bl-xl rounded-tr-xl'>Most Popular</div>}
+            {plans && count === 2 && <div className='absolute font-medium text-base right-0 px-2 bg-[rgba(230,230,230,0.3)] rounded-bl-xl rounded-tr-xl'>Most Popular</div>}
+            
             <div className='relative p-5 flex flex-col h-full justify-between box-sizing'>
                 <div className="">
-                    <h1 className={`card-title ${plans ? "text-2xl font-bold" : "text-xl"}`}>{title}</h1>
-                    <p className={plans ? "text-2xl font-medium text-[rgb(230,230,230)] my-2"
+                    <h1 className={`card-title ${plans ? "text-2xl" : "text-xl"}`}>{title}</h1>
+                    <p className={plans ? "text-xl font-medium text-[rgb(220,220,220)] my-2"
                         : "text-base font-medium text-[rgb(170,170,170)]"}>
                         {subtitle}
                     </p>
 
                     {bulletPoints &&
-                        bulletPoints?.map((b, index) => (
-                            <p key={index} className="text-base text-[rgb(230,230,230)]">
-                                <i className="fa-solid fa-check"></i> {b}
+                        bulletPoints.map((b) => (
+                            <p key={b.id} className="text-base text-[rgb(230,230,230)]">
+                                <i className="fa-solid fa-check"></i> {b.bp}
                             </p>
                         ))}
                 </div>

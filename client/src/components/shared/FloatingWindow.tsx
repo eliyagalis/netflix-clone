@@ -1,6 +1,6 @@
 import React from 'react'
 import { Movie } from '../../models/Movie';
-import LandingForm from './LandingForm';
+import LandingForm from '../feature/LandingForm';
 
 type FloatingWindowProprs = {
     movieDetails: Movie;

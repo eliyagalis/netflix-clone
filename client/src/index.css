@@ -6,3 +6,7 @@
     text-stroke: 3px black;
     text-shadow: 3px 0px 7px black;
 }
+
+.customTransition {
+    transition: all .3s;
+}
