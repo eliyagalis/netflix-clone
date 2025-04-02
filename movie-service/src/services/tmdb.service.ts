@@ -61,6 +61,7 @@ export class TMDBService {
 
   async getUpcomingMovies(page: number = 1): Promise<MovieResponse> {
     return await handleApiRequest<MovieResponse>("upComingMovies",()=>this.makeRequest<MovieResponse>('/movie/upcoming', { page }));
+  
   }
 
   async getMovieDetails(movieId: number): Promise<MovieDetails> {
