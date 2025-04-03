@@ -1,18 +1,25 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 type RoundedButtonProps = {
     color?: string;
     hover?: string;
     size?: string;
-    additional?: string;
+    className?: string;
     children?: React.ReactNode;
+    navLink?: string;
+    rounded?: boolean;
 }
 
-const RoundedButton:React.FC<RoundedButtonProps> = ({color = "rgb(229,9,20)", hover = "rgb(200,0,10)", children, additional}) => {
-  
+const RoundedButton:React.FC<RoundedButtonProps> = ({color = "rgb(229,9,20)", hover = "rgb(200,0,10)", children, className, navLink = "/", rounded}) => {
+    
+    const navigate = useNavigate();
+
     return (
-    <button className={`btn border-none rounded-full bg-[${color}] ${additional} shadow hover:bg-[${hover}]`}>
+    <button className={`btn border-none ${rounded && 'rounded-full'} bg-[${color}] 
+        ${className} shadow hover:bg-[${hover}] transition-all duration-300`}
+        onClick={()=> navigate(navLink)}
+        >
         {children}
     </button>
   )

@@ -10,3 +10,17 @@
 .customTransition {
     transition: all .3s;
 }
+
+input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px #00000000 inset !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+  
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover {
+  background-color: transparent !important;
+  color: white !important;
+  transition: background-color 5000s ease-in-out 0s; /* Prevents autofill color from being visible */
+}

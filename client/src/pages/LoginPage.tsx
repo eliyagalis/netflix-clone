@@ -3,8 +3,15 @@ import Header from "../components/shared/Header";
 import Footer from "../components/shared/Footer";
 import CustomInput from "../components/shared/CustomInput";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const LoginPage = () => {
+    const [loginData, setLoginData] = useState({ email: '', password: '' });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    };
+
     return (
         <div className="h-screen flex flex-col">
             <Helmet>
@@ -14,8 +21,10 @@ const LoginPage = () => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Helmet>
 
-            <div>
-                <Header />
+            <div className="absolute">
+                <Header>
+                    <Link to={"/"}></Link>
+                </Header>
             </div>
 
             <div className="relative flex-grow flex items-center justify-center">
@@ -26,15 +35,24 @@ const LoginPage = () => {
                     alt="Netflix Background"
                 />
 
-
                 {/* Login Form */}
-                <form className="form w-full max-w-md p-13 m-20 bg-[rgba(0,0,0,0.7)] z-5 rounded-lg">
+                <form className="form w-full max-w-md p-12 m-16 bg-[rgba(0,0,0,0.7)] z-5 rounded-lg">
                     <div className="text-3xl text-white font-bold mb-4">Sign In</div>
                     <div className="relative my-4">
-                        <CustomInput required={true} placeholder="Email address" error="Enter valid email address" />
+                        <CustomInput 
+                            // name="email"
+                            required 
+                            placeholder="Email address" 
+                            error="Enter valid email address"
+                        />
                     </div>
                     <div className="relative my-4">
-                        <CustomInput required={true} placeholder="Password" error="Password is required" />
+                        <CustomInput 
+                            // name="password"
+                            required 
+                            placeholder="Password" 
+                            error="Password is required" 
+                        />
                     </div>
                     <button className="btn border-none bg-[rgb(229,9,20)]
                         hover:bg-[rgb(200,0,10)] w-full text-lg

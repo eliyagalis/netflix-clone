@@ -9,11 +9,11 @@ export const images = {
     },
     home: {
         background: {
-            src: "https://assets.nflxext.com/ffe/siteui/vlv3/f6e7f6df-6973-46ef-b98f-12560d2b3c69/web_tall_panel/IL-he-20250317-TRIFECTA-perspective_e464361a-1661-4e44-8041-b488522b0f87_large.jpg",
+            src: "https://assets.nflxext.com/ffe/siteui/vlv3/98df3030-1c2b-4bd1-a2f5-13c611857edb/web_tall_panel/IL-he-20250331-TRIFECTA-perspective_3c89dadb-5b01-4874-b697-132f96da0a9d_large.jpg",
             alt: "Netflix Background"
         },
         poster: {
-            src: "https://assets.nflxext.com/ffe/siteui/vlv3/f6e7f6df-6973-46ef-b98f-12560d2b3c69/web_tall_panel/IL-he-20250317-TRIFECTA-perspective_e464361a-1661-4e44-8041-b488522b0f87_large.jpg",
+            src: "https://assets.nflxext.com/ffe/siteui/vlv3/98df3030-1c2b-4bd1-a2f5-13c611857edb/web_tall_panel/IL-he-20250331-TRIFECTA-perspective_3c89dadb-5b01-4874-b697-132f96da0a9d_large.jpg",
             alt: "Netflix Poster"
         }
     }

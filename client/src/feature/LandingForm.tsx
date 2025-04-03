@@ -1,19 +1,21 @@
 import { useState } from "react";
-import CustomInput from "../shared/CustomInput";
+import CustomInput from "../components/shared/CustomInput";
 import z from "zod";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import { useNavigate } from "react-router-dom";
 
-const emailSchema = z.string().email("Enter a valid email address");
 
 const LandingForm = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
-
     const navigate = useNavigate();
+    
+    const emailSchema = z.string().email("Enter a valid email address");
+    
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         const result = emailSchema.safeParse(email);
+
         if (!result.success) {
             setError(result.error.errors[0].message);
             return;
@@ -33,8 +35,8 @@ const LandingForm = () => {
                     placeholder="Email address"
                     error="Invalid email"
                     rounded
-                    email={email}
-                    setEmail={setEmail}
+                    data={email}
+                    setData={setEmail}
                 />
             </div>
 

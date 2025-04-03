@@ -8,8 +8,8 @@ type CarouselProps = {
 }
 
 const Carousel:React.FC<CarouselProps> = ({ movies, setFloatingPoster, isIndexed }) => {
+    
     const carouselRef = useRef<HTMLDivElement>(null);
-
     const scrollCarousel = (direction: "left" | "right") => {
         if (carouselRef.current) {
             const scrollAmount = 700;

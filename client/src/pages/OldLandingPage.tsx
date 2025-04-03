@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ArchWithGradient from "../components/landing-page/ArchWithGradient";
+import ArchWithGradient from "../components/landing-page/PosterArch";
 import CollapseQuestion from "../components/landing-page/CollapseQuestion";
 import Carousel from "../components/shared/Carousel";
 import Footer from "../components/shared/Footer";

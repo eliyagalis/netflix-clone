@@ -1,25 +1,19 @@
 import React, { useState } from 'react'
 
-type CustomInputProps = {
+interface CustomInputProps extends React.InputHTMLAttributes<HTMLElement> {
     placeholder: string;
-    error: string;
+    error?: string; 
     required?: boolean;
     rounded?: boolean;
-    setEmail: Function;
-    email: string;
 }
 
-const CustomInput:React.FC<CustomInputProps> = ({placeholder, error, required, rounded, email, setEmail}) => {
-
-
+const CustomInput: React.FC<CustomInputProps> = ({ placeholder, error, required, rounded }) => {
     return (
         <div>
             <input type="email" id="floatingInput" placeholder=" "
                 className={`validator input peer px-5 pt-10 pb-6 text-lg w-full ${rounded && `rounded-full`} placeholder-transparent bg-[rgba(34,34,34,0.5)] text-white font-medium border-1 border-gray-500`}
-                onChange={(e)=> setEmail(e.target.value)}
-                value={email}
             />
-            {}
+            { }
             <label
                 htmlFor="floatingInput"
                 className="absolute font-normal left-5 top-2 text-xs text-gray-300
@@ -29,9 +23,10 @@ const CustomInput:React.FC<CustomInputProps> = ({placeholder, error, required, r
             >
                 {placeholder}
             </label>
-            <div className="validator-hint text-left flex items-center pl-4">
-                <span className="whitespace-nowrap text-sm"><i className='fa-regular fa-circle-xmark'></i> {error}</span>
-            </div>
+            {error &&
+                <div className="validator-hint text-left flex items-center pl-4">
+                    <span className="whitespace-nowrap text-sm"><i className='fa-regular fa-circle-xmark'></i> {error}</span>
+                </div>}
         </div>
     )
 }

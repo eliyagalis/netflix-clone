@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ children, border = false }) => {
                         className="block lg:hidden w-7 sm:w-6 max-w-full" />
                 </div>
 
-                {children && <div>{children}</div>}
+                {children && <>{children}</>}
             </div>
         </header>
     );
