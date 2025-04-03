@@ -38,7 +38,7 @@ export const microServiceMiddleware=(app:Application):void=>
         changeOrigin:true,
         pathRewrite: (path,req)=>{return `/api/v1/movies/${req.path}`}        
     }))
-    app.use(`${url}/movies`, (req: Request, res: Response, next: NextFunction) => {
+    app.use(`${url}/movies`, authenticate ,(req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to movies service...", req.originalUrl);
         console.log(req.path);
         next();
@@ -68,7 +68,7 @@ export const microServiceMiddleware=(app:Application):void=>
         changeOrigin:true,
         pathRewrite:(path,req)=>{return `/api/v1/movies/${req.path}`}
     }))
-    app.use('*',(req:Request,res:Response,next:NextFunction)=>{
+    app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
         console.log("somethimg went wrong, Moving to error handler...");
         next(errorHandler)
     })
