@@ -3,14 +3,15 @@ import { Request, Response, NextFunction } from "express";
 import axios, { AxiosResponse } from "axios";
 import errorHandlerFunc from "../src/utils/errorHandlerFunc";
 
+
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const accessToken= req.cookies.accessToken||req.headers['authorization']?.split(" ")[1];
+        const accessToken= req.cookies.accessToken||req.headers['authorization']?.split(" ")[1]||req.cookies.firstStepAuth;
         if(!accessToken){
             errorHandlerFunc(Object.assign(new Error("user unauthorized,no valid access token!"),{status:404}), res);
         }
-        const userId=verifyUser(accessToken);
-        req.user=userId?.id;
+        const user=verifyUser(accessToken);
+        req.userId=user?.id;
         next();
 
     }catch(err){

@@ -1,6 +1,7 @@
 import { Column,Table,DataType,Model, BelongsTo, ForeignKey, Sequelize, HasOne } from "sequelize-typescript";
 import { User } from "./user";
 import { Transaction } from "./transaction";
+import { Subscription } from "./subscription";
 
 @Table({tableName:'payments',modelName:'Payment',timestamps:false})
 export class Payment extends Model{
@@ -8,9 +9,10 @@ export class Payment extends Model{
         type:DataType.UUIDV4,
         primaryKey:true,
         allowNull:false,
-        unique:true
+        unique:true,
+        defaultValue:DataType.UUIDV4
     })
-    id!:string;
+    payment_id!:string;
 
     @ForeignKey(()=>User)
     @Column({
@@ -59,6 +61,14 @@ export class Payment extends Model{
     @BelongsTo(()=>Transaction)
     transacion!:Transaction
 
-    @
+    @ForeignKey(() => Subscription)
+    @Column({
+        type: DataType.UUIDV4,
+        allowNull: false,
+    })
+    subscription_id!: string;
+
+    @BelongsTo(() => Subscription)
+    subscription!: Subscription;
     //בצד של העסקה לציין שיש HasOne()
 }

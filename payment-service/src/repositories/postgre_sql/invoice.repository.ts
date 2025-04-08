@@ -1,5 +1,5 @@
 import {inject, injectable} from 'inversify'
-import { Invoice } from '../models/Invoice'
+import { Invoice } from '../../models/Invoice'
 
 @injectable()
 export class InvoiceRepository{

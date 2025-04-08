@@ -1,5 +1,6 @@
 import { AllowNull, Column,DataType,HasMany,HasOne,Model,PrimaryKey,Table } from "sequelize-typescript";
 import { Invoice } from "./Invoice";
+import { Payment } from "./payment";
 
 @Table({tableName:'transactions',modelName:'Transaction',timestamps:false})
 export class Transaction extends Model{
@@ -8,8 +9,9 @@ export class Transaction extends Model{
         primaryKey:true,
         allowNull:false,
         unique:true,
+        defaultValue:DataType.UUIDV4
     })
-    id!:string;
+    transaction_id!:string;
     @Column({
         type:DataType.STRING,
         allowNull:false
@@ -36,7 +38,9 @@ export class Transaction extends Model{
     error_Message?:String|null
 
     @HasMany(()=>Invoice)
-    invoice!:Invoice
+    invoice!:Invoice[]
+    @HasOne(()=>Payment)
+    payment!:Payment
 
     //לכל עסקה יש מספר תשלומים שקורה כל חודש
     //לכל תשלום- יש עסקה אחת

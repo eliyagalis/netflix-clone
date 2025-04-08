@@ -2,6 +2,7 @@ import { Column,Table,DataType,Model, AllowNull, PrimaryKey, Validate, HasMany, 
 import { Plan } from "./plan";
 import { Invoice } from "./Invoice";
 import { Payment } from "./payment";
+import { Subscription } from "./subscription";
 
 @Table({tableName:'users',modelName:'User',timestamps:false})
 export class User extends Model{
@@ -11,7 +12,7 @@ export class User extends Model{
         allowNull:false,
         unique:true
     })
-    id!:string;
+    user_id!:string;
     @Column({
         type:DataType.STRING,
         allowNull:false,

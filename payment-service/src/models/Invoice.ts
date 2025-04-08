@@ -9,9 +9,10 @@ export class Invoice extends Model{
         type:DataType.UUIDV4,
         primaryKey:true,
         allowNull:false,
-        unique:true
+        unique:true,
+        defaultValue:DataType.UUIDV4
     })
-    id!:string;
+    invoice_id!:string;
 
      @ForeignKey(()=>User)
         @Column({
@@ -32,6 +33,7 @@ export class Invoice extends Model{
     
         @BelongsTo(()=>Payment)
         payment!:Payment;
+
     @Column({
         type:DataType.STRING,
         allowNull:false,
@@ -67,8 +69,5 @@ export class Invoice extends Model{
         type:DataType.UUID,
         allowNull:true
     })
-    transactionId!: string|null
-    @BelongsTo(()=>Transaction)
-    transaction!:Transaction;
-
+    transactionId!: string|null;
 }
