@@ -1,3 +1,3 @@
-export interface UpdateUserDTO {
+export default interface UpdateUserDTO {
     name: string;
 }

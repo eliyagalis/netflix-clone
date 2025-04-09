@@ -1,10 +1,9 @@
 import mongoose, { Schema } from "mongoose";
-import { IUser } from "../interfaces/IUser";
+import IUser from "../interfaces/IUser";
 import { profileSchema } from "./profile-mongo.model";
 
 
-const userSchema = new Schema<IUser>(
-    {
+const userSchema = new Schema<IUser>({
       email: {
         type: String,
         required: true,

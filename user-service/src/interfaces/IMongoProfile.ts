@@ -1,7 +1,8 @@
-import IMyListItem from "./IMyListItem";
+import IMongoMyListItem from "./IMongoMyListItem";
+import {Types} from 'mongoose'
 
-export default interface IProfile {
-    id?: string;
+export default interface IMongoProfile extends Types.Subdocument {
+    _id: Types.ObjectId;
     name: string;
     avatar: string;
     isKid: boolean;
@@ -9,7 +10,7 @@ export default interface IProfile {
     maturityLevel: 'kids' | 'teen' | 'adult';
     autoplayNextEpisode: boolean;
     autoplayPreviews: boolean;
-    myList: IMyListItem[];
+    myList?: Types.DocumentArray<IMongoMyListItem>;
     viewingHistory: {
       contentId: string;
       type: 'movie' | 'episode';

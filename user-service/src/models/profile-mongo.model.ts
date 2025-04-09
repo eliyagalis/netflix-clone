@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IProfile } from "../interfaces/IProfile";
+import IProfile from "../interfaces/IProfile";
 import { myListItemSchema } from "./myList-mongo.model";
 
 export const profileSchema = new Schema<IProfile>({
@@ -61,19 +61,20 @@ export const profileSchema = new Schema<IProfile>({
           default: false
         }
       }
-    ],
-    preferences: [
-      {
-        genre: {
-          type: String,
-          required: true
-        },
-        weight: {
-          type: Number,
-          default: 1,
-          min: 0,
-          max: 10
-        }
-      }
     ]
+    //,
+    // preferences: [
+    //   {
+    //     genre: {
+    //       type: String,
+    //       required: true
+    //     },
+    //     weight: {
+    //       type: Number,
+    //       default: 1,
+    //       min: 0,
+    //       max: 10
+    //     }
+    //   }
+    // ]
   });

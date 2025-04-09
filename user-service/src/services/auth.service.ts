@@ -1,0 +1,47 @@
+import { compare } from 'bcrypt';
+import ITokenService from '../interfaces/ITokenService';
+import ITokenResponse from '../interfaces/ITokenResponse';
+import { injectable } from 'inversify';
+import IAuthSrvice from '../interfaces/IAuthService';
+import IUserPayload from '../interfaces/IUserPayload';
+
+@injectable()
+export class AuthService implements IAuthSrvice {
+  private tokenService: ITokenService;
+
+  constructor(tokenService: ITokenService) {
+    this.tokenService = tokenService;
+  }
+
+  /**
+   * Login method - authenticate user and issue tokens
+   * Note: This assumes UserService has already verified credentials
+   */
+  async login(userPayload: IUserPayload, password: string, hashedPassword: string): Promise<ITokenResponse> {
+
+    const isPasswordValid = await compare(password, hashedPassword);
+
+    //#TODO add sleep for security
+
+    if (!isPasswordValid) {
+      throw new Error('Invalid Email or password'); //Error need to be identical to email error for security concerns.
+    }
+    // Generate access token and refresh tokens
+    return this.tokenService.generateTokens(userPayload)
+  }
+
+  /**
+   * Refresh access token using a refresh token
+   */
+  refreshAccessToken(refreshToken: string): string {
+
+    try {
+      const userPayload = this.tokenService.verifyRefreshToken(refreshToken);
+      //can add additional logic
+      return this.tokenService.generateAccessToken(userPayload);
+    } catch (error) {
+      throw new Error('Token refresh failed')
+    }
+  }
+
+}

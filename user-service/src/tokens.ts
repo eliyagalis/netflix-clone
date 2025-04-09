@@ -1,10 +1,23 @@
+
 export const TOKENS = {
-    mongodb: "mongodb",
-    IUserRepository: "IUserRepository",
-    IUserService: "IUserService",
-    UserController: "UserController",
-    IUserAdapter: "IUserAdapter",
-    userCreated:"userCreated",
-    token: "Token",
-  };
+  // Database
+  mongodb: "mongodb",
+
+  // Repositories
+  IUserRepository: "IUserRepository",
+
+  // Services
+  IUserService: "IUserService",
+  AuthService: "AuthService",
+
+  // Controllers
+  UserController: "UserController",
+  AuthController: "AuthController",
+
+  // Adapters & Misc
+  IUserAdapter: "IUserAdapter",
+  userCreated: "userCreated",
+  token: "Token",
+
   
+};

@@ -1,6 +1,7 @@
-import { IProfile } from "./IProfile";
+import IProfile from "./IProfile";
 
-export interface IUser extends Document {
+export default interface IUser {
+    id?: string;
     email: string;
     password: string;
     firstName: string;

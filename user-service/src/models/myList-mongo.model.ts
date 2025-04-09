@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IMyListItem } from "../interfaces/IMyListItem";
+import IMyListItem from "../interfaces/IMyListItem";
 
 export const myListItemSchema = new Schema<IMyListItem>({
     contentId: {

@@ -1,5 +1,6 @@
 // Interface for "My List" items
-export interface IMyListItem {
+export default interface IMyListItem {
+    id?: string;
     contentId: string;
     type: 'movie' | 'series';
     addedAt: Date;
