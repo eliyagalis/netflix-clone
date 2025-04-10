@@ -19,7 +19,7 @@ export class AuthService implements IAuthSrvice {
    */
   async login(userPayload: IUserPayload, password: string, hashedPassword: string): Promise<ITokenResponse> {
 
-    const isPasswordValid = await compare(password, hashedPassword);
+    const isPasswordValid = this.verifyPassword(password, hashedPassword)
 
     //#TODO add sleep for security
 
@@ -42,6 +42,10 @@ export class AuthService implements IAuthSrvice {
     } catch (error) {
       throw new Error('Token refresh failed')
     }
+  }
+
+  async verifyPassword(password: string, hashedPassword: string) : Promise<Boolean> {
+    return await compare(password, hashedPassword);
   }
 
 }

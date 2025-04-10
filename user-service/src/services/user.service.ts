@@ -59,7 +59,8 @@ export class UserService implements IUserService {
 
     // Create user payload for token
     const userPayload: IUserPayload = {
-      userId: user.id
+      userId: user.id,
+      email: user.email
     };
 
     // Call auth service to verify password and generate tokens
@@ -140,8 +141,7 @@ export class UserService implements IUserService {
     }
 
     // Hash new password
-    const saltRounds = 10;
-    const newPasswordHash = await hash(newPassword, saltRounds);
+    const newPasswordHash = await hash(newPassword);
 
     // Update password in database
     await this.userRepository.update(userId, {

@@ -1,12 +1,10 @@
 import { inject, injectable } from "inversify";
 import SignupRequestDTO from "../DTOs/signup.dto";
-import { IUser } from "../interfaces/IUser";
+import IUser from "../interfaces/IUser";
 import IUserRepository from "../interfaces/IUserRepository";
-import { UpdateUserDTO } from "../DTOs/update.dto";
+import UpdateUserDTO from "../DTOs/update.dto";
 import { TOKENS } from "../tokens";
 import IUserAdapter from "../interfaces/IUserAdapter";
-import mongoose from "mongoose";
-import ITokenResponse from "../interfaces/ITokenResponse";
 import User from "../models/user-mongo.model"
 import {hash} from "../utils/bcrypt"
 
@@ -14,16 +12,16 @@ import {hash} from "../utils/bcrypt"
 export class UserMongoRepository implements IUserRepository {
   
   async create(data: SignupRequestDTO): Promise<IUser> {
-    
+
     const passwordHash = await hash(data.password);
     
     // Create new user
     const newUser = new User({
       email: data.email,
       passwordHash,
-      name: data.name,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phoneNumber: data.phoneNumber
     });
     
     const savedUser = await newUser.save();
@@ -31,8 +29,11 @@ export class UserMongoRepository implements IUserRepository {
     return {
       id: savedUser._id.toString(),
       email: savedUser.email,
-      name: savedUser.name,
-      passwordHash: savedUser.passwordHash,
+      passwordHash: savedUser.password,
+      firstName: savedUser.firstName,
+      lastName: savedUser.lastName,
+      profiles: ,
+      phoneNUmber: savedUser.phoneNumber, //?#TODO should check if phone number exists?
       createdAt: savedUser.createdAt,
       updatedAt: savedUser.updatedAt
     };
@@ -74,7 +75,7 @@ export class UserMongoRepository implements IUserRepository {
     // If password is being updated, hash it
     if (data.password) {
       const saltRounds = 10;
-      updateData.passwordHash = await hash(data.password, saltRounds);
+      updateData.passwordHash = await hash(data.password);
       delete updateData.password;
     }
     
