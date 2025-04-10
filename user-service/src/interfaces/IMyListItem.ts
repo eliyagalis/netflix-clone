@@ -4,5 +4,5 @@ export default interface IMyListItem {
     contentId: string;
     type: 'movie' | 'series';
     addedAt: Date;
-    priority: number; // For custom sorting
+    // priority: number; // For custom sorting
   }

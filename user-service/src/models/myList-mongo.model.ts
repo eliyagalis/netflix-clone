@@ -14,9 +14,9 @@ export const myListItemSchema = new Schema<IMyListItem>({
     addedAt: {
       type: Date,
       default: Date.now
-    },
-    priority: {
-      type: Number,
-      default: 0
     }
+    // priority: {
+    //   type: Number,
+    //   default: 0
+    // }
   });

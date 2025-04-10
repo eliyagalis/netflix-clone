@@ -17,51 +17,34 @@ export const profileSchema = new Schema<IProfile>({
       type: Boolean,
       default: false
     },
-    language: {
-      type: String,
-      default: 'en'
-    },
-    maturityLevel: {
-      type: String,
-      enum: ['kids', 'teen', 'adult'],
-      default: 'adult'
-    },
-    autoplayNextEpisode: {
-      type: Boolean,
-      default: true
-    },
-    autoplayPreviews: {
-      type: Boolean,
-      default: true
-    },
-    myList: [myListItemSchema],
-    viewingHistory: [
-      {
-        contentId: {
-          type: String,
-          required: true
-        },
-        type: {
-          type: String,
-          enum: ['movie', 'episode'],
-          required: true
-        },
-        watchedAt: {
-          type: Date,
-          default: Date.now
-        },
-        progress: {
-          type: Number,
-          min: 0,
-          max: 100,
-          default: 0
-        },
-        completed: {
-          type: Boolean,
-          default: false
-        }
-      }
-    ]
+    myList: [myListItemSchema]
+    // viewingHistory: [
+    //   {
+    //     contentId: {
+    //       type: String,
+    //       required: true
+    //     },
+    //     type: {
+    //       type: String,
+    //       enum: ['movie', 'episode'],
+    //       required: true
+    //     },
+    //     watchedAt: {
+    //       type: Date,
+    //       default: Date.now
+    //     },
+    //     progress: {
+    //       type: Number,
+    //       min: 0,
+    //       max: 100,
+    //       default: 0
+    //     },
+    //     completed: {
+    //       type: Boolean,
+    //       default: false
+    //     }
+    //   }
+    // ]
     //,
     // preferences: [
     //   {

@@ -2,118 +2,139 @@ import { inject, injectable } from "inversify";
 import SignupRequestDTO from "../DTOs/signup.dto";
 import { IUser } from "../interfaces/IUser";
 import IUserRepository from "../interfaces/IUserRepository";
-import { User } from "../models/user-mongo.model";
 import { UpdateUserDTO } from "../DTOs/update.dto";
 import { TOKENS } from "../tokens";
 import IUserAdapter from "../interfaces/IUserAdapter";
 import mongoose from "mongoose";
 import ITokenResponse from "../interfaces/ITokenResponse";
+import User from "../models/user-mongo.model"
+import {hash} from "../utils/bcrypt"
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
-  constructor(@inject(TOKENS.IUserAdapter) private userAdapter: IUserAdapter) {}
-
-  /**
-   * Create a new user in the database
-   */
-  async create(data: SignupRequestDTO): Promise<ITokenResponse | null> {
-    const userData = this.userAdapter.prepareForCreation(data);
-    const newUser = new User(userData);
+  
+  async create(data: SignupRequestDTO): Promise<IUser> {
+    
+    const passwordHash = await hash(data.password);
+    
+    // Create new user
+    const newUser = new User({
+      email: data.email,
+      passwordHash,
+      name: data.name,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+    
     const savedUser = await newUser.save();
-    return savedUser ? this.userAdapter.convertToStandardUser(savedUser) : null;
+    
+    return {
+      id: savedUser._id.toString(),
+      email: savedUser.email,
+      name: savedUser.name,
+      passwordHash: savedUser.passwordHash,
+      createdAt: savedUser.createdAt,
+      updatedAt: savedUser.updatedAt
+    };
   }
-
-  /**
-   * Find a user by email address
-   */
+  
   async findByEmail(email: string): Promise<IUser | null> {
-    const user = await User.findOne({ email: email.toLowerCase() });
-    return user ? this.userAdapter.convertToStandardUser(user) : null;
-  }
-
-  /**
-   * Find a user by ID
-   */
-  async findUserById(id: string): Promise<IUser | null> {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return null;
-    }
-    const user = await User.findById(id);
-    return user ? this.userAdapter.convertToStandardUser(user) : null;
-  }
-
-  /**
-   * Update user fields
-   */
-  async updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null> {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return null;
-    }
-    const updateData = this.userAdapter.prepareForUpdate(data);
-    const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
-    return updatedUser ? this.userAdapter.convertToStandardUser(updatedUser) : null;
-  }
-
-  /**
-   * Update a specific field directly
-   */
-  async updateField(id: string, field: string, value: any): Promise<IUser | null> {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return null;
-    }
-    const update: any = {};
-    update[field] = value;
+    const user = await User.findOne({ email });
     
-    const updatedUser = await User.findByIdAndUpdate(id, { $set: update }, { new: true });
-    return updatedUser ? this.userAdapter.convertToStandardUser(updatedUser) : null;
-  }
-
-  /**
-   * Find a profile by ID within a user
-   */
-  async findProfile(userId: string, profileId: string): Promise<any | null> {
-    if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(profileId)) {
-      return null;
-    }
-    const user = await User.findById(userId);
     if (!user) return null;
-
-    const profile = user.profiles.id(profileId);
-    return profile ? this.userAdapter.convertProfile(profile) : null;
+    
+    return {
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      passwordHash: user.passwordHash,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
   }
-
-  /**
-   * Add an item to a profile's My List
-   */
-  async addToMyList(userId: string, profileId: string, item: any): Promise<boolean> {
-    const dbItem = this.userAdapter.prepareMyListItem(item);
-    const result = await User.updateOne(
-      { 
-        _id: userId,
-        "profiles._id": profileId
-      },
-      { 
-        $push: { "profiles.$.myList": dbItem } 
-      }
+  
+  async findUserById(id: string): Promise<IUser | null> {
+    const user = await User.findById(id);
+    
+    if (!user) return null;
+    
+    return {
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      passwordHash: user.passwordHash,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
+  }
+  
+  async updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null> {
+    const updateData: any = { ...data, updatedAt: new Date() };
+    
+    // If password is being updated, hash it
+    if (data.password) {
+      const saltRounds = 10;
+      updateData.passwordHash = await hash(data.password, saltRounds);
+      delete updateData.password;
+    }
+    
+    const user = await User.findByIdAndUpdate(
+      id, 
+      updateData,
+      { new: true }
     );
     
-    return result.modifiedCount > 0;
-  }
-
-  /**
-   * Remove an item from a profile's My List
-   */
-  async removeFromMyList(userId: string, profileId: string, contentId: string): Promise<boolean> {
-    const result = await User.updateOne(
-      { 
-        _id: userId,
-        "profiles._id": profileId
-      },
-      { 
-        $pull: { "profiles.$.myList": { contentId } } 
-      }
-    );
+    if (!user) return null;
     
-    return result.modifiedCount > 0;
+    return {
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      passwordHash: user.passwordHash,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
   }
+  // We can add refresh token collection to our repo if we want to support multiply refresh tokens for multi device for example 
+  // // Refresh token methods 
+  // async saveRefreshToken(userId: string, token: string, expiresAt: Date): Promise<void> {
+  //   const refreshToken = new RefreshTokenModel({
+  //     userId,
+  //     token,
+  //     expiresAt,
+  //     createdAt: new Date()
+  //   });
+    
+  //   await refreshToken.save();
+  // }
+  
+  // async findRefreshToken(token: string): Promise<any | null> {
+  //   return RefreshTokenModel.findOne({ token });
+  // }
+  
+  // async revokeRefreshToken(token: string): Promise<boolean> {
+  //   const result = await RefreshTokenModel.updateOne(
+  //     { token },
+  //     { isRevoked: true }
+  //   );
+    
+  //   return result.modifiedCount > 0;
+  // }
+  
+  // async revokeAllUserTokens(userId: string): Promise<boolean> {
+  //   const result = await RefreshTokenModel.updateMany(
+  //     { userId, isRevoked: false },
+  //     { isRevoked: true }
+  //   );
+    
+  //   return result.modifiedCount > 0;
+  // }
+  
+  // async removeExpiredTokens(): Promise<number> {
+  //   const result = await RefreshTokenModel.deleteMany({
+  //     expiresAt: { $lt: new Date() }
+  //   });
+    
+  //   return result.deletedCount;
+  // }
 }
