@@ -1,22 +1,10 @@
-import { IFullPlan, IPlan } from "../../interfaces/IPlan";
-import { IPaypalPlanRepository } from "../../interfaces/paypal_interfaces/IPaypalRepositories";
-import { IPayPalPlanResponse } from "../../interfaces/paypal_interfaces/IPaypalResponses";
+import axios from "axios";
+import { IPlan } from "../../interfaces/IPlan";
+import { IPayPalPlanResponse } from "../../interfaces/IPaypalResponses";
 import { apiPostRequest } from "../../utils/tempFunc";
 
 
-export class PlanRepositoryPayPal implements IPaypalPlanRepository{
-  private static instance: PlanRepositoryPayPal;
-
-  private constructor() {}
-
-  public static getInstance(): PlanRepositoryPayPal {
-    if (!PlanRepositoryPayPal.instance) {
-      PlanRepositoryPayPal.instance = new PlanRepositoryPayPal();
-    }
-    return PlanRepositoryPayPal.instance;
-  }
-
-  async createPlan(plan: IFullPlan,productId:string,accessToken:string): Promise<IPayPalPlanResponse | null> {
+  export const createPaypalPlan=async(plan: IPlan,productId:string,accessToken:string): Promise<IPayPalPlanResponse> =>{
     try{
         const planData={
             "product_id":productId,
@@ -37,9 +25,9 @@ export class PlanRepositoryPayPal implements IPaypalPlanRepository{
                     },
                     //קובע את משך החיוב ומחזור החיוב, כל חודש
                     "sequence":1,
-                    "total_cycles":plan.billing_interval==="monthly"? 0 //והוספת תנאי שלא ביטלו את המנוי
-                    : (plan.billing_interval==="annual") ? 12
-                    : getMonthNumber(new Date(), plan.endDate) // Ensure 'endDate' exists in the 'IFullPlan' type
+                    "total_cycles":plan.billing_interval==="monthly"&& 0 //והוספת תנאי שלא ביטלו את המנוי
+                    // : (plan.billing_interval==="annual") ? 12
+                    // : getMonthNumber(new Date(), plan.endDate) // Ensure 'endDate' exists in the 'IFullPlan' type
                     //צריכה לעשות חיבור של שתי הטבלאות פלאן וסבסקריפשין לפי ID ולעבור על הטבלה שנוצרה
                 }
             ],
@@ -69,23 +57,22 @@ export class PlanRepositoryPayPal implements IPaypalPlanRepository{
   }
 
 
-//   public async getPlan(planId: string): Promise<any> {
-//     try {
-//       const response = await fetch(`https://api-m.sandbox.paypal.com/v1/billing/plans/${planId}`, {
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${process.env.PAYPAL_ACCESS_TOKEN}`,
-//         },
-//       });
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch plan');
-//       }
-//       return await response.json();
-//     } catch (error) {
-//       console.error('Error fetching plan:', error);
-//       throw error;
-//     }
-//   }
+  export const getPlan=async(planId: string): Promise<IPayPalPlanResponse>=> {
+    try {
+      const response = await axios.get(`https://api-m.sandbox.paypal.com/v1/billing/plans/${planId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.PAYPAL_ACCESS_TOKEN}`,
+        },
+      });
+      if (!response) {
+        throw new Error(`Failed to get plan id :${planId}`);
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching plan:', error);
+      throw error;
+    }
+  }
 
-}
+//}

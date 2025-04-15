@@ -1,7 +1,6 @@
 import express, { Application } from "express";
 import cors from 'cors'
 import { paypalRouter } from "./routes/paypalRouter";
-
 const app:Application=express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

@@ -1,5 +1,4 @@
 import { createClient, RedisClientType } from 'redis'
-import { handleError } from './handle-error-request';
 const redisClient:RedisClientType= createClient();
 
 const connectRedisClient = async () => {

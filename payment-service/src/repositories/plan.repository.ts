@@ -1,50 +1,35 @@
-import { IFullPlan, IPlan } from "../../interfaces/IPlan";
-import IPlanRepository from "../../interfaces/IPlanRepository";
-import { Plan } from "../../models/plan";
+import { IFullPlan, IPlan } from "../interfaces/IPlan";
+import IPlanRepository from "../interfaces/IPlanRepository";
+import { Plan } from "../models/plan";
 import { inject,injectable } from "inversify";
-import { Tokens } from "../../utils/tokens";
-import IPlanAdapter from "../../interfaces/IPlanAdapter";
+import { Tokens } from "../utils/tokens";
+import IPlanAdapter from "../interfaces/IPlanAdapter";
 
 
 //לעשות אינטרפייסים לכל הטייפים של המודלים
 @injectable()
 export class PlanRepositoryPSql implements IPlanRepository{
     
-    private static instance:PlanRepositoryPSql;
-    private constructor(@inject(Tokens.IPlanAdapter) private planAdapter:IPlanAdapter){
-    }
-    static getInstance(planAdapter:IPlanAdapter):PlanRepositoryPSql{
-        if(!this.instance){
-            this.instance=new PlanRepositoryPSql(planAdapter);
-        }
-        return this.instance;
-    }
-    async createPlan(plan:IPlan):Promise<IFullPlan|null>{
+    constructor(@inject(Tokens.IPlanAdapter) private planAdapter:IPlanAdapter){}
+
+    async createPlan(plan:IPlan,paypalPlanId:string):Promise<IFullPlan>{
         const validPlanName=plan.plan_name!=='basic' && 
                             plan.plan_name!=='premium'&& 
                             plan.plan_name!=='standard';
         if( !plan.plan_name || validPlanName || !plan.price || !plan.description|| !plan.billing_interval){
-            console.log("Please enter all the parameters!");
-            return null;
+            throw new Error("Please enter all the parameters!");
         }
         try{
-            const existingPlan=await this.findPlanByName(plan.plan_name);
-
-            if(existingPlan){
-                console.log("Plan already exists!");
-                return null;
-            }
             const newPlan:Plan=await Plan.create({
-                name:plan.plan_name as 'basic' | 'premium' | 'standard',
+                id:paypalPlanId,
+                plan_name:plan.plan_name as 'basic' | 'premium' | 'standard',
                 price:plan.price,
                 description:plan.description,
                 billing_interval:plan.billing_interval
             });
-            
             return this.planAdapter.convertPlanToIFullPlan(newPlan);
         }catch(err){
-            console.log("Error on creating plan: ",err);
-            return null;
+            throw new Error(`Error on creating postgre plan, problem: ${(err as Error).message}`);
         }
     }
     async findPlanById(planId:string):Promise<Plan | null>{
@@ -53,15 +38,16 @@ export class PlanRepositoryPSql implements IPlanRepository{
             return null;
         }
         const plan=await Plan.findByPk(planId);
-        return plan;
-        // return plan ? this.planAdapter.convertPlanToIFullPlan(plan) : null;
+        return plan ? plan : null;
     }
     async findPlanByName(planName:string): Promise<IFullPlan | null>{
         if(!planName){
             console.log("Plan name is required!");
             return null;
         }
-        const plan=await Plan.findOne({where:{plan_name:planName}});
+        const plan=await Plan.findOne({
+            where:{plan_name:planName}
+        });
         return plan ? this.planAdapter.convertPlanToIFullPlan(plan) : null;
     }
     async getAllPlans(): Promise<IFullPlan[]|null>{
@@ -100,8 +86,26 @@ export class PlanRepositoryPSql implements IPlanRepository{
             console.log("Error on updating plan: ",err);
             return null;
         }
-        //TODO:
-        //deletePlan(id: string): Promise<string|null>,
-
     }
+    async deletePlan(planName: string): Promise<string|null>{
+        if(!planName||!['basic,standard,premium'].includes(planName)){
+            throw new Error("plan name is missed or unvalid");
+        }
+        try {
+            const plan=await this.findPlanByName(planName);
+            if(!plan){
+                throw new Error("plan is not exist");
+            }
+            await Plan.destroy({
+                where:{
+                    plan_name:planName
+                }
+            })
+            return `plan ${planName} deleted succesfully`;
+        } catch (error) {
+            console.log(`couldnt delete plan ${planName}`,error);
+            throw new Error((error as Error).message);
+        }    
+    }
+
 }

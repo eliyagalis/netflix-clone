@@ -11,9 +11,10 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             errorHandlerFunc(Object.assign(new Error("user unauthorized,no valid access token!"),{status:404}), res);
         }
         const user=verifyUser(accessToken);
-        req.userId=user?.id;
+        req.userId=user!.id;
+        req.userName=user!.name;
+        req.userEmail=user!.email;
         next();
-
     }catch(err){
 
         console.log("access token isnt valid- start checking refresh token");

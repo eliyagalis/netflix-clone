@@ -1,23 +1,16 @@
 import axios from "axios";
 
-export interface IProductRepository{
-    // getProductById(id:string):Promise<any>;
-    createProduct(productName:string,accessToken:string):Promise<string|null>;
-    // updateProduct(id:string,product:any):Promise<any>;
-    // deleteProduct(id:string):Promise<any>;
-    // getAllProducts():Promise<any[]>;
-}
-export class ProductRepository implements IProductRepository{
+// export interface IProductPaypalService{
+//     // getProductById(id:string):Promise<any>;
+//     createProduct(productName:string,accessToken:string):Promise<string|null>;
+//     // updateProduct(id:string,product:any):Promise<any>;
+//     // deleteProduct(id:string):Promise<any>;
+//     // getAllProducts():Promise<any[]>;
+// }
+// export class ProductPaypalRequest implements IProductPaypalService{
     
-    private static instance:ProductRepository;
-    private constructor(){}
-    static getInstance():ProductRepository{
-        if(!this.instance){
-            this.instance=new ProductRepository();
-        }
-        return this.instance;
-    }
-    async createProduct(productName:string,accessToken:string):Promise<string|null>{
+//     constructor(){}
+   export const createProduct=async(productName:string,accessToken:string):Promise<string|null>=>{
         try{
                 const productData={
                     "name":productName,
@@ -38,4 +31,4 @@ export class ProductRepository implements IProductRepository{
             throw new Error((error as Error).message);
         }
     }
-}
+// }

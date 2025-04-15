@@ -6,7 +6,7 @@ import { Sequelize} from 'sequelize-typescript';
 import { Tokens } from '../utils/tokens';
 import { Plan } from '../models/plan';
 import { User } from '../models/user';
-import { Payment } from '../models/payment';
+import { Subscription } from '../models/subscription';
 config()
 //תעודה דיגיטלית שמונפקת על ידי רשות מוסמכת שאחראית להנפיק תעודות הססל/טלס ולאמת את השרתים/ אתרים שאני מתחברת אליהם
 // שכאשר אני רוצה להשתמש באתר שמשתמש באבטחת TLS/SSL - 
@@ -29,7 +29,7 @@ export class PostgreSqlConnection{
                         ca:fs.readFileSync(process.env.POSTRAGE_CA!)
                     }
                 },
-                models:[Plan,User,Payment]
+                models:[Plan,User,Subscription]
             })
             try{
                 await sequelize.authenticate();

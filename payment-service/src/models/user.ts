@@ -1,7 +1,5 @@
 import { Column,Table,DataType,Model, AllowNull, PrimaryKey, Validate, HasMany, HasOne, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { Plan } from "./plan";
-import { Invoice } from "./Invoice";
-import { Payment } from "./payment";
 import { Subscription } from "./subscription";
 
 @Table({tableName:'users',modelName:'User',timestamps:false})
@@ -27,12 +25,11 @@ export class User extends Model{
     })
     email!:string;
     
-    @HasOne(()=>Subscription)
+    @HasOne(()=>Subscription,{
+        onDelete: 'CASCADE'  // למחיקת מנוי כאשר המשתמש נמחק הוספת CASCADE
+    })
     subscription!:Subscription;
 
-    @HasMany(()=>Invoice)
-    invoices!:Invoice[];
-
-    @HasMany(()=>Payment)
-    payments!:Payment[];
+    // @HasMany(()=>Invoice)
+    // invoices!:Invoice[];
 }

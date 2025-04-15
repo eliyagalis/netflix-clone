@@ -19,8 +19,6 @@ export default class PlanAdapter implements IPlanAdapter{
         }
         return plan;//
     }
-    // convertIFullPlanToPlan(plan: IFullPlan):Plan  {
-    //     return plan as Plan;
-    // }
+   
 
 }

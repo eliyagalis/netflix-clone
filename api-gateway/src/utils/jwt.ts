@@ -2,7 +2,10 @@ import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
 config();
 interface IUserPayload{
-    id:string
+    id:string,
+    name:string,
+    email:string,
+    subscriptionId:string
 }
 
 export const verifyUser=(token:string):IUserPayload |null=>{

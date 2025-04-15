@@ -43,13 +43,13 @@ export interface IPayPalPlanResponse {
       };
       email_address: string;
     };
-    links: Array<{
+    links?: Array<{
       href: string;
       rel: string;
       method: string;
     }>;
     create_time: string;
-    update_time: string;
+    update_time?: string;
   }
 
   export interface IPayPalSubscriptionCancellationResponse {
