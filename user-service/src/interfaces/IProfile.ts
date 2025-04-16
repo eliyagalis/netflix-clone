@@ -3,7 +3,7 @@ import IMyListItem from "./IMyListItem";
 export default interface IProfile {
     id?: string;
     name: string;
-    avatar?: string;
+    avatar: string;
     isKid: boolean;
     myList: IMyListItem[];
     // viewingHistory: {

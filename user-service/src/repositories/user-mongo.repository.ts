@@ -1,30 +1,33 @@
 import { inject, injectable } from "inversify";
 import SignupRequestDTO from "../DTOs/signup.dto";
-import IUser from "../interfaces/IUser";
+import IUser, { UserStatus } from "../interfaces/IUser";
 import IUserRepository from "../interfaces/IUserRepository";
 import UpdateUserDTO from "../DTOs/update.dto";
 import { TOKENS } from "../tokens";
 import IUserAdapter from "../interfaces/IUserAdapter";
 import User from "../models/user-mongo.model"
 import { hash } from "../utils/bcrypt"
+import UserBuilder from "../builders/user.builder";
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
+
+  constructor(
+    @inject(TOKENS.IUserAdapter) private userAdapter: IUserAdapter
+   )
+  {}
 
   async createInitialUser(data: SignupRequestDTO): Promise<IUser> {
 
     const passwordHash = await hash(data.password);
 
     // Create new user
-    const newUser = new User({
-      email: data.email,
-      passwordHash,
-      isActive: false,
-      phoneNumber: data.phoneNumber?.trim()
-    });
+    const user = new UserBuilder()
+      .withEmailAndPassword(data.email, passwordHash)
+      .withStatus(UserStatus.PENDING)
+      .build();
 
-    const savedUser = await newUser.save();
-
+    mongoUserData = this.userAdapter.toDomainUser()
     return {
       id: savedUser._id.toString(),
       email: savedUser.email,

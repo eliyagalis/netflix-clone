@@ -9,10 +9,8 @@ export default interface IMongoUser extends Document {
   firstName: string;
   lastName: string;
   phoneNumber?: string;
-  subscriptionPlan: {
-    planId: string;
-  };
-  profiles: Types.DocumentArray<IMongoProfile>;
+  subscriptionId: string;
+  profiles: IMongoProfile[];
   status: UserStatus;
   createdAt: Date;
   updatedAt: Date;

@@ -16,7 +16,7 @@ import { UserMongoRepository } from '../repositories/user-mongo.repository';
 
 // Adapters
 import IUserAdapter from '../interfaces/IUserAdapter';
-import { UserAdapter } from '../adapters/user.adapter';
+import { UserAdapter } from '../adapters/user-mongo.adapter';
 
 // Middlewares
 import { AuthMiddleware } from '../middlewares/auth.middleware';
