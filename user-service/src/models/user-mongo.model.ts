@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import IUser from "../interfaces/IUser";
+import IUser, { UserStatus } from "../interfaces/IUser";
 import { profileSchema } from "./profile-mongo.model";
 
 
@@ -34,9 +34,10 @@ const userSchema = new Schema<IUser>({
     type: String
   },
   profiles: [profileSchema],
-  isActive: {
-    type: Boolean,
-    default: true
+  status: {
+    type: String,
+    enum: Object.values(UserStatus),
+    default: UserStatus.PENDING
   },
   lastLogin: {
     type: Date

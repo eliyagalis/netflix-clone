@@ -1,5 +1,6 @@
 import {Types, Document } from 'mongoose';
 import IMongoProfile from './IMongoProfile';
+import { UserStatus } from './IUser';
 
 export default interface IMongoUser extends Document {
   _id: Types.ObjectId;
@@ -10,28 +11,9 @@ export default interface IMongoUser extends Document {
   phoneNumber?: string;
   subscriptionPlan: {
     planId: string;
-    name: string;
-    price: number;
-    quality: string;
-    maxProfiles: number;
-    startDate: Date;
-    nextBillingDate: Date;
-    status: string; // 'active' | 'canceled' | 'paused'
-  };
-  paymentMethod: {
-    type: string;
-    lastFour?: string;
-    expiryDate?: string;
-    billingAddress?: {
-      street: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-    };
   };
   profiles: Types.DocumentArray<IMongoProfile>;
-  isActive: boolean;
+  status: UserStatus;
   createdAt: Date;
   updatedAt: Date;
   lastLogin?: Date;

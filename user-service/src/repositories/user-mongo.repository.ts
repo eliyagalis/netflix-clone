@@ -6,44 +6,46 @@ import UpdateUserDTO from "../DTOs/update.dto";
 import { TOKENS } from "../tokens";
 import IUserAdapter from "../interfaces/IUserAdapter";
 import User from "../models/user-mongo.model"
-import {hash} from "../utils/bcrypt"
+import { hash } from "../utils/bcrypt"
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
-  
-  async create(data: SignupRequestDTO): Promise<IUser> {
+
+  async createInitialUser(data: SignupRequestDTO): Promise<IUser> {
 
     const passwordHash = await hash(data.password);
-    
+
     // Create new user
     const newUser = new User({
       email: data.email,
       passwordHash,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phoneNumber: data.phoneNumber
+      isActive: false,
+      phoneNumber: data.phoneNumber?.trim()
     });
-    
+
     const savedUser = await newUser.save();
-    
+
     return {
       id: savedUser._id.toString(),
       email: savedUser.email,
-      passwordHash: savedUser.password,
+      password: savedUser.password,
       firstName: savedUser.firstName,
       lastName: savedUser.lastName,
-      profiles: ,
-      phoneNUmber: savedUser.phoneNumber, //?#TODO should check if phone number exists?
+      phoneNumber: savedUser.phoneNumber,
+      profiles: [],
+      isActive: savedUser.isActive,
+      subscriptionId: savedUser.subscriptionId,
+      lastLogin: savedUser.lastLogin,
       createdAt: savedUser.createdAt,
       updatedAt: savedUser.updatedAt
     };
   }
-  
+
   async findByEmail(email: string): Promise<IUser | null> {
     const user = await User.findOne({ email });
-    
+
     if (!user) return null;
-    
+
     return {
       id: user._id.toString(),
       email: user.email,
@@ -53,12 +55,12 @@ export class UserMongoRepository implements IUserRepository {
       updatedAt: user.updatedAt
     };
   }
-  
+
   async findUserById(id: string): Promise<IUser | null> {
     const user = await User.findById(id);
-    
+
     if (!user) return null;
-    
+
     return {
       id: user._id.toString(),
       email: user.email,
@@ -68,25 +70,25 @@ export class UserMongoRepository implements IUserRepository {
       updatedAt: user.updatedAt
     };
   }
-  
+
   async updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null> {
     const updateData: any = { ...data, updatedAt: new Date() };
-    
+
     // If password is being updated, hash it
     if (data.password) {
       const saltRounds = 10;
       updateData.passwordHash = await hash(data.password);
       delete updateData.password;
     }
-    
+
     const user = await User.findByIdAndUpdate(
-      id, 
+      id,
       updateData,
       { new: true }
     );
-    
+
     if (!user) return null;
-    
+
     return {
       id: user._id.toString(),
       email: user.email,
@@ -105,37 +107,37 @@ export class UserMongoRepository implements IUserRepository {
   //     expiresAt,
   //     createdAt: new Date()
   //   });
-    
+
   //   await refreshToken.save();
   // }
-  
+
   // async findRefreshToken(token: string): Promise<any | null> {
   //   return RefreshTokenModel.findOne({ token });
   // }
-  
+
   // async revokeRefreshToken(token: string): Promise<boolean> {
   //   const result = await RefreshTokenModel.updateOne(
   //     { token },
   //     { isRevoked: true }
   //   );
-    
+
   //   return result.modifiedCount > 0;
   // }
-  
+
   // async revokeAllUserTokens(userId: string): Promise<boolean> {
   //   const result = await RefreshTokenModel.updateMany(
   //     { userId, isRevoked: false },
   //     { isRevoked: true }
   //   );
-    
+
   //   return result.modifiedCount > 0;
   // }
-  
+
   // async removeExpiredTokens(): Promise<number> {
   //   const result = await RefreshTokenModel.deleteMany({
   //     expiresAt: { $lt: new Date() }
   //   });
-    
+
   //   return result.deletedCount;
   // }
 }

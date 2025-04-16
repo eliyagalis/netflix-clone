@@ -9,8 +9,18 @@ export default interface IUser {
   phoneNumber?: string;
   subscriptionId?: string;
   profiles: IProfile[];
-  isActive: boolean;
+  status: UserStatus;
   lastLogin?: Date;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export enum UserStatus {
+  PENDING = 'pending',
+  INCOMPLETE = 'incomplete',
+  AWAITING_PAYMENT = 'awaiting_payment',
+  ACTIVE = 'active',
+  SUSPENDED = 'suspended',
+  CANCELLED = 'cancelled',
+  LOCKED = 'locked'
 }
