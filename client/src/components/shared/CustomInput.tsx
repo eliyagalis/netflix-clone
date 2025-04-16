@@ -1,19 +1,27 @@
 import React, { useState } from 'react'
 
-interface CustomInputProps extends React.InputHTMLAttributes<HTMLElement> {
+interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     placeholder: string;
     error?: string; 
-    required?: boolean;
     rounded?: boolean;
+    data?: string;
+    onBlur?: () => void;
+    success?: string;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({ placeholder, error, required, rounded }) => {
+const CustomInput: React.FC<CustomInputProps> = ({ placeholder, error, rounded, data, onBlur, onChange, success, ...props }) => {
     return (
         <div>
-            <input type="email" id="floatingInput" placeholder=" "
-                className={`validator input peer px-5 pt-10 pb-6 text-lg w-full ${rounded && `rounded-full`} placeholder-transparent bg-[rgba(34,34,34,0.5)] text-white font-medium border-1 border-gray-500`}
+            <input id="floatingInput" placeholder=" "
+                className={`input peer px-5 pt-10 pb-6 text-lg w-full ${rounded && `rounded-full`} placeholder-transparent bg-[rgba(80,80,80,0.7)] text-white font-medium border-1 
+                ${error? "border-red-500": "border-gray-500"} ${success}`}
+                onChange={onChange}
+                value={data}
+                onBlur={onBlur}
+
+                {...props}
             />
-            { }
+            
             <label
                 htmlFor="floatingInput"
                 className="absolute font-normal left-5 top-2 text-xs text-gray-300
@@ -23,10 +31,10 @@ const CustomInput: React.FC<CustomInputProps> = ({ placeholder, error, required,
             >
                 {placeholder}
             </label>
-            {error &&
-                <div className="validator-hint text-left flex items-center pl-4">
-                    <span className="whitespace-nowrap text-sm"><i className='fa-regular fa-circle-xmark'></i> {error}</span>
-                </div>}
+            
+                <div className="text-left flex items-center pl-4 h-10">
+                {error &&<span className="whitespace-nowrap text-sm text-red-500"><i className='fa-regular fa-circle-xmark'></i> {error}</span>
+}</div>
         </div>
     )
 }

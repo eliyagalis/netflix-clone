@@ -1,5 +1,5 @@
 import { images } from "../../data/images"
-import { sizes } from "../../data/sizes"
+import { typography } from "../../data/typography"
 import { strings } from "../../data/strings"
 import LandingForm from "../../feature/LandingForm"
 import Typography from "../shared/Typography"
@@ -18,13 +18,13 @@ const LandingPoster = () => {
 
                 <div className="absolute w-full h-full z-50 flex flex-col items-center text-center justify-end">
                     <div className="w-9/10 flex flex-col items-center">
-                        <Typography className="max-w-150 font-bold md:font-black w-[90%]" size={sizes.xlarge}>
+                        <Typography className="max-w-150 font-bold md:font-black w-[90%]" size={typography.xlarge}>
                             {strings.landing.poster.headline1}
                         </Typography>
-                        <Typography className="font-base my-2" size={sizes.medium}>
+                        <Typography className="font-base my-2" size={typography.medium}>
                             {strings.landing.poster.headline2}
                         </Typography>
-                        <Typography className=" my-3" size={sizes.small}>
+                        <Typography className=" my-3" size={typography.small}>
                             {strings.landing.poster.inputText}
                         </Typography>
                         <LandingForm />

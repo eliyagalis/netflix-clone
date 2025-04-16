@@ -11,10 +11,13 @@ export const loginSchema = z.object({
   password: z.string().min(6, "Password must be a least 6 characters"),
 });
 
-export const emailValidationSchema = z.object({
-    email: z.string().email("Please enter a valid email address.").min(5, "Email is required"),
-});
+export const emailValidationSchema = z.string().email("Please enter a valid email address.").min(5, "Email is required");
+
+export const emailValidationSchema2 = z.object({ email: z.string().email("Please enter a valid email address.").min(5, "Email is required") });
+
+// });
 
 export type SignupFormData = z.infer<typeof signupSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type EmailFormData = z.infer<typeof emailValidationSchema>;
+export type EmailFormData2 = z.infer<typeof emailValidationSchema2>;
