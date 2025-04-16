@@ -1,4 +1,9 @@
 
+import IMongoMyListItem from "./IMongoMyListItem";
+import IMongoProfile from "./IMongoProfile";
+import IMongoUser from "./IMongoUser";
+import IMyListItem from "./IMyListItem";
+import IProfile from "./IProfile";
 import IUser from "./IUser";
 
 
@@ -9,5 +14,15 @@ export default interface IUserAdapter {
   /**
    * Convert database user to domain user model
    */
-  toDomainUser(dbUser: any): IUser;
+  toDomainUser(dbUser: IMongoUser): IUser;
+
+  toDbUser(userData: Partial<IUser>) : Partial<IMongoUser>;
+
+  toDomainProfile(dbProfile: IMongoProfile): IProfile;
+
+  toDbProfile(profile: Partial<IProfile>): IMongoProfile;
+
+  toDomainMyListItem(mongoListItem: IMongoMyListItem): IMyListItem;
+
+  toDbMyListItem(myListItem: Partial<IMyListItem>): IMongoMyListItem;
 }

@@ -8,7 +8,7 @@ export const TOKENS = {
 
   // Services
   IUserService: "IUserService",
-  AuthService: "AuthService",
+  IAuthService: "IAuthService",
 
   // Controllers
   UserController: "UserController",
@@ -18,6 +18,9 @@ export const TOKENS = {
   IUserAdapter: "IUserAdapter",
   userCreated: "userCreated",
   token: "Token",
+
+  //Builders
+  IUserBuilder: "IUserBuilder"
 
   
 };

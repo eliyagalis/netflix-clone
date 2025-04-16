@@ -2,7 +2,7 @@ import IMongoMyListItem from "./IMongoMyListItem";
 import {Types} from 'mongoose'
 
 export default interface IMongoProfile {
-    _id: Types.ObjectId;
+    _id?: Types.ObjectId;
     name: string;
     avatar: string;
     isKid: boolean;

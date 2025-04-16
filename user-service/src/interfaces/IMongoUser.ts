@@ -6,11 +6,11 @@ export default interface IMongoUser extends Document {
   _id: Types.ObjectId;
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   phoneNumber?: string;
-  subscriptionId: string;
-  profiles: IMongoProfile[];
+  subscriptionId?: string;
+  profiles?: IMongoProfile[];
   status: UserStatus;
   createdAt: Date;
   updatedAt: Date;

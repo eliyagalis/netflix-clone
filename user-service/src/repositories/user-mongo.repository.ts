@@ -7,41 +7,21 @@ import { TOKENS } from "../tokens";
 import IUserAdapter from "../interfaces/IUserAdapter";
 import User from "../models/user-mongo.model"
 import { hash } from "../utils/bcrypt"
-import UserBuilder from "../builders/user.builder";
+import IUserBuilder from "../interfaces/IUserBuilder";
+import IMongoUser from "../interfaces/IMongoUser";
+import CreateUserDTO from "../DTOs/create.dto";
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
 
   constructor(
-    @inject(TOKENS.IUserAdapter) private userAdapter: IUserAdapter
+    @inject(TOKENS.IUserAdapter) private userAdapter: IUserAdapter,
    )
   {}
 
-  async createInitialUser(data: SignupRequestDTO): Promise<IUser> {
-
-    const passwordHash = await hash(data.password);
-
-    // Create new user
-    const user = new UserBuilder()
-      .withEmailAndPassword(data.email, passwordHash)
-      .withStatus(UserStatus.PENDING)
-      .build();
-
-    mongoUserData = this.userAdapter.toDomainUser()
-    return {
-      id: savedUser._id.toString(),
-      email: savedUser.email,
-      password: savedUser.password,
-      firstName: savedUser.firstName,
-      lastName: savedUser.lastName,
-      phoneNumber: savedUser.phoneNumber,
-      profiles: [],
-      isActive: savedUser.isActive,
-      subscriptionId: savedUser.subscriptionId,
-      lastLogin: savedUser.lastLogin,
-      createdAt: savedUser.createdAt,
-      updatedAt: savedUser.updatedAt
-    };
+  async createInitialUser(userData: CreateUserDTO): Promise<IUser> {
+    const newInitialUser = new User(userData)
+    return this.userAdapter.toDomainUser(await newInitialUser.save());
   }
 
   async findByEmail(email: string): Promise<IUser | null> {
@@ -49,14 +29,7 @@ export class UserMongoRepository implements IUserRepository {
 
     if (!user) return null;
 
-    return {
-      id: user._id.toString(),
-      email: user.email,
-      name: user.name,
-      passwordHash: user.passwordHash,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
+    return this.userAdapter.toDomainUser(user);
   }
 
   async findUserById(id: string): Promise<IUser | null> {
@@ -64,24 +37,15 @@ export class UserMongoRepository implements IUserRepository {
 
     if (!user) return null;
 
-    return {
-      id: user._id.toString(),
-      email: user.email,
-      name: user.name,
-      passwordHash: user.passwordHash,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
+    return this.userAdapter.toDomainUser(user)
   }
 
   async updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null> {
-    const updateData: any = { ...data, updatedAt: new Date() };
+    const updateData = { ...data, updatedAt: new Date() };
 
     // If password is being updated, hash it
     if (data.password) {
-      const saltRounds = 10;
-      updateData.passwordHash = await hash(data.password);
-      delete updateData.password;
+      updateData.password = await hash(data.password);
     }
 
     const user = await User.findByIdAndUpdate(
@@ -92,14 +56,7 @@ export class UserMongoRepository implements IUserRepository {
 
     if (!user) return null;
 
-    return {
-      id: user._id.toString(),
-      email: user.email,
-      name: user.name,
-      passwordHash: user.passwordHash,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
+    return this.userAdapter.toDomainUser(user);
   }
   // We can add refresh token collection to our repo if we want to support multiply refresh tokens for multi device for example 
   // // Refresh token methods 

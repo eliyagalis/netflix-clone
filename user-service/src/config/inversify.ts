@@ -4,45 +4,49 @@ import { TOKENS } from '../tokens';
 // Services
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
-import { JwtService } from '../services/jwt.service';
+import { TokenService } from '../services/token.service';
 
 // Controllers
-import { AuthController } from '../controllers/auth.controller';
 import { UserController } from '../controllers/user.controller';
 
 // Repositories
 import IUserRepository from '../interfaces/IUserRepository';
-import { UserMongoRepository } from '../repositories/user-mongo.repository';
 
 // Adapters
 import IUserAdapter from '../interfaces/IUserAdapter';
-import { UserAdapter } from '../adapters/user-mongo.adapter';
+import UserAdapter from '../adapters/user-mongo.adapter';
 
 // Middlewares
-import { AuthMiddleware } from '../middlewares/auth.middleware';
+import UserBuilder from '../builders/user.builder';
+import { UserRepositoryFactory } from '../factories/repostory-factory';
+import IAuthService from '../interfaces/IAuthService';
+import ITokenService from '../interfaces/ITokenService';
 
 // Initialize container
-export const container = new Container();
+const container = new Container();
 
 // Register dependencies
-export const registerDependencies = () => {
-  // Adapters
-  container.bind<IUserAdapter>(TOKENS.IUserAdapter).to(UserAdapter);
-  
-  // Repositories
-  container.bind<IUserRepository>(TOKENS.IUserRepository).to(UserMongoRepository);
 
-  // Services
-  container.bind<AuthService>(TOKENS.AuthService).to(AuthService);
-  container.bind<UserService>(TOKENS.IUserService).to(UserService);
-  container.bind<JwtService>(TOKENS.token).to(JwtService);
+// Adapters
+const userRepository: IUserRepository = 
+    UserRepositoryFactory.createRepository(
+        process.env.DB_TYPE!, 
+        container.get<IUserAdapter>(TOKENS.IUserAdapter)
+    );
+// Repositories
+container.bind<IUserRepository>(TOKENS.IUserRepository).toConstantValue(userRepository);
 
-  // Controllers
-  container.bind<AuthController>(TOKENS.AuthController).to(AuthController);
-  container.bind<UserController>(TOKENS.UserController).to(UserController);
+// Services
+container.bind<IAuthService>(TOKENS.IAuthService).to(AuthService);
+// container.bind<IUserService>(TOKENS.IUserService).to(UserService);
+container.bind<ITokenService>(TOKENS.IUserService).to(TokenService);
 
-  // Middlewares
-  container.bind<AuthMiddleware>(AuthMiddleware).to(AuthMiddleware);
+// Controllers
+container.bind<UserController>(TOKENS.UserController).to(UserController);
 
-  return container;
-};
+// Middlewares
+
+//Builders
+container.bind<UserBuilder>(TOKENS.IUserBuilder).to(UserBuilder);
+
+export { container };

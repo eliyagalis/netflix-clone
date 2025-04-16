@@ -1,3 +1,6 @@
 export default interface UpdateUserDTO {
-    name: string;
+    name?: string;
+    password?: string;
+    email?: string;
+     
 }
