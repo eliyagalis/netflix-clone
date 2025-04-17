@@ -4,11 +4,19 @@ import container from "../config/inversify";
 import { Tokens } from "../utils/tokens";
 import { IPaymentController } from "../interfaces/IPaymentController";
 import { autenticateRule } from "../middleWares/authenticateRule";
-import { errorValidator, validatePaymentMethodFieldReq, validatePlanNameFieldReq, validateUserIdField, validateUserReqFields} from "src/middleWares/validatePaymentsReq";
+import { errorValidator, validatePaymentMethodFieldReq, validatePlanNameFieldReq, validateUserIdField, validateUserReqFields} from "../middleWares/validatePaymentsReq";
 import { body } from "express-validator";
 config()
 export const paypalRouter:Router=Router();
 const paymentController=container.get<IPaymentController>(Tokens.IPaymentController);
+
+paypalRouter.post('/initP',[
+    validatePaymentMethodFieldReq,
+    // autenticateRule,
+    errorValidator
+],(req:Request,res:Response,next:NextFunction)=>{
+    paymentController.createPlans(req,res,next)
+});
 
 paypalRouter.post('/pay',
     [
@@ -16,13 +24,13 @@ paypalRouter.post('/pay',
         validatePlanNameFieldReq,
         validateUserIdField,
         errorValidator
-    ],(req:Request,res:Response)=>{
-    paymentController.startPaymentProcess(req,res)
+    ],(req:Request,res:Response,next:NextFunction)=>{
+    paymentController.startPaymentProcess(req,res,next)
 });
 paypalRouter.post('/cancel',
     [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
-    ,(req:Request,res:Response)=>{
-    paymentController.cancelSubscription(req,res)
+    ,(req:Request,res:Response,next:NextFunction)=>{
+    paymentController.cancelSubscription(req,res,next)
 });
 paypalRouter.post('/approve', 
     [
@@ -32,13 +40,13 @@ paypalRouter.post('/approve',
         validatePlanNameFieldReq,//planName
         errorValidator
     ],
-    (req:Request,res:Response)=>{ paymentController.approvePaymentProcess(req,res)}
+    (req:Request,res:Response,next:NextFunction)=>{ paymentController.approvePaymentProcess(req,res,next) }
 );
 paypalRouter.get('/subscription',
      //אולי למחוק ולהשאיר רק בפונקציה
     [ validateUserIdField,validatePaymentMethodFieldReq,errorValidator ],
-    (req:Request,res:Response)=>{
-        paymentController.getSubscription(req,res)
+    (req:Request,res:Response,next:NextFunction)=>{
+        paymentController.getSubscription(req,res,next)
     }
 );
 paypalRouter.patch('/update',
@@ -49,12 +57,12 @@ paypalRouter.patch('/update',
         body("updateValue").notEmpty().isString().matches(/^[^<>]+$/).withMessage("updateValue is required"),
         errorValidator
     ],
-    (req:Request,res:Response)=>{ paymentController.updateSubscription(req,res)
-});
+    (req:Request,res:Response,next:NextFunction)=>{ paymentController.updateSubscription(req,res,next) }
+);
 paypalRouter.get('/getAll',
     autenticateRule,
     [validatePaymentMethodFieldReq,errorValidator],
-    (req:Request,res:Response)=>{ paymentController.getAllSubscriptions(req,res)}
+    (req:Request,res:Response,next:NextFunction)=>{ paymentController.getAllSubscriptions(req,res,next) }
 );
 
 

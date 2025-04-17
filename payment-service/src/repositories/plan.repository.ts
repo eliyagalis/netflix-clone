@@ -4,6 +4,7 @@ import { Plan } from "../models/plan";
 import { inject,injectable } from "inversify";
 import { Tokens } from "../utils/tokens";
 import IPlanAdapter from "../interfaces/IPlanAdapter";
+import { UpdatePlanDTO } from "src/DTO'S/plan.repo.dto";
 
 
 //לעשות אינטרפייסים לכל הטייפים של המודלים
@@ -59,27 +60,32 @@ export class PlanRepositoryPSql implements IPlanRepository{
             return null;
         }
     }
-    async updatePlan(id: string, data: IPlan): Promise<IFullPlan|null>{
-        if(!id || !data){
-            console.log("one or all the parameters are missing in updatePlan!");
+    async updatePlan<K  extends keyof IPlan>(data:UpdatePlanDTO<K>): Promise<IFullPlan|null>{
+        const {planId,property,valueToChange}=data;
+        if(!planId || !property || !valueToChange){
+            console.log("plan Id, property or value to change is required!");
+            return null;
+        }
+        if(property==="description"){
+            console.log("description is not allowed to be changed!");
             return null;
         }
         try{
-            const plan=await this.findPlanById(id);
+            const plan=await this.findPlanById(planId);
             if(!plan){
                 console.log("Plan not found!");
                 return null;
             }
-            if(data.plan_name&& ['basic','premium','standard'].includes(data.plan_name)){
-                if (data.plan_name && ['basic', 'premium', 'standard'].includes(data.plan_name)) {
-                    plan.name = data.plan_name as 'basic' | 'premium' | 'standard';
-                }
-                else plan.name=plan.name;
+            if (property==="plan_name" && ['basic', 'premium', 'standard'].includes(valueToChange as string)) {
+                plan.name = property as 'basic' | 'premium' | 'standard';
+                plan.description=`{plan.name} plan`;
             }
-            plan.price=data.price || plan.price;
-            plan.description=data.description || plan.description;
-            plan.billing_interval=data.billing_interval || plan.billing_interval;;
-            
+            else if(property==="billing_interval" && ['monthly', 'annual'].includes(valueToChange as string)){
+                plan.billing_interval = valueToChange as 'monthly' | 'annual';
+            }
+            else if(property==="price" && typeof valueToChange==="number"){
+                plan.price = valueToChange;
+            }
             await plan.save();
             return this.planAdapter.convertPlanToIFullPlan(plan);
         }catch(err){

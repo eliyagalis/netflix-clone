@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { Tokens } from "../utils/tokens";
 import { IPaymentService } from "../interfaces/IPaymentService";
@@ -6,13 +6,41 @@ import { IPaymentFacade } from "../interfaces/IPaymentFacade";
 import { handleError } from "../utils/handle-error-request";
 import { IPaymentController } from "../interfaces/IPaymentController";
 import { IUser } from "src/interfaces/IUser";
-
+import { body } from "express-validator";
 
 @injectable()
 export default class PaymentController implements IPaymentController{
     private paymentService!:IPaymentService;
     constructor(@inject(Tokens.IPaymentFacade) private paymentFacade:IPaymentFacade){}
 
+    async createPlans(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
+        const {paymentMethod}=req.body;
+        try {
+            this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
+            await this.paymentService.createPlan({
+                plan_name:"basic",
+                price:32.90,
+                billing_interval:'monthly',
+                description:'basic plan'
+            });
+            await this.paymentService.createPlan({
+                plan_name:"standard",
+                price:54.90,
+                billing_interval:'monthly',
+                description:'standard plan'
+            });
+            await this.paymentService.createPlan({
+                plan_name:"premium",
+                price:69.90,
+                billing_interval:'monthly',
+                description:'premium plan'
+            });
+            return res.status(200).json({message:"plans created successfully"});
+        } catch (error) {
+            console.log("Error creating plans:",error);
+            return next(error);
+        }
+    }
     private paymentReqValidations(userId:string,userName:string,userEmail:string,planName:string|null,paymentMethod:string,res:Response,nameOfFunc:string):Response|boolean{
         
         // const {getSub,createSub,cancelSub,updateSub,getAllSub}=Tokens.controllerMethod;
@@ -39,7 +67,7 @@ export default class PaymentController implements IPaymentController{
 
         return false; //No validation error
     }
-    async startPaymentProcess(req:Request,res:Response):Promise<Response>{
+    async startPaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {planName,paymentMethod}=req.body;
         const {userId}=req;
         if(!paymentMethod || ! ['paypal','stripe'].includes(paymentMethod) ){
@@ -62,10 +90,10 @@ export default class PaymentController implements IPaymentController{
             return res.status(200).json({message:"payment process started successfully",planId:planId});
         } catch (error) {
             console.log("Error starting payment process:",error);
-            return handleError(res,error);
+            return next(error);
         }
     }
-    async approvePaymentProcess(req:Request,res:Response):Promise<Response>{ //done
+    async approvePaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>{ //done
         const {userId,userName,userEmail}=req;
         const {planName,paymentMethod,subscriptionId}=req.body;
         if(!subscriptionId){
@@ -88,10 +116,10 @@ export default class PaymentController implements IPaymentController{
               });        
         } catch (error) {
             console.log("Error creating subscription:",error);
-            return handleError(res,error);
+            return next(error);
         }
     }
-    async getSubscription(req:Request,res:Response):Promise<Response>{
+    async getSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {userId}=req;
         const {paymentMethod}=req.body;
         // const validateRequestResult=this.paymentReqValidations(userId);
@@ -107,10 +135,10 @@ export default class PaymentController implements IPaymentController{
             return res.status(200).json({message: "subscription found", subscription});
         } catch (error) {
             console.log("Error getting subscription:",error);
-            return handleError(res,error);
+            return next(error);
         }
     }
-    async cancelSubscription(req:Request,res:Response):Promise<Response>{
+    async cancelSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {userId}=req;
         const {paymentMethod}=req.body;
         try{
@@ -119,10 +147,10 @@ export default class PaymentController implements IPaymentController{
             return res.status(200).json({message:"subscription canceled successfully"});
         }catch(err){
             console.log("Error canceling subscription:",err);
-            return handleError(res,err);
+            return next(err);
         }
     }
-    async getAllSubscriptions(req:Request,res:Response):Promise<Response>{
+    async getAllSubscriptions(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {paymentMethod}=req.body;
         //שליחה ליוזר מיקרו סרביס עם קפקה של קבלת RULES 
         // if(userEmail.rules!=="admin"){
@@ -137,10 +165,10 @@ export default class PaymentController implements IPaymentController{
             return res.status(200).json({message:"subscriptions found",subscriptions});
         } catch (error) {
             console.log("Error getting all subscriptions:",error);
-            return handleError(res,error);
+            return next(error);
         }
     }
-    async updateSubscription(req:Request,res:Response):Promise<Response>{
+    async updateSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {userId}=req;
         const {paymentMethod,propertyToUpdate,updateValue}=req.body;
         if(!propertyToUpdate || !updateValue){
@@ -156,7 +184,7 @@ export default class PaymentController implements IPaymentController{
             return res.status(200).json({message:"subscription updated successfully",subscription});
         } catch (error) {
             console.log("Error updating subscription:",error);
-            return handleError(res,error);
+            return next(error);
         }
     }
 }

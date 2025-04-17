@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export interface IPaymentController {
-    startPaymentProcess(req:Request,res:Response):Promise<Response>,
-    approvePaymentProcess(req:Request,res:Response):Promise<Response>,
-    getSubscription(req:Request,res:Response):Promise<Response>,
-    cancelSubscription(req:Request,res:Response):Promise<Response>,
-    getAllSubscriptions(req:Request,res:Response):Promise<Response>,
-    updateSubscription(req:Request,res:Response):Promise<Response>
+    createPlans(req:Request,res:Response,next:NextFunction):Promise<Response|void>,
+    startPaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>,
+    approvePaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>,
+    getSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>,
+    cancelSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>,
+    getAllSubscriptions(req:Request,res:Response,next:NextFunction):Promise<Response|void>,
+    updateSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>
 }

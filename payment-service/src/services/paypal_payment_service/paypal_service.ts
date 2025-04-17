@@ -5,7 +5,7 @@ import { createProduct } from "../payPal_requests/product_request";
 import { IFullPlan } from "../../interfaces/IPlan";
 import { IPayPalPlanResponse, IPayPalSubscriptionResponse} from "../../interfaces/IPaypalResponses";
 import { createPaypalPlan } from "../payPal_requests/plan_request";
-import { cancelPaypalSubscription, getSubscriptionById, updatePaypalSubscription } from "../payPal_requests/subscription_requset";
+import { cancelPaypalSubscription, getSubscriptionById, updatePaypalSubscription } from "../payPal_requests/subscription_request";
 import { ISubscription } from "../../interfaces/ISubscription";
 import { ISubscriptionRepository} from "../../repositories/subscription";
 import { CreateSubscriptionDTO, updatePaypalSubscriptionDTO } from "../../DTO'S/subscription.dto";
@@ -23,10 +23,18 @@ export default class PayPalService implements IPaymentService{
         @inject(Tokens.ISubscriptionRepository) private subscriptionRepository:ISubscriptionRepository,
         @inject(Tokens.IUserRepository) private userRepository:IUserRepository
     ){}
+    static getProductId(): string | null {
+        return this.productId;
+      }
+    
+      public static setProductId(id: string | null) {
+        this.productId = id;
+      }
     async createProduct():Promise<string>{
         if(!PayPalService.productId){
             try{
                 const accessToken=await getAccessTokenPayPal();
+                console.log("access token:",accessToken);
                 if(!accessToken){
                     throw new Error("access token not found")
                 }
@@ -72,6 +80,9 @@ export default class PayPalService implements IPaymentService{
     }
     //הפעולה תבדוק האם יש פלאן כזה- אם כן - תשלח חזרה את הפלאן ID 
     async createSubscriptionInit(planName:string):Promise<string>{
+        if(!planName){
+            throw new Error("plan name is required!");
+        }
         try{
             const plan=await this.planRepository.findPlanByName(planName);
             if(!plan){
@@ -112,6 +123,9 @@ export default class PayPalService implements IPaymentService{
     async createUser(userId:string,userName:string,userEmail:string):Promise<IUser>{
         if(!userId||!userName||!userEmail){
             throw new Error("user id or user name or user email is required on creating user!");
+        }
+        if(await this.userRepository.getUserById(userId)){
+            throw new Error("user already exist!");
         }
         try {
             const user=await this.userRepository.createUser({
@@ -197,9 +211,6 @@ export default class PayPalService implements IPaymentService{
             if(!subscription||subscription.status!=="active"){
                 throw new Error("this subscription is'nt active or not exist");
             }
-            if(subscription.user_id!==userId){
-                throw new Error("this subscription doesn't belong to this user");
-            }
             await cancelPaypalSubscription(subscription.subscription_id,accessToken);
             
             await this.userRepository.deleteUser(subscription!.user_id);
@@ -231,9 +242,7 @@ export default class PayPalService implements IPaymentService{
             if(!subscription){
                 throw new Error("this subscription isn't exist");
             }
-            if(subscription.user_id!==userId){
-                throw new Error("this subscription doesn't belong to this user");
-            }
+            
             if( (propertyToUpdate in subscription) && subscription[propertyToUpdate as keyof ISubscription] === updateValue){
                 throw new Error("the value is already exist in the subscription");
             }

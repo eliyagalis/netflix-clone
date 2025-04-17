@@ -36,9 +36,10 @@ export const microServiceMiddleware=(app:Application):void=>
     },createProxyMiddleware({
         target:users_service_url,
         changeOrigin:true,
-        pathRewrite: (path,req)=>{return `/api/v1/movies/${req.path}`}        
+        pathRewrite: (path,req)=>{return `/api/v1/auth/${req.path}`}        
     }))
-    app.use(`${url}/movies`, authenticate ,(req: Request, res: Response, next: NextFunction) => {
+    //, authenticate
+    app.use(`${url}/movies` ,(req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to movies service...", req.originalUrl);
         console.log(req.path);
         next();
@@ -49,14 +50,14 @@ export const microServiceMiddleware=(app:Application):void=>
     }));
      
     
-
-    app.use(`${url}/payment`,authenticate,(req:Request,res:Response,next:NextFunction)=>{
+//authenticate להוסיף למידל וור
+    app.use(`${url}/payment`,(req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to payment service...");
         next(); 
     },createProxyMiddleware({
         target:payment_service_url,
         changeOrigin:true,
-        pathRewrite:(path,req)=>{return `/api/v1/movies/${req.path}`}
+        pathRewrite:(path,req)=>{return `/api/v1/payment/${req.path}`}
     }))
     //('/streaming')
     app.use(`${url}/playMovie`,authenticate,(req:Request,res:Response,next:NextFunction)=>{

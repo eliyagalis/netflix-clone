@@ -1,12 +1,17 @@
 import { createClient, RedisClientType } from 'redis'
-const redisClient:RedisClientType= createClient();
+const redisClient:RedisClientType= createClient({
+     url: process.env.REDIS_PORT_URL
+});
 
 const connectRedisClient = async () => {
     try {
       await redisClient.connect();
+      redisClient.on('connect', () => {
+        console.log('Redis client connected');});
     } catch (err) {
       console.error('Error connecting to Redis:', err);
     }
+    
   };
 export const getOrSetCache=(key:string,cb:Function):Promise<any>=>{
     return new Promise(async(resolve,reject)=>{
