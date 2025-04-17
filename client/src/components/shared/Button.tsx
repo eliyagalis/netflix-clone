@@ -1,40 +1,47 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import { colors } from "../../data/colors";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { ColorProps, colors } from "../../data/colors";
 
-type RoundedButtonProps = {
-    color: Color;
-    className?: string;
-    children?: React.ReactNode;
-    navLink?: string;
-    rounded?: boolean;
-}
+type ButtonProps = {
+  color: ColorProps;
+  className?: string;
+  children?: React.ReactNode;
+  navLink?: string;
+  rounded?: boolean;
+  fontSize?: string;
+  type?: "button" | "submit" | "reset";
+};
 
-type Color = {
-    color: string;
-    hover: string;
-    textColor: string;
-}
+const Button: React.FC<ButtonProps> = ({
+  color = colors.primary,
+  children,
+  className = "",
+  type = "button",
+  navLink,
+  fontSize,
+  rounded
+}) => {
+  const navigate = useNavigate();
+  const isPrimary = color === colors.primary;
+  const textColorClass = isPrimary ? "text-white" : "";
 
-const Button:React.FC<RoundedButtonProps> = (
-    {
-        color = colors.primary, 
-        children, 
-        className, 
-        navLink = "/", 
-        rounded
-    }) => {
-    
-    const navigate = useNavigate();
+  const handleClick = () => {
+    if (navLink) {
+      navigate(navLink);
+    }
+  };
 
-    return (
-    <button className={`btn border-none ${rounded && 'rounded-full'} text-{${color.textColor}} bg-[${color.color}]
-        ${className} shadow hover:bg-[${color.hover}] transition-all duration-300`}
-        onClick={()=> navigate(navLink)}
-        >
-        {children}
+  return (
+    <button
+      type={type} className={`btn border-none ${rounded ? "rounded-full" : ""}
+        ${textColorClass} bg-[${color.color}] hover:bg-[${color.hover}] ${className + " " + fontSize}
+        shadow transition-all duration-300
+      `}
+      onClick={handleClick}
+    >
+      {children}
     </button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

@@ -10,3 +10,9 @@ export const colors = {
         textColor: 'rgb(15,15,15)',
     }
 }
+
+export type ColorProps = {
+    color: string;
+    hover: string;
+    textColor: string;
+}

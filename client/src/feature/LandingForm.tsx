@@ -1,80 +1,70 @@
 import { useState } from "react";
-import CustomInput from "../components/shared/CustomInput";
 import { useNavigate } from "react-router-dom";
-import { EmailFormData, EmailFormData2, emailValidationSchema, emailValidationSchema2 } from "../schemas/authSchema";
+import { EmailFormData, emailValidationSchema } from "../schemas/authSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import CustomInput from "../components/shared/CustomInput";
 import { strings } from "../data/strings";
+import Button from "../components/shared/Button";
+import { colors } from "../data/colors";
+import { typography } from "../data/typography";
 
 const LandingForm = () => {
-    const [email, setEmail] = useState("");
-    const [error, setError] = useState("");
-    const [touched, setTouched] = useState(false);
-    const navigate = useNavigate();
-    
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, touchedFields },
-    }= useForm<EmailFormData2>({
-        resolver: zodResolver(emailValidationSchema2),
-        mode: "onBlur",
-        reValidateMode: "onChange",
-    })
+  const navigate = useNavigate();
+  const [hasBlurred, setHasBlurred] = useState(false);
 
-    // const handleSubmit = (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     if (!validation(email)) return;
-    //     navigate("/signup");
-    // };
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    formState: { errors },
+  } = useForm<EmailFormData>({
+    resolver: zodResolver(emailValidationSchema),
+    mode: "onChange",
+  });
 
-    const validation = (value: string) => {
-        const result = emailValidationSchema.safeParse(value);
-        if (!result.success) {
-            setError(result.error.errors[0].message);
-            return false;
-        }
-        setError("");
-        return true;
-    }
+  const {
+    onBlur,
+    ...emailFieldProps
+  } = register("email");
 
-    const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value);
-        if (touched) validation(e.target.value);
-    }
+  const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    onBlur(e);
+    setHasBlurred(true);
+    await trigger("email");
+  };
 
-    const onSubmit = (data: EmailFormData2)=> {
+  const onSubmit = (data: EmailFormData) => {
+    console.log("Valid email:", data.email);
+    navigate("/signup");
+  };
 
-    }
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full flex flex-wrap justify-center items-start gap-x-2 mb-10"
+    >
+      <div className="relative flex-1 min-w-60 max-w-120 basis-full sm:basis-auto pb-2">
+        <CustomInput
+          placeholder="Email address"
+          rounded
+          error={hasBlurred ? errors.email?.message : undefined}
+          success={hasBlurred && !errors.email}
+          onBlur={handleBlur}
+          {...emailFieldProps}
+        />
+      </div>
 
-    return (
-        <form 
-            onSubmit={handleSubmit(onSubmit)} 
-            className="w-full flex flex-wrap justify-center items-start gap-x-2 mb-10"
-        >
-            <div className="relative flex-1 min-w-60 max-w-120 basis-full sm:basis-auto pb-2">
-                <CustomInput
-                    placeholder="Email address"
-                    rounded
-                    data={email}
-                    error={error}
-                    // onChange={handleValueChange}
-                    // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                    //     setTouched(true);
-                    //     validation(e.target.value);
-                    // }} 
-                    {...register("email")}
-                />
-            </div>
-
-            <div className="flex-grow-0 flex-shrink-0 w-auto basis-full sm:basis-auto">
-                <button type="submit" className="btn border-none rounded-full bg-[rgb(229,9,20)] text-2xl h-auto px-6 py-4 text-white w-full sm:w-auto max-w-120 shadow hover:bg-[rgb(200,0,10)]">
-                    {strings.landing.form.button}
-                    <i className="fa-solid fa-chevron-right"></i>
-                </button>
-            </div>
-        </form>
-    );
+      <div className="flex-grow-0 flex-shrink-0 w-auto basis-full sm:basis-auto">
+        <Button color={colors.primary} rounded type="submit" fontSize={typography.small} className="btn border-none h-auto px-6 py-4 w-full sm:w-auto max-w-120">
+          <div className={`text-[${colors.primary.textColor}] flex items-center gap-2`}>
+            {strings.landing.form.button}
+            <i className="fa-solid fa-chevron-right"></i>
+          </div>
+        </Button>
+      </div>
+    </form>
+  );
 };
 
 export default LandingForm;
