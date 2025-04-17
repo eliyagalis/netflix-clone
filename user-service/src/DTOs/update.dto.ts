@@ -4,3 +4,14 @@ export default interface UpdateUserDTO {
     email?: string;
      
 }
+
+export interface addProfileDTO {
+    name: string,
+    avatar?: string,
+    isKid?: boolean,
+}
+
+export interface addMyListItemDTO {
+    contentId: string,
+    type: 'movie' | 'series' ,
+}

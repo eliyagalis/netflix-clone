@@ -1,15 +1,14 @@
 import { inject, injectable } from "inversify";
-import SignupRequestDTO from "../DTOs/signup.dto";
 import IUser, { UserStatus } from "../interfaces/IUser";
 import IUserRepository from "../interfaces/IUserRepository";
-import UpdateUserDTO from "../DTOs/update.dto";
+import UpdateUserDTO, { addMyListItemDTO, addProfileDTO } from "../DTOs/update.dto";
 import { TOKENS } from "../tokens";
 import IUserAdapter from "../interfaces/IUserAdapter";
 import User from "../models/user-mongo.model"
 import { hash } from "../utils/bcrypt"
-import IUserBuilder from "../interfaces/IUserBuilder";
-import IMongoUser from "../interfaces/IMongoUser";
-import CreateUserDTO from "../DTOs/create.dto";
+import { SetPasswordDTO, SetSubscriptionDTO, SetUserDTO,  } from "../DTOs/set.dto";
+import IMyListItem from "../interfaces/IMyListItem";
+import { Types } from "mongoose";
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
@@ -19,9 +18,77 @@ export class UserMongoRepository implements IUserRepository {
    )
   {}
 
-  async createInitialUser(userData: CreateUserDTO): Promise<IUser> {
-    const newInitialUser = new User(userData)
+  async addInitialUser(data: SetUserDTO): Promise<IUser> {
+    const newInitialUser = new User({
+      email: data.email,
+      status: UserStatus.PENDING
+    });
+
     return this.userAdapter.toDomainUser(await newInitialUser.save());
+  }
+
+  async addUserPassword(userId: string, data: SetPasswordDTO): Promise <IUser | null> {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId, 
+      {
+        password: data.password,
+        status: UserStatus.AWAITING_PAYMENT
+      },
+      {new: true}
+    );
+    if (!updatedUser) return null;
+    return this.userAdapter.toDomainUser(updatedUser);
+  }
+
+  async addSubscriptionId(userId: string, data: SetSubscriptionDTO): Promise <IUser | null> {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        subscriptionId: data.subscriptionId,
+        status: UserStatus.ACTIVE
+      },
+      { new: true}
+    );
+    if (!updatedUser) return null;
+    return this.userAdapter.toDomainUser(updatedUser);
+  }
+
+  async addProfile(userId: string, profileDTO: addProfileDTO): Promise<IUser | null> {
+    const profile = {
+      name: profileDTO.name,
+      avatar: profileDTO.avatar || 'default-avatar.png',
+      isKid: profileDTO.isKid || false,
+      myList: []
+    };
+    
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { 
+        $push: { profiles: profile },
+      },
+      { new: true }
+    );
+    
+    if (!updatedUser) return null;
+    return this.userAdapter.toDomainUser(updatedUser);
+  }
+
+  async addMyListItem(userId: string, profileId: string, itemDTO: addMyListItemDTO): Promise<boolean> {
+    const myListItem : IMyListItem = {
+      contentId: itemDTO.contentId,
+      type: itemDTO.type,
+      addedAt: new Date()
+    };
+
+    const result = await User.updateOne(
+      {
+        _id: new Types.ObjectId(userId),
+        'profiles._id': new Types.ObjectId(profileId) 
+      },
+      { $push: {'profiles.$.myList': myListItem} }
+    );
+
+    return result.modifiedCount > 0;
   }
 
   async findByEmail(email: string): Promise<IUser | null> {
