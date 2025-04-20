@@ -19,11 +19,9 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   navLink,
   fontSize,
-  rounded
+  rounded,
 }) => {
   const navigate = useNavigate();
-  const isPrimary = color === colors.primary;
-  const textColorClass = isPrimary ? "text-white" : "";
 
   const handleClick = () => {
     if (navLink) {
@@ -33,8 +31,9 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      type={type} className={`btn border-none ${rounded ? "rounded-full" : ""}
-        ${textColorClass} bg-[${color.color}] hover:bg-[${color.hover}] ${className + " " + fontSize}
+      type={type}
+      className={`btn border-none ${rounded ? "rounded-full" : ""}
+        ${color.bg} ${color.hover} ${color.text} ${className} ${fontSize}
         shadow transition-all duration-300
       `}
       onClick={handleClick}

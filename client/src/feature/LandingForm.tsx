@@ -58,7 +58,7 @@ const LandingForm = () => {
 
       <div className="flex-grow-0 flex-shrink-0 w-auto basis-full sm:basis-auto">
         <Button color={colors.primary} rounded type="submit" fontSize={typography.small} className="btn border-none h-auto px-6 py-4 w-full sm:w-auto max-w-120">
-          <div className={`text-[${colors.primary.textColor}] flex items-center gap-2`}>
+          <div className={`text-[${colors.primary.text}] flex items-center gap-2`}>
             {strings.landing.form.button}
             <i className="fa-solid fa-chevron-right"></i>
           </div>
