@@ -16,4 +16,3 @@ export const colors = {
     hover: string;
     text: string;
   };
-  
