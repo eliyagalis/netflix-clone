@@ -6,7 +6,7 @@ type FooterProps = {
 const Footer:React.FC<FooterProps> = ({className}) => {
     return (
         <div className={`${className}`}>
-            <footer className="w-8/10 max-w-350 footer sm:footer-horizontal text-neutral-content">
+            <footer className="w-8/10 max-w-350 footer sm:footer-horizontal">
                 <nav>
                     <a className="link link-hover">Branding</a>
                     <a className="link link-hover">Design</a>
@@ -21,10 +21,10 @@ const Footer:React.FC<FooterProps> = ({className}) => {
                 </nav>
             </footer>
             <div className="w-8/10 max-w-350 py-20">
-                <h6 className="text-neutral-content">
+                <h6 className="">
                     Netflix-Clone
                 </h6>
-                <a target="_blank" className="text-white" href="https://github.com/eliyagalis/netflix-clone/">
+                <a target="_blank" className="" href="https://github.com/eliyagalis/netflix-clone/">
                     <i className="fa-brands fa-github"></i>
                 </a>
             </div>

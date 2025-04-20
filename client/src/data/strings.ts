@@ -88,5 +88,14 @@ export const strings = {
         form: {
             button: "Get Started"
         }
+    },
+    signup: {
+        plans: {
+            note: {
+                1: "HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities. Not all content is available in all resolutions. See our Terms of Use for more details.",
+                2: "Only people who live with you may use your account. Watch on 4 different devices at the same time with Premium, 2 with Standard and 1 with Basic.",
+                3: "Live events are included with any Netflix plan and contain ads."
+            }
+        }
     }
 };

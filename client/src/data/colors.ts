@@ -14,7 +14,12 @@ export const colors = {
     text: {
       primary: 'text-black',
       secondary: 'text-[#e50914]',
-      tertiary: 'text-[#ffffff]',
+      lightGray: 'text-[#737373]'
+    },
+    plans: {
+      basic: "bg-[radial-gradient(140.76%_131.96%_at_100%_100%,_rgb(109,59,227)_0%,_rgba(74,42,150,0.5)_73.57%,_rgba(74,42,150,0)_100%),_rgb(29,82,157)]",
+      standard: "bg-[radial-gradient(140.76%_131.96%_at_100%_100%,_rgb(176,56,220)_0%,_rgba(74,42,150,0.5)_73.57%,_rgba(74,42,150,0)_100%),_rgb(29,82,157)]",
+      premium: "bg-[radial-gradient(140.76%_131.96%_at_100%_100%,_rgb(229,9,20)_0%,_rgba(74,42,150,0.5)_73.57%,_rgba(74,42,150,0)_100%),_rgb(29,82,157)]",
     }
   };
   

@@ -24,3 +24,35 @@ input:-webkit-autofill:hover {
   color: white !important;
   transition: background-color 5000s ease-in-out 0s; /* Prevents autofill color from being visible */
 }
+
+/* Add this to your global CSS (e.g., styles/globals.css or styles/utilities.css) */
+
+.bg-plan-3 {
+  background: radial-gradient(
+      140.76% 131.96% at 100% 100%,
+      rgb(229, 9, 20) 0%,
+      rgba(74, 42, 150, 0.5) 73.57%,
+      rgba(74, 42, 150, 0) 100%
+    ),
+    rgb(29, 82, 157);
+}
+
+.bg-plan-1 {
+  background: radial-gradient(
+      140.76% 131.96% at 100% 100%,
+      rgb(109, 59, 227) 0%,
+      rgba(74, 42, 150, 0.5) 73.57%,
+      rgba(74, 42, 150, 0) 100%
+    ),
+    rgb(29, 82, 157);
+}
+
+.bg-plan-2 {
+  background: radial-gradient(
+      140.76% 131.96% at 100% 100%,
+      rgb(176, 56, 220) 0%,
+      rgba(74, 42, 150, 0.5) 73.57%,
+      rgba(74, 42, 150, 0) 100%
+    ),
+    rgb(29, 82, 157);
+}

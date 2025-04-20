@@ -40,7 +40,7 @@ const LandingPage = () => {
                 <Typography className="font-medium" size={typography.medium}>{strings.landing.plans.headline}</Typography>
                 <div className="py-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                     {strings.landing.plans.cards.map((card) => (
-                        <PlanCard key={card.id} title={card.title} subtitle={card.subtitle} type={card.id as 1 | 2 | 3} bulletPoints={card.bulletPoints} price={card.price} navigate="/signup"/>
+                        <PlanCard key={card.id} title={card.title} subtitle={card.subtitle} type={card.id as 1 | 2 | 3 } bulletPoints={card.bulletPoints} price={card.price} navigate="/signup"/>
                     ))}
                 </div>
                 <br />

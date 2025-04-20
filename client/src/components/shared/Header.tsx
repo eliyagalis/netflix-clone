@@ -1,17 +1,28 @@
 import React from "react";
 import { images } from "../../data/images";
+import { useNavigate } from "react-router-dom";
 
-interface HeaderProps {
+type HeaderProps = {
     children?: React.ReactNode;
     className?: string;
     border?: boolean;
+    link?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ children, className, border = false }) => {
+
+const Header: React.FC<HeaderProps> = ({ children, className, link, border = false }) => {
+
+    const navigate = useNavigate();
+    const clickHandler = () => {
+        if (link) {
+            navigate(link);
+        }
+    };
+
     return (
         <header className={`${className} relative z-10 flex justify-center mx-auto w-full left-0 top-0 ${border ? "border-b-[0.5px] border-[rgb(230,230,230)]" : ""} overflow-hidden`}>
             <div className="w-full px-5 sm:px-8 md:px-10 my-5 flex items-center justify-between">
-                <div className="flex items-center">
+                <div className={`flex items-center ${link && "cursor-pointer"}`} onClick={clickHandler}>
                     <img src={images.logo.src}
                         alt={images.logo.alt}
                         className="hidden lg:block w-36 max-w-full" />
