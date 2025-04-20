@@ -1,5 +1,25 @@
 export const strings = {
     landing: {
+        header: {
+            login: {
+                id: 1, 
+                text: "Sign In",
+                link: "/login"
+            },
+        },
+        // header: {
+        //     logo: {
+        //         src: "https://upload.wikimedia.org/wikipedia/commons/6/64/Netflix_2015_logo.svg",
+        //         alt: "Netflix Logo"
+        //     },
+        //     links: [
+        //         { id: 1, text: "Home" },
+        //         { id: 2, text: "TV Shows" },
+        //         { id: 3, text: "Movies" },
+        //         { id: 4, text: "Latest" },
+        //         { id: 5, text: "My List" }
+        //     ]
+        // },
         poster: {
             headline1: "Unlimited movies, TV shows, and more",
             headline2: "Starts at ₪32.90. Cancel anytime.",
@@ -48,7 +68,7 @@ export const strings = {
         reasons: {
             headline: "More Reasons to Join",
             cards: [
-                { id: 1, title: "Enjoy on Your TV", subtitle: "Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.", img: 'https://cdn-icons-png.flaticon.com/128/11169/11169357.png'},
+                { id: 1, title: "Enjoy on Your TV", subtitle: "Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.", img: 'https://cdn-icons-png.flaticon.com/128/11169/11169357.png' },
                 { id: 2, title: "Download your shows to watch offline", subtitle: "Save your favorites easily and always have something to watch.", img: 'https://cdn-icons-png.flaticon.com/128/8556/8556138.png' },
                 { id: 3, title: "Watch everywhere", subtitle: "Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.", img: 'https://cdn-icons-png.flaticon.com/128/3068/3068402.png' },
                 { id: 4, title: "Create profiles for kids", subtitle: "Send kids on adventures with their favorite characters in a space made just for them — free with your membership.", img: 'https://pbs.twimg.com/profile_images/1356333120992149505/-qvakEK7_200x200.jpg' }
@@ -64,6 +84,9 @@ export const strings = {
                 { id: 5, title: "What can I watch on Netflix?", subtitle1: "Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want." },
                 { id: 6, title: "Is Netflix good for kids?", subtitle1: "The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space.", subtitle2: "Kids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don’t want kids to see." }
             ]
+        },
+        form: {
+            button: "Get Started"
         }
     }
 };

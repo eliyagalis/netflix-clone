@@ -1,6 +1,6 @@
 import React from 'react'
 import Card from '../shared/Card';
-import { sizes } from '../../data/sizes';
+import { typography } from '../../data/typography';
 
 type PlanCardProps = {
     className?: string;
@@ -21,8 +21,8 @@ const palette = {
 const PlanCard: React.FC<PlanCardProps> = ({ className, title, subtitle, bulletPoints, price, type, navigate }) => {
     return (
         <Card className={`${className} bg-gradient-to-br ${palette[type]} transition-colors duration-300 border-[rgb(45,43,67)] cursor-pointer`}>
-            <div className={`${sizes.medium} py-1 font-bold text-white`}>{title}</div>
-            <div className={`${sizes.small} py-1 font-bold text-[rgb(184,187,203)]`}>{subtitle}</div>
+            <div className={`${typography.medium} py-1 font-bold text-white`}>{title}</div>
+            <div className={`${typography.small} py-1 font-bold text-[rgb(184,187,203)]`}>{subtitle}</div>
 
             {
                 type === 3 &&
@@ -36,14 +36,14 @@ const PlanCard: React.FC<PlanCardProps> = ({ className, title, subtitle, bulletP
                     {
                         bulletPoints && bulletPoints.map((b) =>
                         (
-                            <li className={`list-row relative py-1 font-medium ${sizes.xxsmall}`} key={b.id}>
+                            <li className={`list-row relative py-1 font-medium ${typography.xxsmall}`} key={b.id}>
                                 <i className='absolute fa-solid fa-check top-1'></i>
                                 {b.bp}
                             </li>
                         ))
                     }
                 </ul>
-                <div className={`${sizes.small} flex items-end font-semibold text-[rgb(184,187,203)]`}>{price}</div>
+                <div className={`${typography.small} flex items-end font-semibold text-[rgb(184,187,203)]`}>{price}</div>
             </div>
         </Card>
     )

@@ -1,6 +1,11 @@
-const Footer = () => {
+import React from "react";
+type FooterProps = {
+    className?: string;
+}
+
+const Footer:React.FC<FooterProps> = ({className}) => {
     return (
-        <div>
+        <div className={`${className}`}>
             <footer className="w-8/10 max-w-350 footer sm:footer-horizontal text-neutral-content">
                 <nav>
                     <a className="link link-hover">Branding</a>

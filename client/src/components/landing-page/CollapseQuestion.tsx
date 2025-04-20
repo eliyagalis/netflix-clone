@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { sizes } from "../../data/sizes";
+import { typography } from "../../data/typography";
 
 type CollapseQuestionProps = {
     title: string;
@@ -7,7 +7,7 @@ type CollapseQuestionProps = {
     subtitle2?: string;
 }
 
-const CollapseQuestion:React.FC<CollapseQuestionProps> = ({title, subtitle1, subtitle2}) => {
+const CollapseQuestion: React.FC<CollapseQuestionProps> = ({ title, subtitle1, subtitle2 }) => {
 
     return (
         <div>
@@ -16,15 +16,15 @@ const CollapseQuestion:React.FC<CollapseQuestionProps> = ({title, subtitle1, sub
                 <div className="collapse-title bg-[rgb(39,39,39)] p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(48,48,48)] hover:bg-[rgb(45,45,45)] transition-all duration-300 ">
                     {title}
                 </div>
-                <div className={`my-1 collapse-content ${sizes.small} font-semibold rounded-2xl bg-[rgb(45,45,45)] transition-all duration-300 `}>
+                <div className={`my-1 collapse-content ${typography.small} font-semibold rounded-2xl bg-[rgb(45,45,45)] transition-all duration-300 `}>
                     <div className="p-4">
                         {subtitle1}
-                        {subtitle2 && 
-                            <Fragment>
-                            <br />
-                            <br />
+                        {subtitle2 &&
+                            <>
+                                <br />
+                                <br />
                                 {subtitle2}
-                            </Fragment>
+                            </>
                         }
                     </div>
                 </div>
