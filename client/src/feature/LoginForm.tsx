@@ -3,7 +3,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginFormData, loginSchema } from '../schemas/authSchema';
 import CustomInput from '../components/shared/CustomInput';
 import Button from '../components/shared/Button';
-import { colors } from '../data/colors';
 import { typography } from '../data/typography';
 import { Link } from 'react-router-dom';
 
@@ -11,10 +10,12 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, touchedFields },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: 'onChange',
+    
   });
 
   const onSubmit = (data: LoginFormData) => {
@@ -33,7 +34,8 @@ const LoginForm = () => {
       <div>
         <CustomInput
           placeholder="Email address"
-          error={touchedFields.email ? errors.email?.message : undefined}
+          error={errors.email?.message}
+          success={touchedFields.email && !errors.email && !!watch('email')}
           {...register('email')}
         />
       </div>
@@ -42,14 +44,14 @@ const LoginForm = () => {
         <CustomInput
           placeholder="Password"
           type="password"
-          error={touchedFields.password ? errors.password?.message : undefined}
+          error={errors.password?.message}
+          success={touchedFields.password && !errors.password && !!watch('password')}
           {...register('password')}
         />
       </div>
 
       <Button
         type="submit"
-        color={colors.primary}
         className="w-full"
         fontSize={typography.xxsmall}
       >

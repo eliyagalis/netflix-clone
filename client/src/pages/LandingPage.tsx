@@ -23,7 +23,7 @@ const LandingPage = () => {
             
             <div className="relative max-w-460 mx-auto">
                 <Header>
-                    <Button navLink={strings.landing.header.login.link} color={colors.secondary} rounded>
+                    <Button navLink={strings.landing.header.login.link} color={colors.buttons.secondary} rounded>
                         {strings.landing.header.login.text}
                     </Button>
                 </Header>

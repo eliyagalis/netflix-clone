@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EmailFormData, emailValidationSchema } from "../schemas/authSchema";
 import { useForm } from "react-hook-form";
@@ -11,28 +10,16 @@ import { typography } from "../data/typography";
 
 const LandingForm = () => {
   const navigate = useNavigate();
-  const [hasBlurred, setHasBlurred] = useState(false);
 
   const {
     register,
     handleSubmit,
-    trigger,
-    formState: { errors },
+    watch,
+    formState: { errors, touchedFields },
   } = useForm<EmailFormData>({
     resolver: zodResolver(emailValidationSchema),
     mode: "onChange",
   });
-
-  const {
-    onBlur,
-    ...emailFieldProps
-  } = register("email");
-
-  const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    onBlur(e);
-    setHasBlurred(true);
-    await trigger("email");
-  };
 
   const onSubmit = (data: EmailFormData) => {
     console.log("Success", data);
@@ -49,16 +36,20 @@ const LandingForm = () => {
         <CustomInput
           placeholder="Email address"
           rounded
-          error={hasBlurred ? errors.email?.message : undefined}
-          success={hasBlurred && !errors.email}
-          onBlur={handleBlur}
-          {...emailFieldProps}
+          error={errors.email?.message}
+          success={touchedFields.email && !errors.email &&  !!watch("email")}
+          {...register("email")}
         />
       </div>
 
       <div className="flex-grow-0 flex-shrink-0 w-auto basis-full sm:basis-auto">
-        <Button color={colors.primary} rounded type="submit" fontSize={typography.small} className="btn border-none h-auto px-6 py-4 w-full sm:w-auto max-w-120">
-          <div className={`text-[${colors.primary.text}] flex items-center gap-2`}>
+        <Button
+          rounded
+          type="submit"
+          fontSize={typography.small}
+          className="btn border-none h-auto px-6 py-4 w-full sm:w-auto max-w-120"
+        >
+          <div className={`text-[${colors.buttons.primary.text}] flex items-center gap-2`}>
             {strings.landing.form.button}
             <i className="fa-solid fa-chevron-right"></i>
           </div>
