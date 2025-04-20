@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { typography } from "../../data/typography";
 
 type CollapseQuestionProps = {
     title: string;
@@ -6,24 +7,25 @@ type CollapseQuestionProps = {
     subtitle2?: string;
 }
 
-const CollapseQuestion:React.FC<CollapseQuestionProps> = ({title, subtitle1, subtitle2}) => {
+const CollapseQuestion: React.FC<CollapseQuestionProps> = ({ title, subtitle1, subtitle2 }) => {
 
     return (
         <div>
-            <div className="collapse bg-[rgb(45,45,45)] rounded-2xl my-4 border-0 hover:bg-[rgb(60,60,60)] transition-all duration-300 collapse-plus">
+            <div className="collapse rounded-2xl border-0 text-white collapse-plus">
                 <input type="checkbox" />
-                <div className="collapse-title p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(70,70,70)] text-white duration-300">
+                <div className="collapse-title bg-[rgb(39,39,39)] p-5 text-xl font-semibold border-2 rounded-2xl border-[rgb(48,48,48)] hover:bg-[rgb(45,45,45)] transition-all duration-300 ">
                     {title}
                 </div>
-                
-                <div className="collapse-content text-xl rounded-t-full">
+                <div className={`my-1 collapse-content ${typography.small} font-semibold rounded-2xl bg-[rgb(45,45,45)] transition-all duration-300 `}>
                     <div className="p-4">
                         {subtitle1}
-                        {subtitle2 && 
-                            <div>
+                        {subtitle2 &&
+                            <>
                                 <br />
-                                {subtitle2}                    
-                            </div>}
+                                <br />
+                                {subtitle2}
+                            </>
+                        }
                     </div>
                 </div>
             </div>
