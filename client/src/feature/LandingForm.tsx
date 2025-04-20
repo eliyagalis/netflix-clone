@@ -35,7 +35,8 @@ const LandingForm = () => {
   };
 
   const onSubmit = (data: EmailFormData) => {
-    console.log("Valid email:", data.email);
+    console.log("Success", data);
+    // Logic
     navigate("/signup");
   };
 

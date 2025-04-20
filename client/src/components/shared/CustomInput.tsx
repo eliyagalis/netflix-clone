@@ -10,7 +10,7 @@ interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const CustomInput: React.FC<CustomInputProps> = ({ placeholder, error, rounded, success, ...props }) => {
   return (
-    <div>
+    <div className='relative'>
       <input
         id="floatingInput"
         placeholder=" "
@@ -25,14 +25,14 @@ const CustomInput: React.FC<CustomInputProps> = ({ placeholder, error, rounded, 
       <label
         htmlFor="floatingInput"
         className="absolute font-normal left-5 top-2 text-xs text-gray-300
-          transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-lg 
+          transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-lg 
           peer-placeholder-shown:text-gray-300 peer-focus:top-2 peer-focus:text-xs 
           peer-focus:text-gray-300"
       >
         {placeholder}
       </label>
 
-      <div className="text-left flex items-center h-10">
+      <div className="text-left flex items-center h-5 mt-1">
         {error && (
           <span className="whitespace-nowrap text-sm text-red-500">
             <i className="fa-regular fa-circle-xmark"></i> {error}
