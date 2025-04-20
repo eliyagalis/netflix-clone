@@ -1,5 +1,5 @@
 import { SetPasswordDTO, SetSubscriptionDTO, SetUserDTO } from "../DTOs/set.dto";
-import UpdateUserDTO from "../DTOs/update.dto";
+import UpdateUserDTO, { addMyListItemDTO, addProfileDTO } from "../DTOs/update.dto";
 import IUser from "./IUser";
 
 
@@ -16,4 +16,8 @@ export default interface IUserRepository {
     findUserById(id: string): Promise<IUser | null>;
 
     updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null>;
+
+    addProfile(userId: string, profileDTO: addProfileDTO): Promise<IUser | null>
+
+    addMyListItem(userId: string, profileId: string, itemDTO: addMyListItemDTO): Promise<boolean>
 }

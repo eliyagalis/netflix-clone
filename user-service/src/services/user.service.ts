@@ -2,23 +2,181 @@ import { injectable, inject } from 'inversify';
 import { TOKENS } from '../tokens';
 import IUserRepository from '../interfaces/IUserRepository';
 import IUserService from '../interfaces/IUserService';
-import UpdateUserDTO from '../DTOs/update.dto';
-import IUser from '../interfaces/IUser';
+import UpdateUserDTO, { addMyListItemDTO, addProfileDTO } from '../DTOs/update.dto';
+import IUser, { isActiveUser, UserStatus } from '../interfaces/IUser';
 import IProfile from '../interfaces/IProfile';
 import IMyListItem from '../interfaces/IMyListItem';
-import mongoose from 'mongoose';
 import SignupRequestDTO from '../DTOs/signup.dto';
 import { hash } from '../utils/bcrypt';
-import { AuthService } from './auth.service';
+import IAuthService from '../interfaces/IAuthService';
 import ITokenResponse from '../interfaces/ITokenResponse';
 import IUserPayload from '../interfaces/IUserPayload';
+import IUserBuilder from '../interfaces/IUserBuilder';
+import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
 
 @injectable()
 export class UserService implements IUserService {
 
   constructor(
     @inject(TOKENS.IUserRepository) private userRepository: IUserRepository,
-    @inject(TOKENS.IAuthService) private authService: AuthService
+    @inject(TOKENS.IAuthService) private authService: IAuthService,
+    @inject(TOKENS.IUserBuilder) private userBuilder: IUserBuilder
   ) { }
 
+  /**
+   * Sign up a new user with email
+   */
+  async signup(email: string): Promise<IUser> {
+    // Check if user already exists
+    const existingUser = await this.userRepository.findByEmail(email);
+    if (existingUser) {
+      throw new Error('Email already registered');
+    }
+    
+    // Create initial user with pending status
+    const userData = { email };
+    return await this.userRepository.addInitialUser(userData);
+  }
+
+  /**
+   * Set password for a user
+   */
+  async addUserPassword(userId: string, data: SetPasswordDTO): Promise<IUser> {
+    // Find user first
+    const user = await this.userRepository.findUserById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    // Verify user is in pending status
+    if (user.status !== UserStatus.PENDING) {
+      throw new Error('User is not in pending status');
+    }
+    
+    // Hash password before saving
+    const hashedPassword = await hash(data.password);
+    
+    // Update user with password
+    const passwordData = { 
+      password: hashedPassword 
+    };
+    
+    const updatedUser = await this.userRepository.addUserPassword(userId, passwordData);
+    if (!updatedUser) {
+      throw new Error('Failed to update user');
+    }
+    
+    return updatedUser;
+  }
+
+  /**
+   * Add subscription for a user
+   */
+  async addSubscription(userId: string, data: SetSubscriptionDTO): Promise<IUser> {
+    const user = await this.userRepository.findUserById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    const updatedUser = await this.userRepository.addSubscriptionId(userId, data);
+    if (!updatedUser) {
+      throw new Error('Failed to update subscription');
+    }
+    
+    return updatedUser;
+  }
+
+  /**
+   * Login a user and generate tokens
+   */
+  async login(email: string, password: string): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: {
+      id: string;
+      email: string;
+      profiles?: IProfile[];
+    }
+  }> {
+    // Find user by email
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new Error('Invalid email or password');
+    }
+    
+    // Check if user is active
+    if (user.status !== UserStatus.ACTIVE) {
+      throw new Error('Account is not active');
+    }
+    
+    if (!isActiveUser(user)) {
+      throw new Error('Account data is incomplete')
+    }
+    // Create user payload for token
+    const userPayload: IUserPayload = {
+      userId: user.id,
+      email: user.email
+    };
+    
+    // Use auth service to login and generate tokens
+    const tokens = await this.authService.login(userPayload, password, user.password);
+    
+    // Return tokens and basic user info
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        profiles: user.profiles
+      }
+    };
+  }
+
+  /**
+   * Refresh access token using refresh token
+   */
+  async refreshToken(refreshToken: string): Promise<string> {
+    return this.authService.refreshAccessToken(refreshToken);
+  }
+
+  /**
+   * Find user by ID
+   */
+  async findUserById(id: string): Promise<IUser | null> {
+    return this.userRepository.findUserById(id);
+  }
+
+  /**
+   * Find user by email
+   */
+  async findByEmail(email: string): Promise<IUser | null> {
+    return this.userRepository.findByEmail(email);
+  }
+
+  /**
+   * Update user information
+   */
+  async updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null> {
+    // If password is included, hash it first
+    if (data.password) {
+      data.password = await hash(data.password);
+    }
+    
+    return this.userRepository.updateUser(id, data);
+  }
+
+  /**
+   * Add a profile to a user account
+   */
+  async addProfile(userId: string, profileData: addProfileDTO): Promise<IUser | null> {
+    return this.userRepository.addProfile(userId, profileData);
+  }
+
+  /**
+   * Add an item to a user's profile watchlist
+   */
+  async addToMyList(userId: string, profileId: string, itemData: addMyListItemDTO): Promise<boolean> {
+    return this.userRepository.addMyListItem(userId, profileId, itemData);
+  }
 }

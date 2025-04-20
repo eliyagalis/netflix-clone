@@ -1,169 +1,128 @@
 import { Request, Response } from 'express';
-import { injectable, inject } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { TOKENS } from '../tokens';
-import { UserService } from '../services/user.service';
-import { UpdateUserDTO } from '../DTOs/update.dto';
-import { handleError } from '../utils/handle-error-request';
+import IUserService from '../interfaces/IUserService';
 
 @injectable()
 export class UserController {
-  private userService: UserService;
-
   constructor(
-    @inject(TOKENS.IUserService) userService: UserService
-  ) {
-    this.userService = userService;
+    @inject(TOKENS.IUserService) private userService: IUserService
+  ) {}
+
+  /**
+   * Sign up a new user
+   */
+  async signup(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.body;
+      
+      const user = await this.userService.signup(email);
+      
+      this.created(res, { 
+        message: 'User created successfully',
+        userId: user.id,
+        status: user.status
+      });
+    } catch (error) {
+      this.handleError(res, error);
+    }
   }
 
   /**
-   * Get current user profile
-   * @route GET /api/users/me
+   * Login a user with email and password
    */
-  getProfile = async (req: Request, res: Response): Promise<Response> => {
+  async login(req: Request, res: Response): Promise<void> {
     try {
-      const userId = req.userId;
+      const { email, password } = req.body;
       
-      if (!userId) {
-        return res.status(401).json({ message: 'Authentication required' });
+      // UserService handles all authentication logic internally
+      const result = await this.userService.login(email, password);
+      
+      // Set refresh token in HTTP-only cookie
+      res.cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+      });
+      
+      this.success(res, {
+        accessToken: result.accessToken,
+        user: result.user
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        this.unauthorized(res, error.message);
+      } else {
+        this.handleError(res, error);
       }
+    }
+  }
 
-      const user = await this.userService.getUserProfile(userId);
+  /**
+   * Refresh access token using refresh token
+   */
+  async refreshToken(req: Request, res: Response): Promise<void> {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+      
+      if (!refreshToken) {
+        this.unauthorized(res, 'Refresh token is required');
+        return;
+      }
+      
+      const accessToken = await this.userService.refreshToken(refreshToken);
+      
+      this.success(res, { accessToken });
+    } catch (error) {
+      res.clearCookie('refreshToken');
+      this.unauthorized(res, 'Invalid refresh token');
+    }
+  }
+
+  /**
+   * Logout user
+   */
+  logout(req: Request, res: Response): void {
+    res.clearCookie('refreshToken');
+    this.success(res, { message: 'Logged out successfully' });
+  }
+  
+  /**
+   * Get current user profile
+   */
+  async getUser(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = req.params.id;
+      
+      const user = await this.userService.findUserById(userId);
       
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        this.notFound(res, 'User not found');
+        return;
       }
-
-      return res.status(200).json(user);
+      
+      this.success(res, user);
     } catch (error) {
-      return handleError(res, error);
+      this.handleError(res, error);
     }
-  };
-
+  }
+  
   /**
-   * Update user profile
-   * @route PUT /api/users/me
+   * Update user
    */
-  updateProfile = async (req: Request, res: Response): Promise<Response> => {
+  async updateUser(req: Request, res: Response): Promise<void> {
     try {
-      const userId = req.userId;
+      const userId = req.params.id;
+      const updateData = req.body;
       
-      if (!userId) {
-        return res.status(401).json({ message: 'Authentication required' });
-      }
-
-      const updateData: UpdateUserDTO = req.body;
-      
-      if (!updateData || Object.keys(updateData).length === 0) {
-        return res.status(400).json({ message: 'No update data provided' });
-      }
-
-      const updatedUser = await this.userService.updateUserProfile(userId, updateData);
+      const updatedUser = await this.userService.updateUser(userId, updateData);
       
       if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
+        this.notFound(res, 'User not found');
+        return;
       }
-
-      return res.status(200).json({
-        message: 'Profile updated successfully',
-        user: updatedUser
-      });
+      
+      this.success(res, updatedUser);
     } catch (error) {
-      return handleError(res, error);
+      this.handleError(res, error);
     }
-  };
-
-  /**
-   * Get profile details including my list
-   * @route GET /api/users/profiles/:profileId
-   */
-  getProfileDetails = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const userId = req.userId;
-      const { profileId } = req.params;
-      
-      if (!userId) {
-        return res.status(401).json({ message: 'Authentication required' });
-      }
-
-      const profile = await this.userService.getProfileDetails(userId, profileId);
-      
-      if (!profile) {
-        return res.status(404).json({ message: 'Profile not found' });
-      }
-
-      return res.status(200).json(profile);
-    } catch (error) {
-      return handleError(res, error);
-    }
-  };
-
-  /**
-   * Add item to profile's my list
-   * @route POST /api/users/profiles/:profileId/mylist
-   */
-  addToMyList = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const userId = req.userId;
-      const { profileId } = req.params;
-      const { contentId, type } = req.body;
-      
-      if (!userId) {
-        return res.status(401).json({ message: 'Authentication required' });
-      }
-
-      if (!contentId || !type) {
-        return res.status(400).json({ message: 'Content ID and type are required' });
-      }
-
-      if (!['movie', 'series'].includes(type)) {
-        return res.status(400).json({ message: 'Type must be either "movie" or "series"' });
-      }
-
-      const myList = await this.userService.addToMyList(
-        userId, 
-        profileId, 
-        contentId, 
-        type as 'movie' | 'series'
-      );
-      
-      if (myList === null) {
-        return res.status(404).json({ message: 'User or profile not found' });
-      }
-
-      return res.status(201).json({
-        message: 'Item added to My List',
-        myList
-      });
-    } catch (error) {
-      return handleError(res, error);
-    }
-  };
-
-  /**
-   * Remove item from profile's my list
-   * @route DELETE /api/users/profiles/:profileId/mylist/:contentId
-   */
-  removeFromMyList = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const userId = req.userId;
-      const { profileId, contentId } = req.params;
-      
-      if (!userId) {
-        return res.status(401).json({ message: 'Authentication required' });
-      }
-
-      const myList = await this.userService.removeFromMyList(userId, profileId, contentId);
-      
-      if (myList === null) {
-        return res.status(404).json({ message: 'User, profile, or content not found' });
-      }
-
-      return res.status(200).json({
-        message: 'Item removed from My List',
-        myList
-      });
-    } catch (error) {
-      return handleError(res, error);
-    }
-  };
+  }
 }

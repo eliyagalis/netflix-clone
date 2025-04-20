@@ -21,6 +21,4 @@ export const TOKENS = {
 
   //Builders
   IUserBuilder: "IUserBuilder"
-
-  
 };

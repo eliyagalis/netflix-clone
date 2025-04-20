@@ -66,7 +66,7 @@ export class UserMongoRepository implements IUserRepository {
       { 
         $push: { profiles: profile },
       },
-      { new: true }
+      { new: true}
     );
     
     if (!updatedUser) return null;

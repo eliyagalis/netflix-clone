@@ -24,3 +24,20 @@ export enum UserStatus {
   CANCELLED = 'cancelled',
   LOCKED = 'locked'
 }
+// Type guards to verify user state
+export function isPendingUser(user: IUser): user is IUser & { id: string } {
+  return user.status === UserStatus.PENDING && user.id !== undefined;
+}
+
+export function isAwaitingPaymentUser(user: IUser): user is IUser & { id: string, password: string } {
+  return user.status === UserStatus.AWAITING_PAYMENT && 
+         user.id !== undefined && 
+         user.password !== undefined;
+}
+
+export function isActiveUser(user: IUser): user is IUser & { id: string, password: string, subscriptionId: string } {
+  return user.status === UserStatus.ACTIVE && 
+         user.id !== undefined && 
+         user.password !== undefined &&
+         user.subscriptionId !== undefined;
+}
