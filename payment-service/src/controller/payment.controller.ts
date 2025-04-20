@@ -6,90 +6,28 @@ import { IPaymentFacade } from "../interfaces/IPaymentFacade";
 import { handleError } from "../utils/handle-error-request";
 import { IPaymentController } from "../interfaces/IPaymentController";
 import { IUser } from "src/interfaces/IUser";
-import { body } from "express-validator";
 
 @injectable()
 export default class PaymentController implements IPaymentController{
     private paymentService!:IPaymentService;
     constructor(@inject(Tokens.IPaymentFacade) private paymentFacade:IPaymentFacade){}
 
-    async createPlans(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
+    async saveAllPlansInit(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {paymentMethod}=req.body;
+        if(!process.env.PAYPAL_BASIC_PLAN || !process.env.PAYPAL_STANDARD_PLAN ||!process.env.PAYPAL_PREMIUM_PLAN){
+            return res.status(400).json({message:"plan id not found"});
+        }
         try {
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
-            await this.paymentService.createPlan({
-                plan_name:"basic",
-                price:32.90,
-                billing_interval:'monthly',
-                description:'basic plan'
-            });
-            await this.paymentService.createPlan({
-                plan_name:"standard",
-                price:54.90,
-                billing_interval:'monthly',
-                description:'standard plan'
-            });
-            await this.paymentService.createPlan({
-                plan_name:"premium",
-                price:69.90,
-                billing_interval:'monthly',
-                description:'premium plan'
-            });
-            return res.status(200).json({message:"plans created successfully"});
+            await this.paymentService.savePlanOnDb(process.env.PAYPAL_BASIC_PLAN!,"basic");
+            await this.paymentService.savePlanOnDb(process.env.PAYPAL_STANDARD_PLAN!,"standard");
+            await this.paymentService.savePlanOnDb(process.env.PAYPAL_PREMIUM_PLAN!,"premium");
+    
+            console.log("Plans created successfully");
+            next();
+            //res.status(200).json({message:"all plans saved successfully on db"})
         } catch (error) {
             console.log("Error creating plans:",error);
-            return next(error);
-        }
-    }
-    private paymentReqValidations(userId:string,userName:string,userEmail:string,planName:string|null,paymentMethod:string,res:Response,nameOfFunc:string):Response|boolean{
-        
-        // const {getSub,createSub,cancelSub,updateSub,getAllSub}=Tokens.controllerMethod;
-        
-        // if( ! [cancelSub,createSub,updateSub,,getSub,getAllSub].includes(nameOfFunc) ){
-        //     return true;
-        // }
-        // if(!paymentMethod || ! ['paypal','stripe'].includes(paymentMethod) ){
-        //     return res.status(400).json({message: "payment method is required!"});
-        // }
-        // if(nameOfFunc==="create" && (!planName || !['basic','standard','premium'].includes(planName))){
-        //     return res.status(400).json({message: "plan name is required!"});
-        // }
-        if(!userId){
-            return res.status(400).json({message: "the user is not logged in or not exist!"});
-        }
-        // if(nameOfFunc==="create"&&( !userName || !userEmail) ){
-        //     return res.status(400).json({message: "the user is not logged in or not exist!"});
-        // }
-        // const regexEmailValidation=/^[^<>@\s]+@[^<>@\s]+\.[^<>@\s]+$/;
-        // if(nameOfFunc==="create"&&!regexEmailValidation.test(userEmail)){
-        //     return res.status(400).json({message: "invalid email format!"});
-        // }
-
-        return false; //No validation error
-    }
-    async startPaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
-        const {planName,paymentMethod}=req.body;
-        const {userId}=req;
-        if(!paymentMethod || ! ['paypal','stripe'].includes(paymentMethod) ){
-            return res.status(400).json({message: "payment method is required!"});
-        }
-        if(!planName || !['basic','standard','premium'].includes(planName)){
-            return res.status(400).json({message: "plan name is required!"});
-        }
-        if(!userId){
-            return res.status(400).json({message: "the user is not logged in or not exist!"});
-        }
-        try {
-            this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
-            //בדיקה האם יש ליוזר כבק מנוי פעיל
-            const userSubscription=await this.paymentService.getSubscription(userId);
-            if(userSubscription && userSubscription.status==="active" ){
-                return res.status(400).json({message: "user already have a subscription"});            
-            }
-            const planId=await this.paymentService.createSubscriptionInit(planName);
-            return res.status(200).json({message:"payment process started successfully",planId:planId});
-        } catch (error) {
-            console.log("Error starting payment process:",error);
             return next(error);
         }
     }
@@ -101,6 +39,12 @@ export default class PaymentController implements IPaymentController{
         }
         try {
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
+            //בדיקה בקפקה האם יש לי יוזר כזה
+            const existUserSubscription=await this.paymentService.getSubscription(userId);
+            if(existUserSubscription && existUserSubscription.status==="active"){
+                await this.paymentService.cancelSubscription(userId,true);
+                return res.status(400).json({message: "user already have a subscription"});            
+            }
             const paypalSubscription=await this.paymentService.approveSubscription(subscriptionId);
 
             if(!paypalSubscription||paypalSubscription.status!=="ACTIVE"){
@@ -129,7 +73,7 @@ export default class PaymentController implements IPaymentController{
         try {
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
             const subscription=await this.paymentService.getSubscription(userId);
-            if(!subscription){
+            if(!subscription||subscription.status!=="active"){
                 return res.status(404).json({message: "subscription not found"});
             }
             return res.status(200).json({message: "subscription found", subscription});
@@ -138,12 +82,14 @@ export default class PaymentController implements IPaymentController{
             return next(error);
         }
     }
+   
     async cancelSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {userId}=req;
         const {paymentMethod}=req.body;
         try{
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
-            await this.paymentService.cancelSubscription(userId);
+            await this.paymentService.cancelSubscription(userId,false);
+            await this.paymentService.deleteUserFromDb(userId);
             return res.status(200).json({message:"subscription canceled successfully"});
         }catch(err){
             console.log("Error canceling subscription:",err);
@@ -188,3 +134,51 @@ export default class PaymentController implements IPaymentController{
         }
     }
 }
+
+   //לא להשתמש
+    // async startPaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
+    //     const {planName,paymentMethod}=req.body;
+    //     const {userId}=req;
+    //     if(!paymentMethod || ! ['paypal','stripe'].includes(paymentMethod) ){
+    //         return res.status(400).json({message: "payment method is required!"});
+    //     }
+    //     if(!planName || !['basic','standard','premium'].includes(planName)){
+    //         return res.status(400).json({message: "plan name is required!"});
+    //     }
+    //     if(!userId){
+    //         return res.status(400).json({message: "the user is not logged in or not exist!"});
+    //     }
+    //     try {
+    //         this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
+    //         //בדיקה האם יש ליוזר כבק מנוי פעיל
+    //         const userSubscription=await this.paymentService.getSubscription(userId);
+    //         if(userSubscription && userSubscription.status==="active" ){
+    //             return res.status(400).json({message: "user already have a subscription"});            
+    //         }
+    //         const planId=await this.paymentService.createSubscriptionInit(planName);
+    //         return res.status(200).json({message:"payment process started successfully",planId:planId});
+    //     } catch (error) {
+    //         console.log("Error starting payment process:",error);
+    //         return next(error);
+    //     }
+    // }
+    //בתוך CREATE PLANS:
+            // this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
+            // await this.paymentService.createPlan({
+            //     plan_name:"basic",
+            //     price:32.90,
+            //     billing_interval:'monthly',
+            //     description:'basic plan'
+            // });
+            // await this.paymentService.createPlan({
+            //     plan_name:"standard",
+            //     price:54.90,
+            //     billing_interval:'monthly',
+            //     description:'standard plan'
+            // });
+            // await this.paymentService.createPlan({
+            //     plan_name:"premium",
+            //     price:69.90,
+            //     billing_interval:'monthly',
+            //     description:'premium plan'
+            // });

@@ -1,11 +1,10 @@
-import { AllowNull, Column,DataType,HasMany,Model,PrimaryKey,Table } from "sequelize-typescript";
+import {Column,DataType,HasMany,Model,Table } from "sequelize-typescript";
 import { Subscription } from "./subscription";
-import { IFullPlan } from "../interfaces/IPlan";
 
 @Table({tableName:'plans',modelName:'Plan',timestamps:false})
-export class Plan extends Model<IFullPlan>{
+export class Plan extends Model{
     @Column({
-        type:DataType.UUIDV4,
+        type:DataType.UUID,
         primaryKey:true,
         allowNull:false,
         unique:true,

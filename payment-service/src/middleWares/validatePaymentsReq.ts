@@ -50,6 +50,7 @@ export const validateUserReqFields=
         }
         return true;
     });
+
 export const errorValidator=(req:Request,res:Response,next:NextFunction):void=>{
     const errors=validationResult(req);
     if(!errors.isEmpty()){

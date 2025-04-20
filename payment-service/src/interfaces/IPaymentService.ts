@@ -6,14 +6,17 @@ import { ISubscription } from "./ISubscription";
 import { IUser } from "./IUser";
 
 export interface IPaymentService{
-    createProduct():Promise<string>,
-    createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>,
-    createSubscriptionInit(planName:string):Promise<string>,
+    // createProduct():Promise<string>,
+    // createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>,
+    // createSubscriptionInit(planName:string):Promise<string>,
     saveSubscription(planName:string,user:IUser,subscription:IPayPalSubscriptionResponse):Promise<ISubscription>,
+    savePlanOnDb(planId:string,planName:string):Promise<IFullPlan>,
+    deleteUserFromDb(userId:string):Promise<string>,
+    getUserById(userId:string):Promise<IUser|null>,
     approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>,
     createUser(userId:string,userName:string,userEmail:string):Promise<IUser>,
     getSubscription(subscriptionId?:string,userId?:string):Promise<ISubscription|null>,
-    cancelSubscription(userId:string):Promise<string>,
+    cancelSubscription(userId:string,haveSubTwice:boolean):Promise<string>,
     updateSubscription(data:updatePaypalSubscriptionDTO):Promise<ISubscription>
     getAllSubscriptions():Promise<ISubscription[]|null>
 }

@@ -1,4 +1,4 @@
-import { json, NextFunction, Request, Response, Router } from "express";
+import {NextFunction, Request, Response, Router } from "express";
 import { config } from "dotenv";
 import container from "../config/inversify";
 import { Tokens } from "../utils/tokens";
@@ -15,24 +15,15 @@ paypalRouter.post('/initP',[
     // autenticateRule,
     errorValidator
 ],(req:Request,res:Response,next:NextFunction)=>{
-    paymentController.createPlans(req,res,next)
+    paymentController.saveAllPlansInit(req,res,next);
 });
 
-paypalRouter.post('/pay',
-    [
-        validatePaymentMethodFieldReq,
-        validatePlanNameFieldReq,
-        validateUserIdField,
-        errorValidator
-    ],(req:Request,res:Response,next:NextFunction)=>{
-    paymentController.startPaymentProcess(req,res,next)
-});
 paypalRouter.post('/cancel',
     [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
     ,(req:Request,res:Response,next:NextFunction)=>{
     paymentController.cancelSubscription(req,res,next)
 });
-paypalRouter.post('/approve', 
+paypalRouter.post('/paymentCompleted', 
     [
         validateUserIdField,//userId
         validateUserReqFields,//userName,userEmail
@@ -40,9 +31,10 @@ paypalRouter.post('/approve',
         validatePlanNameFieldReq,//planName
         errorValidator
     ],
+    (req:Request,res:Response,next:NextFunction)=>{ paymentController.saveAllPlansInit(req,res,next);},
     (req:Request,res:Response,next:NextFunction)=>{ paymentController.approvePaymentProcess(req,res,next) }
 );
-paypalRouter.get('/subscription',
+paypalRouter.get('/getSubscription',
      //אולי למחוק ולהשאיר רק בפונקציה
     [ validateUserIdField,validatePaymentMethodFieldReq,errorValidator ],
     (req:Request,res:Response,next:NextFunction)=>{

@@ -10,7 +10,7 @@ export default class PlanAdapter implements IPlanAdapter{
     convertPlanToIFullPlan(plan: Plan): IFullPlan {
         if('name' in plan){
             return{
-                id:plan.id,
+                id: plan.plan_id,
                 plan_name:plan.name,
                 price:plan.price,
                 billing_interval:plan.billing_interval,

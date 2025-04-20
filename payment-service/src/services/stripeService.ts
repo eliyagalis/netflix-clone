@@ -18,17 +18,15 @@ export default class StripeService implements IPaymentService {
         @inject(Tokens.ISubscriptionRepository) private subscriptionRepository:ISubscriptionRepository,
         @inject(Tokens.IUserRepository) private userRepository:IUserRepository
     ){}
-    async createProduct():Promise<string>{
-        return "Stripe Product ID";
-    }
+    // async createProduct():Promise<string>{
+    //     return "Stripe Product ID";
+    // }
 
-    async createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>{
-        return {} as IFullPlan;
-    }
+    // async createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>{
+    //     return {} as IFullPlan;
+    // }
 
-    async createSubscriptionInit(planName:string):Promise<string>{
-        return "Stripe plan ID";
-    }
+   
     async approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>{
         return {} as IPayPalSubscriptionResponse;
     }
@@ -43,6 +41,15 @@ export default class StripeService implements IPaymentService {
             return newUser as IUser;
         }
         return user as IUser;
+    }
+    async  savePlanOnDb(planId:string,planName:string):Promise<IFullPlan>{
+        return {} as IFullPlan;
+    }
+    async deleteUserFromDb(userId:string):Promise<string>{
+        return ""
+    }
+    async  getUserById(userId:string):Promise<IUser|null>{
+        return {} as IUser;
     }
     async saveSubscription(planName:string,user:IUser,subscription:IPayPalSubscriptionResponse):Promise<ISubscription>{
        return {} as ISubscription;

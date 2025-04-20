@@ -2,7 +2,7 @@ import { inject } from "inversify";
 import { getAccessTokenPayPal } from "../../config/paypal_accessToken";
 import { Tokens } from "../../utils/tokens";
 import { createProduct } from "../payPal_requests/product_request";
-import { IFullPlan } from "../../interfaces/IPlan";
+import { IFullPlan, IPlan } from "../../interfaces/IPlan";
 import { IPayPalPlanResponse, IPayPalSubscriptionResponse} from "../../interfaces/IPaypalResponses";
 import { createPaypalPlan } from "../payPal_requests/plan_request";
 import { cancelPaypalSubscription, getSubscriptionById, updatePaypalSubscription } from "../payPal_requests/subscription_request";
@@ -23,104 +23,68 @@ export default class PayPalService implements IPaymentService{
         @inject(Tokens.ISubscriptionRepository) private subscriptionRepository:ISubscriptionRepository,
         @inject(Tokens.IUserRepository) private userRepository:IUserRepository
     ){}
-    static getProductId(): string | null {
-        return this.productId;
-      }
+    // static getProductId(): string | null {
+    //     return this.productId;
+    //   }
     
-      public static setProductId(id: string | null) {
-        this.productId = id;
-      }
-    async createProduct():Promise<string>{
-        if(!PayPalService.productId){
-            try{
-                const accessToken=await getAccessTokenPayPal();
-                console.log("access token:",accessToken);
-                if(!accessToken){
-                    throw new Error("access token not found")
-                }
-                const productName="Netflix general Subscription";
-                const productId=await createProduct(productName,accessToken);
-                if(!productId){
-                    throw new Error("product not found");
-                }
-                PayPalService.productId=productId;
-                return productId; // Returning the PayPal response
-            }catch(err){
-                console.log("Error creating Paypal product:",err);
-                throw new Error((err as Error).message);
+    //   public static setProductId(id: string | null) {
+    //     this.productId = id;
+    //   }
+    // async createProduct():Promise<string>{
+    //     if(!PayPalService.productId){
+    //         try{
+    //             const accessToken=await getAccessTokenPayPal();
+    //             console.log("access token:",accessToken);
+    //             if(!accessToken){
+    //                 throw new Error("access token not found")
+    //             }
+    //             const productName="Netflix general Subscription";
+    //             const productId=await createProduct(productName,accessToken);
+    //             if(!productId){
+    //                 throw new Error("product not found");
+    //             }
+    //             PayPalService.productId=productId;
+    //             return productId; // Returning the PayPal response
+    //         }catch(err){
+    //             console.log("Error creating Paypal product:",err);
+    //             throw new Error((err as Error).message);
+    //         }
+    //     }
+    //     return PayPalService.productId; // Ensure a return value if productId already exists
+    // }
+    async savePlanOnDb(planId:string,planName:string):Promise<IFullPlan>{
+        try {
+            if(await this.planRepository.findPlanById(planId)){
+                throw new Error("plan is already exist on db");
             }
-        }
-        return PayPalService.productId; // Ensure a return value if productId already exists
-    }
-
-    // ובדאטה בייס שלי הפונקציה יוצרת פלאן חדש בפייפאל
-//הפלאן הוא בעצם סוג המנוי (בייסיק, פרימיום, סטנדרט) שאני מציעה ללקוחות שלי
-
-    async createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>{
-        if(!data.plan_name){
-            throw new Error("plan name !")
-        }
-        if(!PayPalService.productId){
-            this.createProduct();
-        }
-        try{
-            const accessToken:string=await getAccessTokenPayPal();
-            const plan=await this.planRepository.findPlanByName(data.plan_name);
-            if(plan){
-                throw new Error("plan is already exist");
-            }
-            //יהיה ריפוזיטורי של שימוש אחיד שיהיה בעתיד או Pypal/stripe
-            const createdPaypalPlan:IPayPalPlanResponse=await createPaypalPlan(data,PayPalService.productId!,accessToken);
-            const createdPostgreSqlPlan=await this.planRepository.createPlan(data,createdPaypalPlan.id);
-            return createdPostgreSqlPlan as IFullPlan;
-        }catch(err){
-            console.log("Error creating Paypal plan:",err);
-            throw new Error(`Error creating Paypal plan: ${(err as Error).message}`);
+           const newPlan:IFullPlan={ 
+                id:planId,
+                plan_name:planName,
+                price:planName=="basic"? 32.90: planName=="standard"?54.50:69.90,
+                billing_interval:'monthly',
+                description:`${planName} plan`
+            };
+            return await this.planRepository.createPlan(newPlan);
+        } catch (error) {
+            console.log("error saving plans in db");
+            throw new Error((error as Error).message);
         }
     }
-    //הפעולה תבדוק האם יש פלאן כזה- אם כן - תשלח חזרה את הפלאן ID 
-    async createSubscriptionInit(planName:string):Promise<string>{
-        if(!planName){
-            throw new Error("plan name is required!");
-        }
-        try{
-            const plan=await this.planRepository.findPlanByName(planName);
-            if(!plan){
-                throw new Error("plan not found");
-            }
-            return plan.id as string;
-        }catch(err){
-            console.log("Error creating subscription:",err);
-            throw new Error((err as Error).message);
-        }
-    }
+  
     async approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>{
         try {
             const accessToken=await getAccessTokenPayPal();
-            const subscription=await getSubscriptionById(subscriptionId,accessToken);
-            if(!subscription||subscription.status!=="ACTIVE"){
+            const createdPayPalSub=await getSubscriptionById(subscriptionId,accessToken);//מפייפאל
+            if(!createdPayPalSub||createdPayPalSub.status!=="ACTIVE"){
                 throw new Error("subscription not found or not active");
             }
-            return subscription as IPayPalSubscriptionResponse;
+            return createdPayPalSub as IPayPalSubscriptionResponse;
         } catch (error) {
             console.log("Error approving subscription:",error);
             throw new Error((error as Error).message);
-            
         }
     }
-    // async checkingUserHaveSubscription(userId:string):Promise<ISubscription|null>{
-    //     try {
-    //         const user=await this.userRepository.getUserById(userId);
-    //         if(user){
-    //             throw new Error("user have a subscription already");
-    //         }
-
-    //     } catch (error) {
-    //         console.log("Error checking user subscription:",error);
-    //         throw new Error((error as Error).message);
-    //     }
-    // }
-    async createUser(userId:string,userName:string,userEmail:string):Promise<IUser>{
+       async createUser(userId:string,userName:string,userEmail:string):Promise<IUser>{
         if(!userId||!userName||!userEmail){
             throw new Error("user id or user name or user email is required on creating user!");
         }
@@ -146,15 +110,10 @@ export default class PayPalService implements IPaymentService{
         //     throw new Error("plan name or user id is required on creating subcription!");
         // }
         try{
-            const accessToken=await getAccessTokenPayPal();
-            if(!accessToken){
-                throw new Error("access token not found")
-            }
             const plan=await this.planRepository.findPlanByName(planName);
             if(!plan){
                 throw new Error("plan not found")
             }
-
             const subscriptionData: CreateSubscriptionDTO = {
                 user: user,
                 plan: plan,
@@ -186,9 +145,9 @@ export default class PayPalService implements IPaymentService{
         }
         try{
             const param= userId? userId:subscriptionId;
-            if(param===userId&& !await this.userRepository.getUserById(param!)){
-                throw new Error("user not found");
-            }
+            // if(param===userId&& !await this.userRepository.getUserById(param!)){
+            //     throw new Error("user not found");
+            // }
             const subscription=await this.subscriptionRepository.getSubscriptionWithDetails(param);
             return subscription? subscription as ISubscription:null;
         }catch(err){
@@ -196,9 +155,20 @@ export default class PayPalService implements IPaymentService{
             throw new Error((err as Error).message);
         }
     }
-     
+    async getUserById(userId:string):Promise<IUser|null>{
+        if(!userId){
+            throw new Error("user id is required!")
+        }
+        try {
+            const userExist=this.userRepository.getUserById(userId);
+            return userExist? userExist! :null;
+        } catch (error) {
+            console.log("error finding user by id");
+            throw new Error((error as Error).message);
+        }
+    }
     //הפונקציה מבטלת מנוי קיים בפייפאל
-    async cancelSubscription(userId:string):Promise<string>{
+    async cancelSubscription(userId:string,haveSubTwice:boolean=false):Promise<string>{
         if(!userId){
             throw new Error("user id is required!")
         }
@@ -212,14 +182,24 @@ export default class PayPalService implements IPaymentService{
                 throw new Error("this subscription is'nt active or not exist");
             }
             await cancelPaypalSubscription(subscription.subscription_id,accessToken);
-            
-            await this.userRepository.deleteUser(subscription!.user_id);
-            
+            // await this.userRepository.deleteUser(subscription!.user_id);
             //למרות שהCASADE מתבצע אוטומטית כאשר המנוי נמחק- עדיין ארצה לא להתנות בידיו את כל המחיקה וארצה לבצע זאת עצמאית
-            return await this.subscriptionRepository.cancelPostgreSqlSubscription(subscription.subscription_id); 
+            if(!haveSubTwice){
+                return await this.subscriptionRepository.cancelPostgreSqlSubscription(subscription.subscription_id); 
+            }
+            return "canceling paypal subscription succeeded";
         }catch(err){
             console.log("Error canceling Paypal subscription:",err);
             throw new Error((err as Error).message);
+        }
+    }
+    
+    async deleteUserFromDb(userId:string):Promise<string>{ 
+        try {
+            return await this.userRepository.deleteUser(userId);
+        } catch (error) {
+            console.log("error deleting user from Db");
+            throw new Error((error as Error).message);
         }
     }
     async getAllSubscriptions():Promise<ISubscription[]|null>{
@@ -238,7 +218,7 @@ export default class PayPalService implements IPaymentService{
             throw new Error("access token not found")
         }
         try {
-            const subscription=await this.getSubscription(userId);
+            const subscription=await this.getSubscription("",userId);
             if(!subscription){
                 throw new Error("this subscription isn't exist");
             }
@@ -270,3 +250,44 @@ export default class PayPalService implements IPaymentService{
         }
     } 
 }
+  // ובדאטה בייס שלי הפונקציה יוצרת פלאן חדש בפייפאל
+//הפלאן הוא בעצם סוג המנוי (בייסיק, פרימיום, סטנדרט) שאני מציעה ללקוחות שלי
+
+    // async createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>{
+    //     if(!data.plan_name){
+    //         throw new Error("plan name !")
+    //     }
+    //     if(!PayPalService.productId){
+    //         this.createProduct();
+    //     }
+    //     try{
+    //         const accessToken:string=await getAccessTokenPayPal();
+    //         const plan=await this.planRepository.findPlanByName(data.plan_name);
+    //         if(plan){
+    //             throw new Error("plan is already exist");
+    //         }
+    //         //יהיה ריפוזיטורי של שימוש אחיד שיהיה בעתיד או Pypal/stripe
+    //         const createdPaypalPlan:IPayPalPlanResponse=await createPaypalPlan(data,PayPalService.productId!,accessToken);
+    //         const createdPostgreSqlPlan=await this.planRepository.createPlan(data,createdPaypalPlan.id);
+    //         return createdPostgreSqlPlan as IFullPlan;
+    //     }catch(err){
+    //         console.log("Error creating Paypal plan:",err);
+    //         throw new Error(`Error creating Paypal plan: ${(err as Error).message}`);
+    //     }
+    // }
+    // //הפעולה תבדוק האם יש פלאן כזה- אם כן - תשלח חזרה את הפלאן ID 
+    // async createSubscriptionInit(planName:string):Promise<string>{
+    //     if(!planName){
+    //         throw new Error("plan name is required!");
+    //     }
+    //     try{
+    //         const plan=await this.planRepository.findPlanByName(planName);
+    //         if(!plan){
+    //             throw new Error("plan not found");
+    //         }
+    //         return plan.id as string;
+    //     }catch(err){
+    //         console.log("Error creating subscription:",err);
+    //         throw new Error((err as Error).message);
+    //     }
+    // }

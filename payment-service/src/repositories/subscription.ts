@@ -14,7 +14,7 @@ export interface ISubscriptionRepository {
     getSubscriptionWithDetails(subscriptionId?:string,userId?:string): Promise<ISubscription|null>,
     cancelPostgreSqlSubscription(subscriptionId:string):Promise<string>,
     getAllSubscriptions():Promise<Subscription[]|null>,
-    updateSubscription<T extends keyof ISubscription>(property:T,valueToChange:Subscription[T],subscription:ISubscription) : Promise<ISubscription>
+    updateSubscription<T extends keyof ISubscription>(property:T,valueToChange:ISubscription[T],subscription:ISubscription) : Promise<ISubscription>
 }
 
 //קודם כל מקבלת פרטים של היוזר ושומרת אותם->>
@@ -121,7 +121,7 @@ export class SubscriptionRepository implements ISubscriptionRepository {
     // Subscription.
     async updateSubscription<T extends keyof ISubscription>(
         property:T,   //אחד מהשדות המוגדרים במודל מנוי
-        valueToChange:Subscription[T], //טיפוס מסוג הערך של השדה שמסומן באמצעות T
+        valueToChange:ISubscription[T], //טיפוס מסוג הערך של השדה שמסומן באמצעות T
         subscription:ISubscription) : Promise<ISubscription>
     {
         try{

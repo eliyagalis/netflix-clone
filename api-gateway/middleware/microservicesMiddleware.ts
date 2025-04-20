@@ -39,7 +39,7 @@ export const microServiceMiddleware=(app:Application):void=>
         pathRewrite: (path,req)=>{return `/api/v1/auth/${req.path}`}        
     }))
     //, authenticate
-    app.use(`${url}/movies` ,(req: Request, res: Response, next: NextFunction) => {
+    app.use(`${url}/movies`,(req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to movies service...", req.originalUrl);
         console.log(req.path);
         next();

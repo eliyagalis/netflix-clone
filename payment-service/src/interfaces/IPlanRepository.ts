@@ -4,7 +4,7 @@ import { IFullPlan, IPlan } from "./IPlan";
 
 interface IPlanRepository {
     getAllPlans(): Promise<IFullPlan[]|null>,
-    createPlan(plan: IPlan,paypalPlanId:string): Promise<IFullPlan>,
+    createPlan(plan: IFullPlan): Promise<IFullPlan>,
     updatePlan<K  extends keyof IPlan>(data:UpdatePlanDTO<K>): Promise<IFullPlan|null>,
     deletePlan(planName: string): Promise<string|null>,
     findPlanByName(name: string): Promise<IFullPlan|null>,

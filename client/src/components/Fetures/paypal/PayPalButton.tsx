@@ -1,35 +1,67 @@
 import React from 'react'
 import { PayPalButtons,PayPalScriptProvider } from '@paypal/react-paypal-js';
-
+import { useNavigate } from 'react-router-dom';
 interface PayPalButtonProps {
     planId:string,
     onSuccess:(subscriptionId:string)=>void
 }
 const PayPalButton:React.FC<PayPalButtonProps> = ({planId,onSuccess}) => {
+    const navigate=useNavigate()
+
   return (
     <PayPalScriptProvider options={{
-        clientId:process.env.REACT_APP_CLIENT_ID_PP as string,
+        clientId:import.meta.env.VITE_CLIENT_ID_PP as string,
         vault:true,
         intent:"subscription"
     }}>
-        <PayPalButtons style={{layout:'vertical',color:'blue',shape:'rect',label:'subscribe'}}
-            createSubscription={(data,actions)=>{
+        <PayPalButtons style={{layout:'vertical',color:'gold',shape:'rect',label:'subscribe'}}
+            createSubscription={(_, actions) => {
+                if (!planId) {
+                    console.error("Missing planId for subscription creation");
+                    return Promise.reject(new Error("Missing plan_id"));
+                  }
                 return actions.subscription.create({
-                    plan_id:planId
+                    plan_id: planId
                 });
             }}
-            onApprove={(data)=>{
-                console.log(data.subscriptionID);
-                onSuccess(data.subscriptionID);
+            onApprove={async (data) => {
+                if (data.subscriptionID) {
+                    console.log("subscription id :",data.subscriptionID);
+                    onSuccess(data.subscriptionID);
+                } else {
+                    console.error("Subscription ID is undefined or null.");
+                }
             }}
-            onError={(error)=>{
-                console.error("Error creating subscription:",error);
-                //להפנות שוב לשלב של יצירת מנוי
-
-            }}/>
+            onError={(error) => {
+                console.error("Error creating subscription:", error);
+                navigate('/choosePlan') // Add a route for choosing a plan
+            }}
+        />
     </PayPalScriptProvider>
 
   )
 }
 
 export default PayPalButton
+
+// //      <div id="paypal-button-container-P-9GT50560L5615082SNAAWG3Y"></div>
+// <script src="https://www.paypal.com/sdk/js?client-id=AYjAWvcwwDc1USNaKZ_Oc-5LlZxKXPk3Y1McezDyxdO_n4G8FjB9c6vn8uYAmHRRTkdwIuckVz2xegGp&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+// <script>
+//   paypal.Buttons({
+//       style: {
+//           shape: 'rect',
+//           color: 'gold',
+//           layout: 'horizontal',
+//           label: 'subscribe'
+//       },
+//       createSubscription: function(data, actions) {
+//         return actions.subscription.create({
+//           /* Creates the subscription */
+//           plan_id: 'P-9GT50560L5615082SNAAWG3Y'
+//         });
+//       },
+//       onApprove: function(data, actions) {
+//         alert(data.subscriptionID); // You can add optional success message for the subscriber here
+//       }
+//   }).render('#paypal-button-container-P-9GT50560L5615082SNAAWG3Y'); // Renders the PayPal button
+// </script>

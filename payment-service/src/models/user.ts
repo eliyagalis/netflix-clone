@@ -5,7 +5,7 @@ import { Subscription } from "./subscription";
 @Table({tableName:'users',modelName:'User',timestamps:false})
 export class User extends Model{
     @Column({
-        type:DataType.UUIDV4,
+        type:DataType.UUID,
         primaryKey:true,
         allowNull:false,
         unique:true
@@ -30,6 +30,4 @@ export class User extends Model{
     })
     subscription!:Subscription;
 
-    // @HasMany(()=>Invoice)
-    // invoices!:Invoice[];
 }

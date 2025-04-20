@@ -5,7 +5,7 @@ import { Plan } from "./plan";
 @Table({tableName:'subscription',modelName:'Subscription',timestamps:false})
 export class Subscription extends Model{
     @Column({
-        type:DataType.UUIDV4,
+        type:DataType.UUID,
         primaryKey:true,
         allowNull:false,
         unique:true
@@ -14,7 +14,7 @@ export class Subscription extends Model{
 
     @ForeignKey(()=>User)
     @Column({
-        type:DataType.UUIDV4,
+        type:DataType.UUID,
         allowNull:false,
         onDelete: 'CASCADE'
     })
@@ -27,7 +27,7 @@ export class Subscription extends Model{
 
     @ForeignKey(()=>Plan)
     @Column({
-        type:DataType.UUIDV4,
+        type:DataType.UUID,
         allowNull:false,
     })
     plan_id!:string
@@ -58,10 +58,10 @@ export class Subscription extends Model{
     status!:"active"|"cancelled"|"expired"
 
     //תאריך חידוש המנוי
-    @Column({
-        type:DataType.DATE,
-        allowNull:true
-    })
-    renewal_date?:Date 
+    // @Column({
+    //     type:DataType.DATE,
+    //     allowNull:true
+    // })
+    // renewal_date?:Date 
 
 }

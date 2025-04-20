@@ -13,23 +13,23 @@ export class PlanRepositoryPSql implements IPlanRepository{
     
     constructor(@inject(Tokens.IPlanAdapter) private planAdapter:IPlanAdapter){}
 
-    async createPlan(plan:IPlan,paypalPlanId:string):Promise<IFullPlan>{
+    async createPlan(plan:IFullPlan):Promise<IFullPlan>{
         const validPlanName=plan.plan_name!=='basic' && 
                             plan.plan_name!=='premium'&& 
                             plan.plan_name!=='standard';
-        if( !plan.plan_name || validPlanName || !plan.price || !plan.description|| !plan.billing_interval){
+        if( !plan.id||!plan.plan_name || validPlanName || !plan.price || !plan.description|| !plan.billing_interval){
             throw new Error("Please enter all the parameters!");
         }
         try{
             const newPlan:Plan=await Plan.create({
-                id:paypalPlanId,
+                id:plan.id,
                 plan_name:plan.plan_name as 'basic' | 'premium' | 'standard',
                 price:plan.price,
                 description:plan.description,
                 billing_interval:plan.billing_interval
             });
             return this.planAdapter.convertPlanToIFullPlan(newPlan);
-        }catch(err){
+        }catch(err){                                                       
             throw new Error(`Error on creating postgre plan, problem: ${(err as Error).message}`);
         }
     }

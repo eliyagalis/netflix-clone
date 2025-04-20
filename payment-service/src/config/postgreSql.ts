@@ -18,9 +18,11 @@ config()
 export class PostgreSqlConnection{
     private static instance: Sequelize|null;
     private constructor(){}
+
     public static async getInstance(){
         if(!PostgreSqlConnection.instance){
-            const sequelize=new Sequelize(`postgres://${Tokens.userName}:${Tokens.password}@${Tokens.host}:${Tokens.dbPort}/${Tokens.name}`,{
+            // console.log("username:"+" "+process.env.DB_USERNAME+"   pass: "+process.env.DB_PASS+" host: "+process.env.DB_HOST+" port:"+process.env.DB_PORT+" dbName:"+process.env.DB_NAME);
+            const sequelize=new Sequelize(`postgres://${process.env.DB_USERNAME}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,{
                 dialect:'postgres',
                 dialectOptions:{
                     ssl:{
@@ -31,16 +33,32 @@ export class PostgreSqlConnection{
                 },
                 models:[Plan,User,Subscription]
             })
-            try{
-                await sequelize.authenticate();
-                console.log(" Db connected succssesfuly");
-                await sequelize.sync({alter:true});
-                console.log("db created succssesfully");
-                this.instance=sequelize;
-            }catch(err){
-                throw new Error("Database connection faild");
-            }
+            this.instance=sequelize;
+            console.log("PostgreSqlConnection instance created=======");
         }
+            try{
+                await this.instance!.authenticate();
+                console.log(" Db connected succssesfuly");
+                await this.instance!.sync({alter:true});
+                console.log("db created succssesfully");
+                // this.instance=sequelize;
+            }catch(err){
+                console.error("Unable to connect to the database: the error------", err);
+                throw new Error("Database connection faild",);
+            }
+        
         return PostgreSqlConnection.instance;
+    }
+    public static async closeConnection(){
+        if(PostgreSqlConnection.instance){
+            await PostgreSqlConnection.instance.close();
+            PostgreSqlConnection.instance=null;
+        }
+    }
+    public static async deleteDb(){
+        if(PostgreSqlConnection.instance){
+            await PostgreSqlConnection.instance.drop({cascade:true});
+            PostgreSqlConnection.instance=null;
+        }
     }
 }

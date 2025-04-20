@@ -15,7 +15,7 @@ export const getAccessTokenPayPal=async():Promise<string>=>{
                     "Content-Type": "application/x-www-form-urlencoded",
                     "Authorization": `Basic ${credentials}`,
                   },
-            })
+                })
             return (res.data).access_token;
         })
         return accessTokenFromCache;
