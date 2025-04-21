@@ -29,6 +29,7 @@ export class UserService implements IUserService {
   async signup(email: string): Promise<IUser> {
     // Check if user already exists
     const existingUser = await this.userRepository.findByEmail(email);
+
     if (existingUser) {
       throw new Error('Email already registered');
     }

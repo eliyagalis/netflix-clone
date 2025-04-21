@@ -2,56 +2,57 @@ import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { TOKENS } from '../tokens';
 import IUserService from '../interfaces/IUserService';
+import { handleError } from '../utils/handle-error-request';
+import { SetUserDTO } from '../DTOs/set.dto';
 
 @injectable()
 export class UserController {
   constructor(
     @inject(TOKENS.IUserService) private userService: IUserService
-  ) {}
+  ) { }
 
   /**
    * Sign up a new user
    */
-  async signup(req: Request, res: Response): Promise<void> {
+  async signup(req: Request, res: Response) {
     try {
+      const data: SetUserDTO = req.body
+
       const { email } = req.body;
-      
+
       const user = await this.userService.signup(email);
-      
-      this.created(res, { 
-        message: 'User created successfully',
-        userId: user.id,
-        status: user.status
-      });
+
+      res.status(200)
     } catch (error) {
-      this.handleError(res, error);
+      handleError(res, error);
     }
   }
 
   /**
    * Login a user with email and password
    */
-  async login(req: Request, res: Response): Promise<void> {
+  async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      
+
       // UserService handles all authentication logic internally
       const result = await this.userService.login(email, password);
-      
+
       // Set refresh token in HTTP-only cookie
       res.cookie('refreshToken', result.refreshToken, {
         httpOnly: true,
       });
-      
-      this.success(res, {
-        accessToken: result.accessToken,
-        user: result.user
-      });
+
+      res.cookie('accessToken', result.accessToken, {
+        httpOnly: true
+      })
+
+      res.status(200).json({ message: 'Login succesful', user: result.user });
     } catch (error) {
-      if (error instanceof Error) {
-        this.unauthorized(res, error.message);
+      if (error instanceof Error) { //???
+        handleError(res, error.message);
       } else {
-        this.handleError(res, error);
+        handleError(res, error);
       }
     }
   }
@@ -59,70 +60,81 @@ export class UserController {
   /**
    * Refresh access token using refresh token
    */
-  async refreshToken(req: Request, res: Response): Promise<void> {
+  async refreshToken(req: Request, res: Response) {
     try {
       const refreshToken = req.cookies.refreshToken;
-      
+
       if (!refreshToken) {
-        this.unauthorized(res, 'Refresh token is required');
+        res.status(401).json({ message: "Refresh token is required" });
         return;
       }
-      
+
       const accessToken = await this.userService.refreshToken(refreshToken);
-      
-      this.success(res, { accessToken });
+
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true
+      })
+
     } catch (error) {
       res.clearCookie('refreshToken');
-      this.unauthorized(res, 'Invalid refresh token');
+      handleError(res, error);
     }
   }
 
   /**
    * Logout user
    */
-  logout(req: Request, res: Response): void {
+  logout(req: Request, res: Response) {
     res.clearCookie('refreshToken');
-    this.success(res, { message: 'Logged out successfully' });
+    res.clearCookie('accessToken');
+    res.status(200).json({
+      message: 'Logout succesfully'
+    })
   }
-  
+
   /**
    * Get current user profile
    */
-  async getUser(req: Request, res: Response): Promise<void> {
+  async getUser(req: Request, res: Response) {
     try {
       const userId = req.params.id;
-      
+
       const user = await this.userService.findUserById(userId);
-      
+
       if (!user) {
-        this.notFound(res, 'User not found');
-        return;
+        throw new Error('User not found')
       }
-      
-      this.success(res, user);
+
+      res.status(200).json({
+        message: 'User retrived succesfully',
+        user: user
+      })
+
     } catch (error) {
-      this.handleError(res, error);
+      handleError(res, error);
     }
   }
-  
+
   /**
    * Update user
    */
-  async updateUser(req: Request, res: Response): Promise<void> {
+  async updateUser(req: Request, res: Response) {
     try {
       const userId = req.params.id;
       const updateData = req.body;
-      
+
       const updatedUser = await this.userService.updateUser(userId, updateData);
-      
+
       if (!updatedUser) {
-        this.notFound(res, 'User not found');
-        return;
+        throw new Error('User not found')
       }
-      
-      this.success(res, updatedUser);
+
+      res.status(200).json({
+        message: 'User updated succesfully',
+        user: updatedUser
+      })
     } catch (error) {
-      this.handleError(res, error);
+      handleError(res, error);
     }
   }
 }
