@@ -2,18 +2,15 @@ import IUser from './IUser';
 import IProfile from './IProfile';
 import UpdateUserDTO from '../DTOs/update.dto';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
+import SignupRequestDTO from '../DTOs/signup.dto';
+import ITokenResponse from './ITokenResponse';
 
 export default interface IUserService {
   /**
    * Sign up a new user with email
    */
-  signup(email: string): Promise<IUser>;
-  
-  /**
-   * Set password for a user
-   */
-  addUserPassword(userId: string, data: SetPasswordDTO): Promise<IUser>;
-  
+  signup(data: SignupRequestDTO): Promise<ITokenResponse>;
+ 
   /**
    * Add subscription for a user
    */

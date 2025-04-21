@@ -9,46 +9,37 @@ import { hash } from "../utils/bcrypt"
 import { SetPasswordDTO, SetSubscriptionDTO, SetUserDTO,  } from "../DTOs/set.dto";
 import IMyListItem from "../interfaces/IMyListItem";
 import { Types } from "mongoose";
+import SignupRequestDTO from "../DTOs/signup.dto";
+import IStatusService from "../interfaces/IStatusService";
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
 
   constructor(
     @inject(TOKENS.IUserAdapter) private userAdapter: IUserAdapter,
+    @inject(TOKENS.IStatusService) private statusService: IStatusService
    )
   {}
-
-  async addInitialUser(data: SetUserDTO): Promise<IUser> {
-    const newInitialUser = new User({
-      email: data.email,
-      status: UserStatus.PENDING
-    });
-
-    return this.userAdapter.toDomainUser(await newInitialUser.save());
+  async addInitialUser(data: SignupRequestDTO): Promise<IUser | null> {
+    const newInitialUser = new User(data);
+    return newInitialUser ? this.userAdapter.toDomainUser(await newInitialUser.save()): null;
   }
+  
+  async addSubscriptionId(userId: string, data: SetSubscriptionDTO): Promise<IUser | null> {
+    const user = await User.findById(userId);
+    if (!user) return null;
 
-  async addUserPassword(userId: string, data: SetPasswordDTO): Promise <IUser | null> {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId, 
-      {
-        password: data.password,
-        status: UserStatus.AWAITING_PAYMENT
-      },
-      {new: true}
-    );
-    if (!updatedUser) return null;
-    return this.userAdapter.toDomainUser(updatedUser);
-  }
-
-  async addSubscriptionId(userId: string, data: SetSubscriptionDTO): Promise <IUser | null> {
+    const nextStatus = this.statusService.getStatusAfterSubscription(user.status);
+    
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
         subscriptionId: data.subscriptionId,
-        status: UserStatus.ACTIVE
+        status: nextStatus
       },
       { new: true}
     );
+    
     if (!updatedUser) return null;
     return this.userAdapter.toDomainUser(updatedUser);
   }

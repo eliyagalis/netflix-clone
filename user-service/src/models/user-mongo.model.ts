@@ -18,12 +18,10 @@ const userSchema = new Schema<IUser>({
   },
   firstName: {
     type: String,
-    required: true,
     trim: true
   },
   lastName: {
     type: String,
-    required: true,
     trim: true
   },
   phoneNumber: {
@@ -37,7 +35,7 @@ const userSchema = new Schema<IUser>({
   status: {
     type: String,
     enum: Object.values(UserStatus),
-    default: UserStatus.PENDING
+    default: UserStatus.INITIAL
   },
   lastLogin: {
     type: Date

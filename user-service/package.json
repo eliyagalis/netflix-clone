@@ -3,8 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon src/index.ts"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
   },
   "keywords": [
     "user",
@@ -21,10 +28,20 @@
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.14",
     "@types/joi": "^17.2.2",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.13.14",
+    "@types/supertest": "^6.0.3",
+    "install": "^0.13.0",
+    "jest": "^29.7.0",
+    "jest-extended": "^4.0.2",
+    "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.9",
+    "npm": "^10.9.2",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },

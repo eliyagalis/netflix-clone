@@ -10,6 +10,7 @@ export const TOKENS = {
   IUserService: "IUserService",
   IAuthService: "IAuthService",
   ITokenService: "ITokenService",
+  IStatusService: "IStatusService",
   // Controllers
   UserController: "UserController",
   AuthController: "AuthController",

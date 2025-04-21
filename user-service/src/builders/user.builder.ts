@@ -5,13 +5,18 @@ import IUserBuilder from "../interfaces/IUserBuilder";
   
 export default class UserBuilder implements IUserBuilder{
     private user: Partial<IUser> = {
-      status: UserStatus.PENDING,
+      status: UserStatus.INITIAL,
       profiles: []
     };
-  
+    
+    withId(id: string): IUserBuilder {
+      this.user.id = id;
+      return this;
+    }
+
     withEmailAndPassword(email: string, password: string): UserBuilder {
       this.user.email = email.toLowerCase().trim();
-      this.user.password = password; // Note: Would be hashed before saving
+      this.user.password = password; 
       return this;
     }
   
@@ -21,7 +26,6 @@ export default class UserBuilder implements IUserBuilder{
       if (phoneNumber) {
         this.user.phoneNumber = phoneNumber;
       }
-      this.user.status = UserStatus.INCOMPLETE;
       return this;
     }
   
@@ -46,7 +50,12 @@ export default class UserBuilder implements IUserBuilder{
       return this;
     }
   
-    build(): Partial<IUser> {
-      return { ...this.user };
+    build(): IUser {
+
+      if (!this.user.id || !this.user.email || !this.user.password) {
+        throw new Error('Cannot build user: missing required fields');
+      }
+
+      return this.user as IUser;
     }
   }

@@ -4,6 +4,7 @@ import { TOKENS } from '../tokens';
 import IUserService from '../interfaces/IUserService';
 import { handleError } from '../utils/handle-error-request';
 import { SetUserDTO } from '../DTOs/set.dto';
+import SignupRequestDTO from '../DTOs/signup.dto';
 
 @injectable()
 export class UserController {
@@ -16,13 +17,11 @@ export class UserController {
    */
   async signup(req: Request, res: Response) {
     try {
-      const data: SetUserDTO = req.body
+      const data: SignupRequestDTO = req.body
 
-      const { email } = req.body;
+      const user = await this.userService.signup(data);
 
-      const user = await this.userService.signup(email);
-
-      res.status(200)
+      res.status(200).json({message: "User signup", user: user})
     } catch (error) {
       handleError(res, error);
     }

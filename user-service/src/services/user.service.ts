@@ -13,6 +13,7 @@ import ITokenResponse from '../interfaces/ITokenResponse';
 import IUserPayload from '../interfaces/IUserPayload';
 import IUserBuilder from '../interfaces/IUserBuilder';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
+import UserBuilder from '../builders/user.builder';
 
 @injectable()
 export class UserService implements IUserService {
@@ -26,50 +27,47 @@ export class UserService implements IUserService {
   /**
    * Sign up a new user with email
    */
-  async signup(email: string): Promise<IUser> {
+  async signup(data: SignupRequestDTO): Promise<ITokenResponse> {
+
+    const { email, password } = data;
     // Check if user already exists
     const existingUser = await this.userRepository.findByEmail(email);
 
     if (existingUser) {
       throw new Error('Email already registered');
     }
-    
-    // Create initial user with pending status
-    const userData = { email };
-    return await this.userRepository.addInitialUser(userData);
-  }
 
-  /**
-   * Set password for a user
-   */
-  async addUserPassword(userId: string, data: SetPasswordDTO): Promise<IUser> {
-    // Find user first
-    const user = await this.userRepository.findUserById(userId);
+    const hashedPassword: string = await hash(password);
+
+    const partialUser = new UserBuilder();
+    partialUser.withEmailAndPassword(email, hashedPassword)
+
+    const newUser: IUser | null = await this.userRepository.addInitialUser({
+      email: email,
+      password: hashedPassword
+    })
+
+    if (!newUser) {
+      throw new Error("Error in the created user")
+    }
+
+    partialUser.withId(newUser.id).build()
+
+    const user = partialUser.withId(newUser.id).build()
+
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("Problem in user build")
     }
-    
-    // Verify user is in pending status
-    if (user.status !== UserStatus.PENDING) {
-      throw new Error('User is not in pending status');
-    }
-    
-    // Hash password before saving
-    const hashedPassword = await hash(data.password);
-    
-    // Update user with password
-    const passwordData = { 
-      password: hashedPassword 
-    };
-    
-    const updatedUser = await this.userRepository.addUserPassword(userId, passwordData);
-    if (!updatedUser) {
-      throw new Error('Failed to update user');
-    }
-    
-    return updatedUser;
-  }
 
+    // Create user payload for token generation
+    const userPayload: IUserPayload = {
+      userId: user.id,
+      email: user.email
+    };
+
+    // Generate tokens using AuthService
+    return this.authService.login(userPayload, password, hashedPassword);
+  }
   /**
    * Add subscription for a user
    */
@@ -78,12 +76,12 @@ export class UserService implements IUserService {
     if (!user) {
       throw new Error('User not found');
     }
-    
+
     const updatedUser = await this.userRepository.addSubscriptionId(userId, data);
     if (!updatedUser) {
       throw new Error('Failed to update subscription');
     }
-    
+
     return updatedUser;
   }
 
@@ -104,12 +102,12 @@ export class UserService implements IUserService {
     if (!user) {
       throw new Error('Invalid email or password');
     }
-    
+
     // Check if user is active
     if (user.status !== UserStatus.ACTIVE) {
       throw new Error('Account is not active');
     }
-    
+
     if (!isActiveUser(user)) {
       throw new Error('Account data is incomplete')
     }
@@ -118,10 +116,10 @@ export class UserService implements IUserService {
       userId: user.id,
       email: user.email
     };
-    
+
     // Use auth service to login and generate tokens
     const tokens = await this.authService.login(userPayload, password, user.password);
-    
+
     // Return tokens and basic user info
     return {
       accessToken: tokens.accessToken,
@@ -163,7 +161,7 @@ export class UserService implements IUserService {
     if (data.password) {
       data.password = await hash(data.password);
     }
-    
+
     return this.userRepository.updateUser(id, data);
   }
 

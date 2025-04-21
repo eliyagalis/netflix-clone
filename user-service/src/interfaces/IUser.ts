@@ -1,9 +1,9 @@
 import IProfile from "./IProfile";
 
 export default interface IUser {
-  id?: string; // Optional for new users before saving
+  id: string; // Optional for new users before saving
   email: string;
-  password?: string;
+  password: string;
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
@@ -16,8 +16,7 @@ export default interface IUser {
 }
 
 export enum UserStatus {
-  PENDING = 'pending',
-  INCOMPLETE = 'incomplete',
+  INITIAL = 'initial',
   AWAITING_PAYMENT = 'awaiting_payment',
   ACTIVE = 'active',
   SUSPENDED = 'suspended',
@@ -25,8 +24,8 @@ export enum UserStatus {
   LOCKED = 'locked'
 }
 // Type guards to verify user state
-export function isPendingUser(user: IUser): user is IUser & { id: string } {
-  return user.status === UserStatus.PENDING && user.id !== undefined;
+export function isInitialUser(user: IUser): user is IUser & { id: string } {
+  return user.status === UserStatus.INITIAL && user.id !== undefined;
 }
 
 export function isAwaitingPaymentUser(user: IUser): user is IUser & { id: string, password: string } {

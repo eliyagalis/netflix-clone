@@ -22,6 +22,8 @@ import UserBuilder from '../builders/user.builder';
 import { UserRepositoryFactory } from '../factories/repostory-factory';
 import IAuthService from '../interfaces/IAuthService';
 import ITokenService from '../interfaces/ITokenService';
+import IStatusService from '../interfaces/IStatusService';
+import { StatusService } from '../services/status.service';
 
 // Initialize container
 const container = new Container();
@@ -41,6 +43,7 @@ container.bind<IUserRepository>(TOKENS.IUserRepository).toConstantValue(userRepo
 container.bind<IAuthService>(TOKENS.IAuthService).to(AuthService);
 container.bind<IUserService>(TOKENS.IUserService).to(UserService);
 container.bind<ITokenService>(TOKENS.ITokenService).to(TokenService);
+container.bind<IStatusService>(TOKENS.IStatusService).to(StatusService)
 
 // Controllers
 container.bind<UserController>(TOKENS.UserController).to(UserController);
