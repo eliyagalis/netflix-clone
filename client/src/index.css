@@ -27,7 +27,7 @@ input:-webkit-autofill:hover {
 
 /* Add this to your global CSS (e.g., styles/globals.css or styles/utilities.css) */
 
-.bg-plan-3 {
+.bg-plan-premium {
   background: radial-gradient(
       140.76% 131.96% at 100% 100%,
       rgb(229, 9, 20) 0%,
@@ -37,7 +37,7 @@ input:-webkit-autofill:hover {
     rgb(29, 82, 157);
 }
 
-.bg-plan-1 {
+.bg-plan-basic {
   background: radial-gradient(
       140.76% 131.96% at 100% 100%,
       rgb(109, 59, 227) 0%,
@@ -47,7 +47,7 @@ input:-webkit-autofill:hover {
     rgb(29, 82, 157);
 }
 
-.bg-plan-2 {
+.bg-plan-standard {
   background: radial-gradient(
       140.76% 131.96% at 100% 100%,
       rgb(176, 56, 220) 0%,

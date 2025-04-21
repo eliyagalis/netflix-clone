@@ -18,11 +18,11 @@ import { colors } from "../data/colors";
 const LandingPage = () => {
 
     return (
-        <div className={`bg-[rgb(15,15,15)] text-white w-full min-h-screen`}>
+        <div className={`${colors.background.darkGray} text-white w-full min-h-screen`}>
             <HelmetHandler page={seo.landing} />
             
             <div className="relative max-w-460 mx-auto">
-                <Header>
+                <Header isSwitch>
                     <Button navLink={strings.landing.header.login.link} color={colors.buttons.secondary} rounded>
                         {strings.landing.header.login.text}
                     </Button>
@@ -65,9 +65,8 @@ const LandingPage = () => {
                     {strings.landing.poster.inputText}
                 </Typography>
                 <LandingForm />
-                <br />
-                <Footer />
             </div>
+            <Footer className="w-9/10 mx-auto"/>
         </div>
     )
 }

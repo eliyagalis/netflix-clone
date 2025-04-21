@@ -16,6 +16,13 @@ export const colors = {
       secondary: 'text-[#e50914]',
       lightGray: 'text-[#737373]'
     },
+    background: {
+      primary: 'bg-[#e50914]',
+      lightWhite: 'bg-[#f3f3f3]',
+      lightGray: 'bg-[#737373]',
+      darkGray: 'bg-[#0f0f0f]',
+
+    },
     plans: {
       basic: "bg-[radial-gradient(140.76%_131.96%_at_100%_100%,_rgb(109,59,227)_0%,_rgba(74,42,150,0.5)_73.57%,_rgba(74,42,150,0)_100%),_rgb(29,82,157)]",
       standard: "bg-[radial-gradient(140.76%_131.96%_at_100%_100%,_rgb(176,56,220)_0%,_rgba(74,42,150,0.5)_73.57%,_rgba(74,42,150,0)_100%),_rgb(29,82,157)]",
