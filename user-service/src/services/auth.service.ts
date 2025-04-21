@@ -1,17 +1,17 @@
 import { compare } from 'bcrypt';
 import ITokenService from '../interfaces/ITokenService';
 import ITokenResponse from '../interfaces/ITokenResponse';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import IAuthSrvice from '../interfaces/IAuthService';
 import IUserPayload from '../interfaces/IUserPayload';
+import { TOKENS } from '../tokens';
 
 @injectable()
 export class AuthService implements IAuthSrvice {
-  private tokenService: ITokenService;
-
-  constructor(tokenService: ITokenService) {
-    this.tokenService = tokenService;
-  }
+  
+  constructor(
+    @inject(TOKENS.ITokenService) private tokenService: ITokenService,
+  ) {}
 
   /**
    * Login method - authenticate user and issue tokens
