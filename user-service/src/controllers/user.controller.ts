@@ -97,6 +97,8 @@ export class UserController {
    */
   async getUser(req: Request, res: Response) {
     try {
+
+      const accessToken = req.cookies('accessToken')
       const userId = req.params.id;
 
       const user = await this.userService.findUserById(userId);
