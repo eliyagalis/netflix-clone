@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ColorProps, colors } from "../../data/colors";
 
 type ButtonProps = {
-  color: ColorProps;
+  color?: ColorProps;
   className?: string;
   children?: React.ReactNode;
   navLink?: string;
@@ -13,7 +13,7 @@ type ButtonProps = {
 };
 
 const Button: React.FC<ButtonProps> = ({
-  color = colors.primary,
+  color = colors.buttons.primary,
   children,
   className = "",
   type = "button",

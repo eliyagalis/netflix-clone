@@ -1,3 +1,5 @@
+import { title } from "process";
+
 export const strings = {
     landing: {
         header: {
@@ -87,6 +89,52 @@ export const strings = {
         },
         form: {
             button: "Get Started"
+        }
+    },
+    signup: {
+        plans: {
+            note: {
+                1: "HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities. Not all content is available in all resolutions. See our Terms of Use for more details.",
+                2: "Only people who live with you may use your account. Watch on 4 different devices at the same time with Premium, 2 with Standard and 1 with Basic.",
+                3: "Live events are included with any Netflix plan and contain ads."
+            },
+            planform: {
+                basic: {
+                  title: "Basic",
+                  subtitle: "720p",
+                  monthlyPrice: "₪32.90",
+                  quality: "Good",
+                  resolution: "720p (HD)",
+                  spatialAudio: false,
+                  supportedDevices: "TV, computer, mobile phone, tablet",
+                  sameTimeDevices: 1,
+                  downloadDevices: 1,
+                },
+                standard: {
+                  title: "Standard",
+                  subtitle: "1080p",
+                  monthlyPrice: "₪54.90",
+                  quality: "Great",
+                  resolution: "1080p (Full HD)",
+                  spatialAudio: false,
+                  supportedDevices: "TV, computer, mobile phone, tablet",
+                  sameTimeDevices: 2,
+                  downloadDevices: 2,
+                },
+                premium: {
+                  title: "Premium",
+                  subtitle: "4K + HDR",
+                  monthlyPrice: "₪69.90",
+                  quality: "Best",
+                  resolution: "4K (Ultra HD) + HDR",
+                  spatialAudio: true,
+                  supportedDevices: "TV, computer, mobile phone, tablet",
+                  sameTimeDevices: 4,
+                  downloadDevices: 6,
+                  isMostPopular: true,
+                }
+              }
+              
         }
     }
 };

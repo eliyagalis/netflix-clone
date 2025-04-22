@@ -24,8 +24,8 @@ const LoginPage = () => {
                 <LoginForm />
             </div>
 
-            <div className="relative z-10 bg-[rgb(22,22,22)] p-5 pt-15 w-full mx-auto">
-                <Footer className="w-9/10 max-w-350 mx-auto" />
+            <div className="relative z-10 bg-[rgb(22,22,22)] py-5">
+                <Footer />
             </div>
         </div>
 
