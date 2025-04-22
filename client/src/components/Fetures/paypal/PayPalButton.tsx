@@ -2,10 +2,11 @@ import React from 'react'
 import { PayPalButtons,PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { useNavigate } from 'react-router-dom';
 interface PayPalButtonProps {
-    planId:string,
-    onSuccess:(subscriptionId:string)=>void
+    planName:string,
+    onSuccess:(subscriptionId:string)=>void,
+    checkPlanAndUser:(planName:string)=>Promise<string|undefined>;
 }
-const PayPalButton:React.FC<PayPalButtonProps> = ({planId,onSuccess}) => {
+const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlanAndUser,onSuccess}) => {
     const navigate=useNavigate()
 
   return (
@@ -15,13 +16,18 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planId,onSuccess}) => {
         intent:"subscription"
     }}>
         <PayPalButtons style={{layout:'vertical',color:'gold',shape:'rect',label:'subscribe'}}
-            createSubscription={(_, actions) => {
-                if (!planId) {
-                    console.error("Missing planId for subscription creation");
-                    return Promise.reject(new Error("Missing plan_id"));
-                  }
+            createSubscription={async(_, actions) => {
+                if(!planName) {
+                    console.error("Missing planName for subscription creation");
+                    return Promise.reject(new Error("Missing plan name"));
+                }
+                const servicePlanId=await checkPlanAndUser(planName);
+                if(!servicePlanId){
+                    return Promise.reject(new Error("invalid plan"));
+                }
+                //TODO:BOM plan Id and userId req validations
                 return actions.subscription.create({
-                    plan_id: planId
+                    plan_id:servicePlanId!
                 });
             }}
             onApprove={async (data) => {
@@ -32,7 +38,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planId,onSuccess}) => {
                     console.error("Subscription ID is undefined or null.");
                 }
             }}
-            onError={(error) => {
+            onError={async(error) => {
                 console.error("Error creating subscription:", error);
                 navigate('/choosePlan') // Add a route for choosing a plan
             }}

@@ -39,7 +39,9 @@ export class PostgreSqlConnection{
             try{
                 await this.instance!.authenticate();
                 console.log(" Db connected succssesfuly");
-                await this.instance!.sync({alter:true});
+                if(process.env.NODE_ENV==="development"){
+                    await this.instance!.sync({alter:true});
+                }
                 console.log("db created succssesfully");
                 // this.instance=sequelize;
             }catch(err){

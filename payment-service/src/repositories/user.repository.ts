@@ -13,21 +13,22 @@ export interface IUserRepository{
 @injectable()
 export default class UserRepository implements IUserRepository{
     async createUser(data:CreateUserDTO):Promise<IUser>{
-        if(!data.user_id||!data.name||!data.email){
+        if(!data.user_id||!data.email){
             console.log("one of the parameters user id/name/email is missing to create a userName");
             throw new Error("one of the parameters user id/name/email is missing");
         }
+        console.log( "the user Id in repo:", data.user_id);
         try {
             const user=new User({
-                id:data.user_id,
-                name:data.name,
+                user_id:data.user_id!,
+                // name:data.name,
                 email:data.email,
                 subscriptions:data.subscriptions? data.subscriptions:null
             })
             await user.save();
             return user as IUser
         } catch (error) {
-            throw new Error("Error creating user");
+            throw new Error(`Error creating user: ${error}`);
         }
     }
     async getUserById(userId:string):Promise<IUser|null>{

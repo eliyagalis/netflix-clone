@@ -37,16 +37,10 @@ export const validateUserIdField=
         }
         return true;
     });
-export const validateUserReqFields=
+export const validateUserEmailReqField=
     check("*").custom((_, { req }) => {
-        if(!req.userEmail || !emailRegex.test(req.userEmail)){
+        if(!req.userEmail || !emailRegex.test(req.userEmail)||forbiddenTagsRegex.test(req.userEmail)){
            throw new Error("invalid email format or missing email");
-        }
-        if(!req.userName){
-            throw new Error("missing userName");
-        }
-        if(req.userName && (typeof req.userName !== 'string' || forbiddenTagsRegex.test(req.userName))){
-            throw new Error("invalid userName");
         }
         return true;
     });

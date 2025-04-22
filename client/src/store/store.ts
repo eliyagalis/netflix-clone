@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector,TypedUseSelectorHook, useDispatch } from "react-redux";
-
+import stepReducer from '../store/slices/loginSteps'
 export const store = configureStore({
-    reducer: {}
+    reducer: {
+        step:stepReducer
+    }
 });
 
 export type RootState = ReturnType<typeof store.getState>; //מחזיר את הטייפים של כל הסטייטים

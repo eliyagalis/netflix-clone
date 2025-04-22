@@ -1,5 +1,4 @@
 import axios from "axios";
-import { IUser } from "../../interfaces/IUser";
 import { IPayPalSubscriptionCancellationResponse, IPayPalSubscriptionResponse } from "../../interfaces/IPaypalResponses";
 
 //    export const createPaypalSubscription=async(planId:string,user:IUser,accessToken:string):Promise<IPayPalSubscriptionResponse>=>{

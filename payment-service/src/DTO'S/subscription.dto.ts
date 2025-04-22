@@ -3,7 +3,7 @@ import { IUser } from "../interfaces/IUser";
 import { IPayPalSubscriptionResponse } from "../interfaces/IPaypalResponses";
 
 export interface CreateSubscriptionDTO {
-    paypalData:IPayPalSubscriptionResponse,
+    paypalData:Partial<IPayPalSubscriptionResponse>,
     user: IUser,
     plan:IFullPlan
     // renewal_date:Date|undefined,

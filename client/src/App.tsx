@@ -3,7 +3,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import OldLandingPage from "./pages/OldLandingPage";
-import PaypalLogic from "./components/Fetures/paypal/paypalTry";
+import PaypalLogic from "./components/Fetures/paypal/paypalLogic";
 import PlansPage from "./pages/PlansPage";
 import MainMoviesPage from "./pages/MainMoviesPage";
 function App() {
@@ -15,7 +15,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/old" element={<OldLandingPage />} />
         {/* <Route path="/main" element={<MainPage/>}/> */}
-        <Route path="/payment" element={<PaypalLogic planId={import.meta.env.VITE_BASIC_PLAN!} planName="basic" paymentMethod="paypal"/>}/>
+        <Route path="/payment" element={<PaypalLogic planName="basic" paymentMethod="paypal"/>}/>
         <Route path="/choosePlan" element={<PlansPage/>}/>
         <Route path="/mainMoviePage" element={<MainMoviesPage/>}/>
       </Routes>
