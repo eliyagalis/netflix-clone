@@ -14,6 +14,7 @@ export default class PaymentController implements IPaymentController{
 
     async saveAllPlansInit(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {paymentMethod}=req.body;
+        console.log("print print");
         if(!process.env.PAYPAL_BASIC_PLAN || !process.env.PAYPAL_STANDARD_PLAN ||!process.env.PAYPAL_PREMIUM_PLAN){
             return res.status(400).json({message:"plan id not found"});
         }
@@ -31,27 +32,51 @@ export default class PaymentController implements IPaymentController{
             return next(error);
         }
     }
+    async validatePlanAndUser(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
+        // const {userId}=req;
+        const {planName,paymentMethod}=req.body;
+        console.log("plan name back",planName);
+        try {
+            this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
+            // if(!await this.paymentService.existUserOnUserService(userId)){
+            //     return res.status(404).json({message:"user is not exist"});
+            // }
+            console.log("start find plan by name");
+            const foundPlanId=await this.paymentService.existPlanByName(planName);
+            console.log("plan id found in validatePlanAndUser:",foundPlanId);
+            return res.status(200).json({message:"plan correct",planId:foundPlanId});
+        } catch (error) {
+            return next(error);
+        }
+
+    }
     async approvePaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>{ //done
-        const {userId,userName,userEmail}=req;
+        const {userId,userEmail}=req;
         const {planName,paymentMethod,subscriptionId}=req.body;
         if(!subscriptionId){
             return res.status(400).json({message: "subscription id is required!"});
         }
+        console.log("start approve payment process on controller");
         try {
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
             //בדיקה בקפקה האם יש לי יוזר כזה
+            console.log("trying to find sub like this-->");
             const existUserSubscription=await this.paymentService.getSubscription(userId);
             if(existUserSubscription && existUserSubscription.status==="active"){
                 await this.paymentService.cancelSubscription(userId,true);
                 return res.status(400).json({message: "user already have a subscription"});            
             }
+            console.log("sub not found its great! ,start approveSub in the service:")
             const paypalSubscription=await this.paymentService.approveSubscription(subscriptionId);
-
+            console.log("paypal subscription is: --",paypalSubscription)
             if(!paypalSubscription||paypalSubscription.status!=="ACTIVE"){
+                console.log("paypal didnt return any sub or sub isnt active:(")
                 return handleError(res,new Error("payment process was not succeeded"));
             }
-            const user:IUser=await this.paymentService.createUser(userId,userName!,userEmail!);
+            const user:IUser=await this.paymentService.createUser(userId,userEmail!);
+            console.log("user created successfully");
             const subscription=await this.paymentService.saveSubscription(planName,user,paypalSubscription);
+            console.log(`Subscription approved and saved successfully! subscription:---- ${subscription}`);
             return res.status(200).json({
                 message: "Subscription approved and saved successfully",
                 subscriptionId:subscription!.subscription_id,
@@ -91,6 +116,20 @@ export default class PaymentController implements IPaymentController{
             await this.paymentService.cancelSubscription(userId,false);
             await this.paymentService.deleteUserFromDb(userId);
             return res.status(200).json({message:"subscription canceled successfully"});
+        }catch(err){
+            console.log("Error canceling subscription:",err);
+            return next(err);
+        }
+    }
+    async deleteUser(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
+        const {userId}=req;
+        const {paymentMethod}=req.body;
+        try{
+            this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
+            if(await this.paymentService.deleteUserFromDb(userId)){
+                console.log("user deleted successfully");
+                return res.status(200).json({message:"user deleted successfully"});
+            }
         }catch(err){
             console.log("Error canceling subscription:",err);
             return next(err);

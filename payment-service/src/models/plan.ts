@@ -4,7 +4,7 @@ import { Subscription } from "./subscription";
 @Table({tableName:'plans',modelName:'Plan',timestamps:false})
 export class Plan extends Model{
     @Column({
-        type:DataType.UUID,
+        type:DataType.STRING,
         primaryKey:true,
         allowNull:false,
         unique:true,

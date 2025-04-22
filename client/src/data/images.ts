@@ -23,6 +23,13 @@ export const images = {
             alt: "Netflix Background"
         },
     },
+
+    payment:{
+        lockPic:{
+            src:"https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Lock.png",
+            alt:"payment lock logo"
+        }
+
     registration: {
         src: 'https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Devices.png',
         alt: 'Netflix Devices Image',

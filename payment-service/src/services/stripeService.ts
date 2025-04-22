@@ -30,20 +30,27 @@ export default class StripeService implements IPaymentService {
     async approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>{
         return {} as IPayPalSubscriptionResponse;
     }
-    async createUser(userId:string,userName:string,userEmail:string):Promise<IUser>{
+    async createUser(userId:string,userEmail:string):Promise<IUser>{
         const user=await this.userRepository.getUserById(userId);
         if(!user){
             const newUser=await this.userRepository.createUser({
                 user_id:userId,
-                name:userName,
+                // name:userName,
                 email:userEmail
             });
             return newUser as IUser;
         }
         return user as IUser;
     }
-    async  savePlanOnDb(planId:string,planName:string):Promise<IFullPlan>{
+    async savePlanOnDb(planId:string,planName:string):Promise<IFullPlan>{
         return {} as IFullPlan;
+    }
+    async existPlanByName(planName:string):Promise<string|null>{
+        const plan=await this.planRepository.findPlanByName(planName);
+       return plan ? plan.id:null;
+    }
+    async existUserOnUserService(userId:string):Promise<boolean>{
+        return true;
     }
     async deleteUserFromDb(userId:string):Promise<string>{
         return ""
