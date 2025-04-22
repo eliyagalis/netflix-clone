@@ -22,5 +22,11 @@ export const images = {
             src: "https://assets.nflxext.com/ffe/siteui/vlv3/69bec183-9cc8-49d4-8fc2-08228d3c91b4/web/IL-he-20250414-TRIFECTA-perspective_5f960e48-00b0-4c69-831b-5940659bd69d_large.jpg",
             alt: "Netflix Background"
         },
+    },
+    payment:{
+        lockPic:{
+            src:"https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Lock.png",
+            alt:"payment lock logo"
+        }
     }
 }
