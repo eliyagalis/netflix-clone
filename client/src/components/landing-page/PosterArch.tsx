@@ -1,4 +1,4 @@
-const ArchWithGradientTailwind = () => {
+const PosterArch = () => {
     return (
         <div className="z-150 w-[110%] left-1/2 transform -translate-x-1/2 max-w-470 absolute bottom-4 md:bottom-4 lg:bottom-6 xl:bottom-10">
             {/* Red Arch */}
@@ -28,4 +28,4 @@ const ArchWithGradientTailwind = () => {
     );
 };
 
-export default ArchWithGradientTailwind;
+export default PosterArch;

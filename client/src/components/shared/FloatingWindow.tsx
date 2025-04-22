@@ -1,6 +1,6 @@
 import React from 'react'
 import { Movie } from '../../models/Movie';
-import LandingForm from './LandingForm';
+import LandingForm from '../../feature/LandingForm';
 
 type FloatingWindowProprs = {
     movieDetails: Movie;
@@ -13,10 +13,10 @@ const FloatingWindow: React.FC<FloatingWindowProprs> = ({ movieDetails, setMovie
             <div onClick={() => setMovieDetails(null)}
                 className={`fixed inset-0 bg-[rgba(0,0,0,0.6)] z-60 flex items-center justify-center`}>
             </div>
-            <div className="fixed rounded-3xl z-100 inset-0 bg-white w-4/5 h-[80vh] max-w-180 max-h-180 m-auto overflow-y-auto transform">
+            <div className="fixed rounded-3xl z-100 inset-0 bg-white w-4/5 h-[80vh] max-w-180 max-h-180 m-auto overflow-y-auto transform border-0">
                 <div className="relative">
                     <img className="w-full max-h-[60vh] object-cover" src={movieDetails.src} />
-                    <button className="fixed btn btn-ghost btn-circle p-6 flex justify-center items-center shadow-none top-1 right-1 text-white hover:bg-[rgb(148,148,148,0.5)] border-0"
+                    <button className="fixed btn btn-ghost btn-circle p-6 flex justify-center items-center shadow-0 top-1 right-1 text-white hover:bg-[rgb(148,148,148,0.5)] border-0"
                         onClick={() => setMovieDetails(null)}
                         title="close"
                     >

@@ -1,12 +1,15 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
+import { Movie } from "../../models/Movie";
 
-interface Movie {
-    src: string;
+type CarouselProps = {
+    movies: Array<Movie>;
+    isIndexed?: boolean;
+    setFloatingPoster: Function;
 }
 
-const Carousel = ({ movies, setFloatingPoster }: { movies: Array<Movie>, setFloatingPoster: Function }) => {
+const Carousel:React.FC<CarouselProps> = ({ movies, setFloatingPoster, isIndexed }) => {
+    
     const carouselRef = useRef<HTMLDivElement>(null);
-
     const scrollCarousel = (direction: "left" | "right") => {
         if (carouselRef.current) {
             const scrollAmount = 700;
@@ -40,11 +43,13 @@ const Carousel = ({ movies, setFloatingPoster }: { movies: Array<Movie>, setFloa
                         onClick={() => setFloatingPoster(m)}
                     >
                         <img src={m.src} className="rounded-3xl object-cover w-[80%]" />
+                        
+                        {isIndexed && 
                         <div className="absolute top-0 font-bold">
                             <span className="absolute font-black text-black text-[4.5rem] -left-4 myStroke">
                                 {index + 1}
                             </span>
-                        </div>
+                        </div> }
                     </div>
                 ))}
             </div>

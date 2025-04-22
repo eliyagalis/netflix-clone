@@ -1,32 +1,46 @@
-import React from 'react'
+import React from 'react';
 
-type CustomInputProps = {
-    placeholder: string,
-    error: string
-    required: boolean
-    rounded?: boolean
+interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  placeholder: string;
+  error?: string;
+  rounded?: boolean;
+  success?: boolean;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const CustomInput:React.FC<CustomInputProps> = ({placeholder, error, required, rounded}) => {
-    return (
-        <div>
-            <input type="email" required={required} id="floatingInput" placeholder=" "
-                className={`validator input peer px-5 pt-10 pb-6 text-lg w-full ${rounded && `rounded-full`} placeholder-transparent bg-[rgba(34,34,34,0.5)] text-white font-medium border-1 border-gray-500`}
-            />
-            <label
-                htmlFor="floatingInput"
-                className="absolute font-normal left-5 top-2 text-xs text-gray-300 
-                        transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-lg 
-                        peer-placeholder-shown:text-gray-300 peer-focus:top-2 peer-focus:text-xs 
-                        peer-focus:text-gray-300"
-            >
-                {placeholder}
-            </label>
-            <div className="validator-hint text-left flex items-center pl-4 gap-2">
-                <span className="whitespace-nowrap text-sm"><i className='fa-regular fa-circle-xmark'></i> {error}</span>
-            </div>
-        </div>
-    )
-}
+const CustomInput: React.FC<CustomInputProps> = ({ placeholder, error, rounded, success, ...props }) => {
+  return (
+    <div className='relative'>
+      <input
+        id="floatingInput"
+        placeholder=" "
+        className={`input peer px-5 pt-10 pb-5 text-lg w-full 
+          ${rounded ? "rounded-full" : ""} 
+          placeholder-transparent bg-[rgba(80,80,80,0.7)] text-white font-medium border-1 
+          ${error ? "border-red-500" : "border-gray-500"}
+          ${success ? "border-green-500" : ""}`}
+        {...props}
+      />
 
-export default CustomInput
+      <label
+        htmlFor="floatingInput"
+        className="absolute font-normal left-5 top-2 text-xs text-gray-300
+          transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-lg 
+          peer-placeholder-shown:text-gray-300 peer-focus:top-2 peer-focus:text-xs 
+          peer-focus:text-gray-300"
+      >
+        {placeholder}
+      </label>
+
+      <div className="text-left flex items-center h-5 mt-1">
+        {error && (
+          <span className="whitespace-nowrap text-sm text-red-500">
+            <i className="fa-regular fa-circle-xmark"></i> {error}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CustomInput;

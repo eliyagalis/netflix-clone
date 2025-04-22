@@ -10,16 +10,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+
     "@paypal/react-paypal-js": "^8.8.2",
     "@reduxjs/toolkit": "^2.7.0",
     "@tailwindcss/vite": "^4.0.14",
+
+    "@hookform/resolvers": "^5.0.1",
+    "@tailwindcss/vite": "^4.1.0",
+
     "axios": "^1.8.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-helmet": "^6.1.0",
+
     "react-redux": "^9.2.0",
+
+    "react-hook-form": "^7.55.0",
+
     "react-router-dom": "^7.4.0",
-    "tailwindcss": "^4.0.14"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
