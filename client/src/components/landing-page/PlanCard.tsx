@@ -20,7 +20,7 @@ const palette = {
 
 const PlanCard: React.FC<PlanCardProps> = ({ className, title, subtitle, bulletPoints, price, type, navigate }) => {
     return (
-        <Card className={`${className} bg-gradient-to-br ${palette[type]} transition-colors duration-300 border-[rgb(45,43,67)] cursor-pointer`}>
+        <Card className={`${className} bg-gradient-to-br ${palette[type]} transition-colors duration-300 border-[rgb(45,43,67)]`}>
             <div className={`${typography.medium} py-1 font-bold text-white`}>{title}</div>
             <div className={`${typography.small} py-1 font-bold text-[rgb(184,187,203)]`}>{subtitle}</div>
 

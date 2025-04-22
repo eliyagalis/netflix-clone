@@ -14,12 +14,16 @@ export const colors = {
     text: {
       primary: 'text-black',
       secondary: 'text-[#e50914]',
-      lightGray: 'text-[#737373]'
+      lightGray: 'text-[#737373]',
+      mediumGray: 'text-[#333333]',
+      darkGray: 'text-[#0f0f0f]',
+      white: 'text-white',
     },
     background: {
       primary: 'bg-[#e50914]',
       lightWhite: 'bg-[#f3f3f3]',
       lightGray: 'bg-[#737373]',
+      mediumGray: 'bg-[#333333]',
       darkGray: 'bg-[#0f0f0f]',
 
     },

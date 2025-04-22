@@ -13,7 +13,7 @@ export const images = {
             alt: "Netflix Background"
         },
         poster: {
-            src: "https://assets.nflxext.com/ffe/siteui/vlv3/fc2c345e-5991-4917-be24-cd328b62cc3f/web_tall_panel/IL-he-20250414-TRIFECTA-perspective_321385fc-5b3d-4d4f-808f-39c16b05bf41_large.jpg",
+            src: "https://assets.nflxext.com/ffe/siteui/vlv3/fc2c345e-5991-4917-be24-cd328b62cc3f/web_auto_scroll/IL-he-20250414-TRIFECTA-bc16e2a7-1987-42f8-b078-a25f25d03237_large.jpg",
             alt: "Netflix Poster"
         }
     },
@@ -22,5 +22,9 @@ export const images = {
             src: "https://assets.nflxext.com/ffe/siteui/vlv3/69bec183-9cc8-49d4-8fc2-08228d3c91b4/web/IL-he-20250414-TRIFECTA-perspective_5f960e48-00b0-4c69-831b-5940659bd69d_large.jpg",
             alt: "Netflix Background"
         },
+    },
+    registration: {
+        src: 'https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Devices.png',
+        alt: 'Netflix Devices Image',
     }
 }

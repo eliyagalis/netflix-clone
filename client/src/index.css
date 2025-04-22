@@ -11,21 +11,34 @@
     transition: all .3s;
 }
 
-input:-webkit-autofill {
+/* input:-webkit-autofill {
     box-shadow: 0 0 0px 1000px #00000000 inset !important;
-    -webkit-text-fill-color: #fff !important;
+    -webkit-text-fill-color: inherit !important;
   }
   
-
 input:-webkit-autofill,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:hover {
   background-color: transparent !important;
-  color: white !important;
-  transition: background-color 5000s ease-in-out 0s; /* Prevents autofill color from being visible */
+  color: inherit !important;
+  transition: background-color 5000s ease-in-out 0s;
+} 
+*/
+
+
+.blackInput:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px #ffffff00 inset !important;
+  -webkit-text-fill-color: white !important;
 }
 
-/* Add this to your global CSS (e.g., styles/globals.css or styles/utilities.css) */
+.blackInput:-webkit-autofill,
+.blackInput:-webkit-autofill:focus,
+.blackInput:-webkit-autofill:hover {
+background-color: transparent !important;
+color: white !important;
+transition: background-color 5000s ease-in-out 0s; /* Prevents autofill color from being visible */
+}
+
 
 .bg-plan-premium {
   background: radial-gradient(
@@ -55,4 +68,17 @@ input:-webkit-autofill:hover {
       rgba(74, 42, 150, 0) 100%
     ),
     rgb(29, 82, 157);
+}
+
+@keyframes scrollBackAndForth {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.scrolling-bg {
+  animation: scrollBackAndForth 50s linear infinite alternate;
 }

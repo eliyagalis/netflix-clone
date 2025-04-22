@@ -29,7 +29,6 @@ const Register = () => {
 
   const onSubmit = (data: SignupFormData) => {
     //logic
-    
     navigate('/signup/planform');
   };
 
@@ -38,10 +37,10 @@ const Register = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="mx-auto max-w-[400px]"
     >
-      <h3 className={`${typography.xxsmall} font-medium my-3`}>
-        STEP 2 OF 3
+      <h3 className={`${typography.xxsmall} font-medium mt-10`}>
+        STEP 1 OF 3
       </h3>
-      <h1 className={`${typography.large} font-semibold my-3`}>
+      <h1 className={`${typography.large} font-bold mb-3`}>
         Create a password to start your membership
       </h1>
       <h6 className={`${typography.small}`}>Just a few more steps and you're done!</h6>
@@ -49,8 +48,10 @@ const Register = () => {
 
       <div className="">
         <CustomInput
-          placeholder="Email address"
+          placeholder="Email"
           background='white'
+          placeholderColor='#555555'
+          inputColor='black'
           error={errors.email?.message}
           success={touchedFields.email && !errors.email && !!watch('email')}
           {...register('email')}
@@ -58,9 +59,11 @@ const Register = () => {
       </div>
       <div className="">
         <CustomInput
-          placeholder="Password"
+          placeholder="Add a password"
           type="password"
           background='white'
+          placeholderColor='#555555'
+          inputColor='black'
           error={errors.password?.message}
           success={touchedFields.password && !errors.password && !!watch('password')}
           {...register('password')}

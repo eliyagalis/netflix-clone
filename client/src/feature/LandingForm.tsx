@@ -24,7 +24,7 @@ const LandingForm = () => {
   const onSubmit = (data: EmailFormData) => {
     console.log("Success", data);
     // Logic
-    navigate("/signup");
+    navigate("/signup/");
   };
 
   return (
@@ -32,10 +32,11 @@ const LandingForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full flex flex-wrap justify-center items-start gap-x-2 mb-10"
     >
-      <div className="relative flex-1 min-w-60 max-w-120 basis-full sm:basis-auto pb-2">
+      <div className="relative flex-1 min-w-60 max-w-120 basis-full sm:basis-auto pb-5">
         <CustomInput
           placeholder="Email address"
           rounded
+          className="blackInput"
           error={errors.email?.message}
           success={touchedFields.email && !errors.email &&  !!watch("email")}
           {...register("email")}
