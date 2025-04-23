@@ -18,7 +18,7 @@ const PaymentMethodButton:React.FC<LogoCard> = ({text,imagesChildren,navigateLin
           {imagesChildren}
         </span>
       </div>
-      <span className=''><i className="fa-solid fa-chevron-right"></i></span>
+      <span><i className="fa-solid fa-chevron-right"></i></span>
     </div>
   </Button>
   )
