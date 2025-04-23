@@ -184,6 +184,5 @@ export class UserService implements IUserService {
 
     return partialProfile;
 
-
   }
 }

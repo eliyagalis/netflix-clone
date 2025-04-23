@@ -8,6 +8,7 @@ import SignupRequestDTO from '../DTOs/signup.dto';
 import LoginRequestDTO from '../DTOs/login.dto';
 import IUser from '../interfaces/IUser';
 import { date } from 'joi';
+import UpdateRequestDTO from '../DTOs/update.dto';
 
 @injectable()
 export class UserController {
@@ -135,8 +136,13 @@ export class UserController {
    */
   async updateUser(req: Request, res: Response) {
     try {
-      const userId = req.params.id;
-      const updateData = req.body;
+      const userId = req.header('id');
+
+      if (!userId) {
+        return res.status(401).json({ message: "User ID not provided" });
+      }
+
+      const updateData : UpdateRequestDTO = req.body;
 
       const updatedUser = await this.userService.updateUser(userId, updateData);
 
