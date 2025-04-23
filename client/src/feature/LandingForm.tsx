@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { EmailFormData, emailValidationSchema } from "../schemas/authSchema";
+import { EmailFormData, emailValidationSchema } from "../schemas/authSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "../components/shared/CustomInput";
@@ -34,6 +34,7 @@ const LandingForm = () => {
     >
       <div className="relative flex-1 min-w-60 max-w-120 basis-full sm:basis-auto pb-5">
         <CustomInput
+          type="email"
           placeholder="Email address"
           rounded
           className="blackInput"

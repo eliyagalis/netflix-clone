@@ -40,7 +40,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         onBlur={handleBlur}
         className={`${className}
           peer w-full px-5 pt-6 pb-2 text-lg font-medium border
-          placeholder-transparent focus:outline-none
+          placeholder-transparent 
           ${rounded ? 'rounded-full' : 'rounded-md'}
           ${showError ? 'border-red-500' : success ? 'border-green-500' : 'border-gray-500'}
         `}
@@ -63,16 +63,16 @@ const CustomInput: React.FC<CustomInputProps> = ({
         {placeholder}
       </label>
 
-        {showError && (
-      <div className="h-5 mt-1 flex items-center text-left">
+      {showError && (
+        <div className="h-5 mt-1 flex items-center text-left">
           <span
             id={`${placeholder}-error`}
             className="text-sm text-red-500 whitespace-nowrap"
           >
             <i className="fa-regular fa-circle-xmark mr-1"></i> {error}
           </span>
-      </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,22 +1,23 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
-
-import SignUpPage from "./pages/SignUpPage";
-
 import PaypalLogic from "./feature/paypal/paypalLogic";
 import MainMoviesPage from "./pages/MainMoviesPage";
 import ChoosePaymentMethod from "./pages/ChoosePaymentMethod";
 
 import SignupLayout from "./pages/SignupLayout";
 import Planform from "./feature/signup/Planform";
-import Register from "./feature/signup/Register";
 import Payment from "./feature/signup/Payment";
+import Regform from "./feature/signup/Regform";
 import Registration from "./feature/signup/Registration";
+
 import ScrollToTop from "./components/shared/ScrollToTop";
+
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import TrailerMovie from "./components/shared/TrailerMovie";
+import BrowseLayout from "./pages/BrowseLayout";
+import Browse from "./pages/browse/Browse";
 
 
 
@@ -37,9 +38,14 @@ function App() {
           <Route path="/signup" element={<SignupLayout />}>
             <Route path="registration" element={<Registration />} />
             <Route path="choosePaymentMethod" element={<ChoosePaymentMethod/>}/>
-            <Route path="regform" element={<Register />} />
+            <Route path="regform" element={<Regform />} />
             <Route path="planform" element={<Planform />} />
             <Route path="payment" element={<Payment />} />
+          </Route>
+
+          <Route path="browse" element={<BrowseLayout />}>
+            <Route index element={<Browse />} />
+            
           </Route>
 
           {/* <Route path="/main" element={<MainPage/>}/> */}

@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { typography } from '../../data/typography';
-import { strings } from '../../data/strings';
 import Button from '../../components/shared/Button';
 import { useNavigate } from 'react-router-dom';
 import CustomInput from '../../components/shared/CustomInput';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { SignupFormData, signupSchema } from '../../schemas/authSchema';
+import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
 
-const Register = () => {
+const Regform = () => {
   const [userData, setUserData] = useState<{ email: string; password: string }>({
     email: '',
     password: ''
@@ -35,7 +34,7 @@ const Register = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto max-w-[400px]"
+      className="mx-auto max-w-100"
     >
       <h3 className={`${typography.xxsmall} font-medium mt-10`}>
         STEP 1 OF 3
@@ -46,8 +45,9 @@ const Register = () => {
       <h6 className={`${typography.small}`}>Just a few more steps and you're done!</h6>
       <h6 className={`${typography.small} mb-4`}>We hate paperwork, too.</h6>
 
-      <div className="">
+      <div className="my-2">
         <CustomInput
+          className='focus:ring-blue-500'
           placeholder="Email"
           background='white'
           placeholderColor='#555555'
@@ -57,7 +57,7 @@ const Register = () => {
           {...register('email')}
         />
       </div>
-      <div className="">
+      <div className="my-2">
         <CustomInput
           placeholder="Add a password"
           type="password"
@@ -71,7 +71,7 @@ const Register = () => {
       </div>
 
       <div className="w-full flex">
-        <Button type="submit" fontSize={typography.large} className={` w-full h-16 my-6 mx-auto`}>
+        <Button type="submit" fontSize={typography.large} className={` w-full h-16 my-6 mb-18 mx-auto`}>
           Next
         </Button>
       </div>
@@ -80,4 +80,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Regform
