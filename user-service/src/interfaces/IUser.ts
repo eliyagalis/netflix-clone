@@ -8,7 +8,7 @@ export default interface IUser {
   lastName?: string;
   phoneNumber?: string;
   subscriptionId?: string;
-  profiles?: IProfile[];
+  profiles: IProfile[];
   status: UserStatus;
   lastLogin?: Date;
   createdAt: Date;

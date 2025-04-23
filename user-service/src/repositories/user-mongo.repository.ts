@@ -11,6 +11,7 @@ import IMyListItem from "../interfaces/IMyListItem";
 import { Types } from "mongoose";
 import SignupRequestDTO from "../DTOs/signup.dto";
 import IStatusService from "../interfaces/IStatusService";
+import IProfile from "../interfaces/IProfile";
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
@@ -116,46 +117,13 @@ export class UserMongoRepository implements IUserRepository {
 
     return this.userAdapter.toDomainUser(user);
   }
-  // We can add refresh token collection to our repo if we want to support multiply refresh tokens for multi device for example 
-  // // Refresh token methods 
-  // async saveRefreshToken(userId: string, token: string, expiresAt: Date): Promise<void> {
-  //   const refreshToken = new RefreshTokenModel({
-  //     userId,
-  //     token,
-  //     expiresAt,
-  //     createdAt: new Date()
-  //   });
+  
+  async getProfiles(userId: string): Promise<IProfile[] | null> {
+    const user = await User.findById(userId)
 
-  //   await refreshToken.save();
-  // }
+    if (!user)
+      return null;
 
-  // async findRefreshToken(token: string): Promise<any | null> {
-  //   return RefreshTokenModel.findOne({ token });
-  // }
-
-  // async revokeRefreshToken(token: string): Promise<boolean> {
-  //   const result = await RefreshTokenModel.updateOne(
-  //     { token },
-  //     { isRevoked: true }
-  //   );
-
-  //   return result.modifiedCount > 0;
-  // }
-
-  // async revokeAllUserTokens(userId: string): Promise<boolean> {
-  //   const result = await RefreshTokenModel.updateMany(
-  //     { userId, isRevoked: false },
-  //     { isRevoked: true }
-  //   );
-
-  //   return result.modifiedCount > 0;
-  // }
-
-  // async removeExpiredTokens(): Promise<number> {
-  //   const result = await RefreshTokenModel.deleteMany({
-  //     expiresAt: { $lt: new Date() }
-  //   });
-
-  //   return result.deletedCount;
-  // }
+    return user.profiles;
+  }
 }

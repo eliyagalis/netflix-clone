@@ -4,6 +4,7 @@ import UpdateUserDTO from '../DTOs/update.dto';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
 import SignupRequestDTO from '../DTOs/signup.dto';
 import ITokenResponse from './ITokenResponse';
+import LoginRequestDTO from '../DTOs/login.dto';
 
 export default interface IUserService {
   /**
@@ -19,20 +20,12 @@ export default interface IUserService {
   /**
    * Login a user and generate tokens
    */
-  login(email: string, password: string): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    user: {
-      id: string;
-      email: string;
-      profiles?: IProfile[];
-    }
-  }>;
+  login(data: LoginRequestDTO): Promise<ITokenResponse>;
   
   /**
    * Refresh access token using refresh token
    */
-  refreshToken(refreshToken: string): Promise<string>;
+  refreshToken(refreshToken: string): Promise<string | null>;
   
   /**
    * Find user by ID

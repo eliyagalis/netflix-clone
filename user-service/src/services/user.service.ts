@@ -14,6 +14,7 @@ import IUserPayload from '../interfaces/IUserPayload';
 import IUserBuilder from '../interfaces/IUserBuilder';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
 import UserBuilder from '../builders/user.builder';
+import LoginRequestDTO from '../DTOs/login.dto';
 
 @injectable()
 export class UserService implements IUserService {
@@ -59,14 +60,12 @@ export class UserService implements IUserService {
       throw new Error("Problem in user build")
     }
 
-    // Create user payload for token generation
     const userPayload: IUserPayload = {
       userId: user.id,
       email: user.email
-    };
-
-    // Generate tokens using AuthService
-    return this.authService.login(userPayload, password, hashedPassword);
+    }
+    
+    return this.authService.login(userPayload, password, user.password);
   }
   /**
    * Add subscription for a user
@@ -88,29 +87,16 @@ export class UserService implements IUserService {
   /**
    * Login a user and generate tokens
    */
-  async login(email: string, password: string): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    user: {
-      id: string;
-      email: string;
-      profiles?: IProfile[];
-    }
-  }> {
+  async login(data: LoginRequestDTO): Promise<ITokenResponse> {
+
+    const {email , password } = data
+
     // Find user by email
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new Error('Invalid email or password');
     }
 
-    // Check if user is active
-    if (user.status !== UserStatus.ACTIVE) {
-      throw new Error('Account is not active');
-    }
-
-    if (!isActiveUser(user)) {
-      throw new Error('Account data is incomplete')
-    }
     // Create user payload for token
     const userPayload: IUserPayload = {
       userId: user.id,
@@ -118,24 +104,17 @@ export class UserService implements IUserService {
     };
 
     // Use auth service to login and generate tokens
-    const tokens = await this.authService.login(userPayload, password, user.password);
-
-    // Return tokens and basic user info
-    return {
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        profiles: user.profiles
-      }
-    };
+    return await this.authService.login(userPayload, password, user.password);
   }
 
+
+  //add getuser by token
+  //add getProfiles by token
+  //add get mylist by token
   /**
    * Refresh access token using refresh token
    */
-  async refreshToken(refreshToken: string): Promise<string> {
+  async refreshToken(refreshToken: string): Promise<string | null> {
     return this.authService.refreshAccessToken(refreshToken);
   }
 

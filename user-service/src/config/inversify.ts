@@ -30,11 +30,14 @@ const container = new Container();
 
 // Register dependencies
 container.bind<IUserAdapter>(TOKENS.IUserAdapter).to(UserAdapter);
+container.bind<IStatusService>(TOKENS.IStatusService).to(StatusService);
+
 // Adapters
 const userRepository: IUserRepository = 
     UserRepositoryFactory.createRepository(
         process.env.DB_TYPE!, 
-        container.get<IUserAdapter>(TOKENS.IUserAdapter)
+        container.get<IUserAdapter>(TOKENS.IUserAdapter),
+        container.get<IStatusService>(TOKENS.IStatusService)
     );
 // Repositories
 container.bind<IUserRepository>(TOKENS.IUserRepository).toConstantValue(userRepository);
@@ -43,7 +46,6 @@ container.bind<IUserRepository>(TOKENS.IUserRepository).toConstantValue(userRepo
 container.bind<IAuthService>(TOKENS.IAuthService).to(AuthService);
 container.bind<IUserService>(TOKENS.IUserService).to(UserService);
 container.bind<ITokenService>(TOKENS.ITokenService).to(TokenService);
-container.bind<IStatusService>(TOKENS.IStatusService).to(StatusService)
 
 // Controllers
 container.bind<UserController>(TOKENS.UserController).to(UserController);

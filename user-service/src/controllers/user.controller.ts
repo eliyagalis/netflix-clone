@@ -5,6 +5,9 @@ import IUserService from '../interfaces/IUserService';
 import { handleError } from '../utils/handle-error-request';
 import { SetUserDTO } from '../DTOs/set.dto';
 import SignupRequestDTO from '../DTOs/signup.dto';
+import LoginRequestDTO from '../DTOs/login.dto';
+import IUser from '../interfaces/IUser';
+import { date } from 'joi';
 
 @injectable()
 export class UserController {
@@ -19,9 +22,17 @@ export class UserController {
     try {
       const data: SignupRequestDTO = req.body
 
-      const user = await this.userService.signup(data);
+      const tokens = await this.userService.signup(data);
 
-      res.status(200).json({message: "User signup", user: user})
+      res.cookie('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+      });
+
+      res.cookie('accessToken', tokens.accessToken, {
+        httpOnly: true
+      })
+
+      res.status(200).json({message: "User signup"})
     } catch (error) {
       handleError(res, error);
     }
@@ -32,21 +43,22 @@ export class UserController {
    */
   async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body;
+      const data: LoginRequestDTO = req.body;
 
       // UserService handles all authentication logic internally
-      const result = await this.userService.login(email, password);
+      const tokens = await this.userService.login(data);
+
 
       // Set refresh token in HTTP-only cookie
-      res.cookie('refreshToken', result.refreshToken, {
+      res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
       });
 
-      res.cookie('accessToken', result.accessToken, {
+      res.cookie('accessToken', tokens.accessToken, {
         httpOnly: true
       })
 
-      res.status(200).json({ message: 'Login succesful', user: result.user });
+      res.status(200).json({ message: 'Login succesful'});
     } catch (error) {
       if (error instanceof Error) { //???
         handleError(res, error.message);
@@ -83,7 +95,7 @@ export class UserController {
   /**
    * Logout user
    */
-  logout(req: Request, res: Response) {
+  async logout(req: Request, res: Response) {
     res.clearCookie('refreshToken');
     res.clearCookie('accessToken');
     res.status(200).json({
@@ -96,9 +108,11 @@ export class UserController {
    */
   async getUser(req: Request, res: Response) {
     try {
+      const userId = req.header('id');
 
-      const accessToken = req.cookies.accessToken
-      const userId = req.params.id;
+      if (!userId) {
+        return res.status(401).json({ message: "User ID not provided" });
+      }
 
       const user = await this.userService.findUserById(userId);
 
@@ -108,7 +122,7 @@ export class UserController {
 
       res.status(200).json({
         message: 'User retrived succesfully',
-        user: user
+        data: user
       })
 
     } catch (error) {

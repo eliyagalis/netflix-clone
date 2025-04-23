@@ -5,7 +5,7 @@ import { UserStatus } from './IUser';
 export default interface IMongoUser extends Document {
   _id: Types.ObjectId;
   email: string;
-  password?: string;
+  password: string;
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
