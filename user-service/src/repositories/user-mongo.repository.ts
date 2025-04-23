@@ -12,6 +12,7 @@ import { Types } from "mongoose";
 import SignupRequestDTO from "../DTOs/signup.dto";
 import IStatusService from "../interfaces/IStatusService";
 import IProfile from "../interfaces/IProfile";
+import { profile } from "console";
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
@@ -126,4 +127,5 @@ export class UserMongoRepository implements IUserRepository {
 
     return user.profiles;
   }
+
 }

@@ -183,6 +183,23 @@ export class UserService implements IUserService {
     })
 
     return partialProfile;
+  }
 
+  async getDetailedProfile(userId: string ,profileId: string): Promise<IProfile> {
+    
+    const profiles = await this.userRepository.getProfiles(userId);
+
+    if(!profiles) {
+      throw new Error ('User not found');
+    }
+
+    const detailedProfile = profiles.find(profile => profile.id === profileId);
+
+    if (!detailedProfile) {
+      throw new Error ('Profile not found');
+    }
+
+    return detailedProfile;
+    
   }
 }
