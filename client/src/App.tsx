@@ -10,7 +10,7 @@ import SignupLayout from "./pages/SignupLayout";
 import Planform from "./feature/signup/Planform";
 import Register from "./feature/signup/Register";
 import Payment from "./feature/signup/Payment";
-import Registration from "./feature/signup/registration";
+import Registration from "./feature/signup/Registration";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
