@@ -33,9 +33,8 @@ export class SubscriptionRepository implements ISubscriptionRepository {
             !data.paypalData.id||
             !data.paypalData.status||
             !data.paypalData.start_time||
-            !data.paypalData.subscriber||
             !data.paypalData.create_time||
-            !['active','cancelled','expired'].includes(data.paypalData.status)
+            !['active','cancelled','expired'].includes(data.paypalData.status.toLowerCase())
         ){
             throw new Error("some or all of the parameters is missing on creating subscription!");
         }
@@ -46,7 +45,7 @@ export class SubscriptionRepository implements ISubscriptionRepository {
                 plan_id:data.paypalData.plan_id,
                 start_date:data.paypalData.create_time,
                 end_date: data.end_date? new Date(data.end_date) : null,
-                status: data.paypalData.status as "active"|"cancelled"|"expired",
+                status: data.paypalData.status.toLowerCase() as "active"|"cancelled"|"expired",
                 user: data.user,
                 // renewal_date: data. ? new Date(renewal_date):null,
                 plan:data.plan
@@ -78,7 +77,7 @@ export class SubscriptionRepository implements ISubscriptionRepository {
                 return subscription? subscription as ISubscription: null;    
         } catch (error) {
             console.log("error get the subscription")
-            throw new Error("Internal server error while getting subscription");
+            throw new Error(`Internal server error while getting subscription: ${error}`);
         }
     }
    

@@ -57,8 +57,10 @@ export default class PayPalService implements IPaymentService{
             if(await this.planRepository.findPlanById(planId)){
                 throw new Error("plan is already exist on db");
             }
+            console.log("plan id savePlanOnDb service:",planId);
+            console.log("plan name id saveOnDb service",planName);
            const newPlan:IFullPlan={ 
-                id:planId,
+                id:planId!,
                 plan_name:planName,
                 price:planName=="basic"? 32.90: planName=="standard"?54.50:69.90,
                 billing_interval:'monthly',
@@ -70,7 +72,25 @@ export default class PayPalService implements IPaymentService{
             throw new Error((error as Error).message);
         }
     }
-  
+    async existPlanByName(planName:string):Promise<string|null>{
+        if(!planName){
+            return null
+        }
+        try {
+           const plan:IFullPlan|null=await this.planRepository.findPlanByName(planName);
+           return plan? plan.id:null
+        } catch (error) {
+            console.log("the error of finding plan:",error);
+            return null;
+        }
+    }
+    async existUserOnUserService(userId:string):Promise<boolean>{
+        if(!userId){
+            return false;
+        }
+       //קפקה
+       return true;
+    }
     async approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>{
         try {
             const accessToken=await getAccessTokenPayPal();
@@ -84,23 +104,20 @@ export default class PayPalService implements IPaymentService{
             throw new Error((error as Error).message);
         }
     }
-       async createUser(userId:string,userName:string,userEmail:string):Promise<IUser>{
-        if(!userId||!userName||!userEmail){
+       async createUser(userId:string,userEmail:string):Promise<IUser>{
+        if(!userId||!userEmail){
             throw new Error("user id or user name or user email is required on creating user!");
         }
         if(await this.userRepository.getUserById(userId)){
             throw new Error("user already exist!");
         }
+        console.log("the user Id in service:",userId);
         try {
-            const user=await this.userRepository.createUser({
-                user_id:userId,
-                name:userName,
-                email:userEmail
-            });
+            const user=await this.userRepository.createUser({user_id:userId!,email:userEmail});
             return user as IUser;
         } catch (error) {
             console.log("Error creating user:",error);
-            throw new Error((error as Error).message);
+            throw new Error(`${(error as Error).message}, err: ${error}`);
         }
     }
         //הפונקציה יוצרת מנוי חדש בפייפאל
@@ -114,6 +131,13 @@ export default class PayPalService implements IPaymentService{
             if(!plan){
                 throw new Error("plan not found")
             }
+            // !data.user||
+            // !data.plan||
+            // !data.paypalData.id||
+            // !data.paypalData.status||
+            // !data.paypalData.start_time||
+            // !data.paypalData.create_time||
+            // !['active','cancelled','expired'].includes(data.paypalData.status)
             const subscriptionData: CreateSubscriptionDTO = {
                 user: user,
                 plan: plan,
@@ -123,14 +147,13 @@ export default class PayPalService implements IPaymentService{
                     plan_id: subscription.plan_id,
                     start_time: subscription.start_time,
                     create_time: new Date().toISOString(),
-                    subscriber: {
-                        name: { given_name: user.name },
-                        email_address: user.email
-                    },
                     update_time: subscription.update_time
                 },
                 end_date: undefined,
             };
+            console.log(`user: ${user} plan: ${plan} paypalData.id${subscriptionData.paypalData.id} paypalData.status:${subscriptionData.paypalData.status}
+                paypalData.planId: ${subscriptionData.paypalData.plan_id} startTime: ${subscriptionData.paypalData.start_time} 
+                created Time: ${subscriptionData.paypalData.create_time}`);
             const created_subscription_postgreSql:ISubscription=await this.subscriptionRepository.createSubscription(subscriptionData);
             return created_subscription_postgreSql;
 
@@ -167,6 +190,7 @@ export default class PayPalService implements IPaymentService{
             throw new Error((error as Error).message);
         }
     }
+
     //הפונקציה מבטלת מנוי קיים בפייפאל
     async cancelSubscription(userId:string,haveSubTwice:boolean=false):Promise<string>{
         if(!userId){

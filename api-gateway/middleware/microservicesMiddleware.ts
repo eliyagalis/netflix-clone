@@ -53,11 +53,28 @@ export const microServiceMiddleware=(app:Application):void=>
 //authenticate להוסיף למידל וור
     app.use(`${url}/payment`,(req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to payment service...");
+              // בדיקה לדו-סביבתי (פיתוח בלבד)
         next(); 
     },createProxyMiddleware({
         target:payment_service_url,
         changeOrigin:true,
-        pathRewrite:(path,req)=>{return `/api/v1/payment/${req.path}`}
+        secure:false,
+        pathRewrite:(path,req)=>{
+            console.log("path:",`${req.path}`,`${payment_service_url}`);
+            return req.path;
+        },
+        on:{
+            proxyReq:(proxyReq,req)=>{
+                console.log(req.path,req.originalUrl);
+                if (process.env.NODE_ENV === 'development') {
+                    proxyReq.setHeader("x-user-id","550e8400-e29b-41d4-a716-446655440000");
+                    proxyReq.setHeader("x-user-email","dev@gmail.com");
+                    // req.userId = "devUserId";
+                    // req.userEmail = "dev@gmail.com";
+                    // req.userName = "devUser";
+                }
+            },
+            error:(err,req)=>{console.log(req)}}
     }))
     //('/streaming')
     app.use(`${url}/playMovie`,authenticate,(req:Request,res:Response,next:NextFunction)=>{

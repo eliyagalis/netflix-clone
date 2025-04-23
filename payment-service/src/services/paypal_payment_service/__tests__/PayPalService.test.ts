@@ -153,7 +153,7 @@ describe("PayPalService -", () => {
         const fakeUser:IUser={
             user_id:"user123",
             email:"user@gmail.com",
-            name:"test user"
+            // name:"test user"
         }
         const fakeSubscription:IPayPalSubscriptionResponse = {
             id: 'sub_123',
@@ -164,9 +164,9 @@ describe("PayPalService -", () => {
             create_time: new Date().toISOString(),
             subscriber:{
                 name:{
-                    given_name: fakeUser.name
+                    given_name: "fake name"
                 },
-                email_address:fakeUser.email
+                email_address:"fakeuser@gmail.com"
             } 
         };
         it("should approve subscription successfully",async()=>{
@@ -362,29 +362,28 @@ describe("PayPalService -", () => {
     });
     describe("createUser-",()=>{
         const fakeUserId="user_123";
-        const fakeUserName="test user name";
         const fakeUserEmail="user@gmail.com";
         const fakeUser:IUser = {
             user_id:fakeUserId,
-            name:fakeUserName,
+            // name:fakeUserName,
             email:fakeUserEmail
         };
         it("should create and return user successfully",async()=>{
             (mockUserRepo.getUserById as jest.Mock).mockResolvedValue(null);
             (mockUserRepo.createUser as jest.Mock).mockResolvedValue(fakeUser);
             
-            const res = await service.createUser(fakeUserId,fakeUserName,fakeUserEmail);
+            const res = await service.createUser(fakeUserId,fakeUserEmail);
             
             expect(mockUserRepo.getUserById).toHaveBeenCalledWith(fakeUserId); 
-            expect(mockUserRepo.createUser).toHaveBeenCalledWith({"email": fakeUserEmail, "name": fakeUserName, "user_id": fakeUserId});
+            expect(mockUserRepo.createUser).toHaveBeenCalledWith({"email": fakeUserEmail, "user_id": fakeUserId});
             expect(res).toEqual(fakeUser); 
         });
         it("should throw error if user already exists",async()=>{
             (mockUserRepo.getUserById as jest.Mock).mockResolvedValue(fakeUser);
-            await expect(service.createUser(fakeUserId,fakeUserName,fakeUserEmail)).rejects.toThrow("user already exist");
+            await expect(service.createUser(fakeUserId,fakeUserEmail)).rejects.toThrow("user already exist");
         });
         it("should throw error if user id is not provided",async()=>{
-            await expect(service.createUser("",fakeUserName,fakeUserEmail)).rejects.toThrow("user id or user name or user email is required on creating user!");
+            await expect(service.createUser("",fakeUserEmail)).rejects.toThrow("user id or user name or user email is required on creating user!");
         });
     });
     describe("saveSubscription-",()=>{
@@ -401,7 +400,7 @@ describe("PayPalService -", () => {
         const accessToken="fake_token";
         const fakeUser:IUser = {
             user_id: fakeUserId,
-            name: 'test userName',
+            // name: 'test userName',
             email:"user@gmail.com",
         }
         const fakeSubscription:IPayPalSubscriptionResponse = {
@@ -413,9 +412,9 @@ describe("PayPalService -", () => {
             create_time: new Date().toISOString(),
             subscriber:{
                 name:{
-                    given_name: fakeUser.name
+                    given_name: "user123"
                 },
-                email_address:fakeUser.email
+                email_address:"user@gmail.com"
             } 
         };
         const fakeSavedSubscription:ISubscription = {
@@ -461,7 +460,7 @@ describe("PayPalService -", () => {
         };
         const fakeUser:IUser = {
             user_id: 'user_123',
-            name: 'test userName',
+            // name: 'test userName',
             email:'user@gmail.com'
         }
         it("should return subscription by id successfully",async()=>{
@@ -548,7 +547,7 @@ describe("PayPalService -", () => {
         const fakeUserId="user123";
         const fakeUser:IUser={
             user_id:fakeUserId,
-            name:"user Test",
+            // name:"user Test",
             email:"userTest@gmail.com"
         }
         it("should get user successfully",async()=>{

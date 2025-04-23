@@ -20,10 +20,11 @@ export class PlanRepositoryPSql implements IPlanRepository{
         if( !plan.id||!plan.plan_name || validPlanName || !plan.price || !plan.description|| !plan.billing_interval){
             throw new Error("Please enter all the parameters!");
         }
+
         try{
             const newPlan:Plan=await Plan.create({
-                id:plan.id,
-                plan_name:plan.plan_name as 'basic' | 'premium' | 'standard',
+                plan_id:plan.id,
+                name:plan.plan_name as 'basic' | 'premium' | 'standard',
                 price:plan.price,
                 description:plan.description,
                 billing_interval:plan.billing_interval
@@ -47,7 +48,7 @@ export class PlanRepositoryPSql implements IPlanRepository{
             return null;
         }
         const plan=await Plan.findOne({
-            where:{plan_name:planName}
+            where:{name:planName}
         });
         return plan ? this.planAdapter.convertPlanToIFullPlan(plan) : null;
     }

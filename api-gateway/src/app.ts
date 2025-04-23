@@ -9,8 +9,8 @@ config();
 const app:Application=express();
 const port=process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+// app.use(express.json());
+// app.use(express.urlencoded({extended:true}));
 app.use(cors({origin:"*",credentials:true}));
 microServiceMiddleware(app);
 app.use(errorHandler);

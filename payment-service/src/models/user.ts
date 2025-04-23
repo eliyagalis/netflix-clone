@@ -11,14 +11,14 @@ export class User extends Model{
         unique:true
     })
     user_id!:string;
-    @Column({
-        type:DataType.STRING,
-        allowNull:false,
-        validate:{
-            len:[1,255]
-        }
-    })
-    name!:string;
+    // @Column({
+    //     type:DataType.STRING,
+    //     allowNull:false,
+    //     validate:{
+    //         len:[1,255]
+    //     }
+    // })
+    // name!:string;
     @Column({
         type:DataType.STRING,
         allowNull:false

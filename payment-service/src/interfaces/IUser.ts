@@ -1,6 +1,6 @@
 export interface IUser{
     user_id:string,
     email:string,
-    name:string,
+    // name:string,
     subscriptions?:[]
 }

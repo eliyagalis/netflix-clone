@@ -4,7 +4,7 @@ import container from "../config/inversify";
 import { Tokens } from "../utils/tokens";
 import { IPaymentController } from "../interfaces/IPaymentController";
 import { autenticateRule } from "../middleWares/authenticateRule";
-import { errorValidator, validatePaymentMethodFieldReq, validatePlanNameFieldReq, validateUserIdField, validateUserReqFields} from "../middleWares/validatePaymentsReq";
+import { errorValidator, validatePaymentMethodFieldReq, validatePlanNameFieldReq, validateUserEmailReqField, validateUserIdField} from "../middleWares/validatePaymentsReq";
 import { body } from "express-validator";
 config()
 export const paypalRouter:Router=Router();
@@ -17,31 +17,73 @@ paypalRouter.post('/initP',[
 ],(req:Request,res:Response,next:NextFunction)=>{
     paymentController.saveAllPlansInit(req,res,next);
 });
-
-paypalRouter.post('/cancel',
+paypalRouter.post('/deleteUser', (req:Request,res:Response,next:NextFunction)=>{
+        console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
+        req.userId = req.headers['x-user-id'] as string;
+        req.userEmail = req.headers['x-user-email'] as string;
+        next()
+    },
+    [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
+    ,(req:Request,res:Response,next:NextFunction)=>{
+    paymentController.deleteUser(req,res,next);
+});
+paypalRouter.post('/cancel', (req:Request,res:Response,next:NextFunction)=>{
+        console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
+        req.userId = req.headers['x-user-id'] as string;
+        req.userEmail = req.headers['x-user-email'] as string;
+        next()
+    },
     [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
     ,(req:Request,res:Response,next:NextFunction)=>{
     paymentController.cancelSubscription(req,res,next)
 });
-paypalRouter.post('/paymentCompleted', 
+paypalRouter.post('/plansCheck',
+    (req:Request,res:Response,next:NextFunction)=>{
+        console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
+        req.userId = req.headers['x-user-id'] as string;
+        req.userEmail = req.headers['x-user-email'] as string;
+        next()
+    }
+    ,[
+        validateUserIdField,
+        validatePaymentMethodFieldReq,
+        validatePlanNameFieldReq,
+        errorValidator
+    ],
+    // (req:Request,res:Response,next:NextFunction)=>{ 
+    //     console.log("save all plans:")
+    //     paymentController.saveAllPlansInit(req,res,next);},
+    (req:Request,res:Response,next:NextFunction)=>{ 
+        console.log("plan saved");
+        paymentController.validatePlanAndUser(req,res,next);}
+)
+paypalRouter.post('/paymentCompleted',(req:Request,res:Response,next:NextFunction)=>{
+        req.userId = req.headers['x-user-id'] as string;
+        req.userEmail = req.headers['x-user-email'] as string;
+        next();
+    }, 
     [
         validateUserIdField,//userId
-        validateUserReqFields,//userName,userEmail
+        validateUserEmailReqField,//userName,userEmail
         validatePaymentMethodFieldReq,//paymentMethod
         validatePlanNameFieldReq,//planName
         errorValidator
     ],
-    (req:Request,res:Response,next:NextFunction)=>{ paymentController.saveAllPlansInit(req,res,next);},
-    (req:Request,res:Response,next:NextFunction)=>{ paymentController.approvePaymentProcess(req,res,next) }
+    (req:Request,res:Response,next:NextFunction)=>{ 
+        paymentController.approvePaymentProcess(req,res,next) }
 );
-paypalRouter.get('/getSubscription',
+paypalRouter.get('/getSubscription',(req:Request,res:Response,next:NextFunction)=>{
+        req.userId = req.headers['x-user-id'] as string;
+    }, 
      //אולי למחוק ולהשאיר רק בפונקציה
     [ validateUserIdField,validatePaymentMethodFieldReq,errorValidator ],
     (req:Request,res:Response,next:NextFunction)=>{
         paymentController.getSubscription(req,res,next)
     }
 );
-paypalRouter.patch('/update',
+paypalRouter.patch('/update',(req:Request,res:Response,next:NextFunction)=>{
+        req.userId = req.headers['x-user-id'] as string;
+    }, 
     [
         validateUserIdField,
         validatePaymentMethodFieldReq,

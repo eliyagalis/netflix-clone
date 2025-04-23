@@ -5,7 +5,7 @@ import { Plan } from "./plan";
 @Table({tableName:'subscription',modelName:'Subscription',timestamps:false})
 export class Subscription extends Model{
     @Column({
-        type:DataType.UUID,
+        type:DataType.STRING,
         primaryKey:true,
         allowNull:false,
         unique:true
@@ -27,7 +27,7 @@ export class Subscription extends Model{
 
     @ForeignKey(()=>Plan)
     @Column({
-        type:DataType.UUID,
+        type:DataType.STRING,
         allowNull:false,
     })
     plan_id!:string
