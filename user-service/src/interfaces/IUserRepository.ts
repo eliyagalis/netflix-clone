@@ -1,6 +1,7 @@
 import { SetPasswordDTO, SetSubscriptionDTO, SetUserDTO } from "../DTOs/set.dto";
 import SignupRequestDTO from "../DTOs/signup.dto";
 import UpdateUserDTO, { addMyListItemDTO, addProfileDTO } from "../DTOs/update.dto";
+import IProfile from "./IProfile";
 import IUser from "./IUser";
 
 
@@ -19,4 +20,6 @@ export default interface IUserRepository {
     addProfile(userId: string, profileDTO: addProfileDTO): Promise<IUser | null>
 
     addMyListItem(userId: string, profileId: string, itemDTO: addMyListItemDTO): Promise<boolean>
+
+    getProfiles(userId: string) : Promise<IProfile[] | null> 
 }

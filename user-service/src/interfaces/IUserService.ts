@@ -20,7 +20,7 @@ export default interface IUserService {
   /**
    * Login a user and generate tokens
    */
-  login(data: LoginRequestDTO): Promise<ITokenResponse>;
+  login(data: LoginRequestDTO): Promise<{tokens: ITokenResponse, profiles: Partial<IProfile>[]}>;
   
   /**
    * Refresh access token using refresh token
@@ -51,4 +51,6 @@ export default interface IUserService {
    * Add an item to a user's profile watchlist
    */
   addToMyList(userId: string, profileId: string, itemData: { contentId: string, type: string }): Promise<boolean>;
+
+  getProfiles(userId: string) : Promise<Partial<IProfile>[] | null>
 }

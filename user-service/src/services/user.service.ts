@@ -15,6 +15,7 @@ import IUserBuilder from '../interfaces/IUserBuilder';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
 import UserBuilder from '../builders/user.builder';
 import LoginRequestDTO from '../DTOs/login.dto';
+import { profile } from 'console';
 
 @injectable()
 export class UserService implements IUserService {
@@ -64,9 +65,10 @@ export class UserService implements IUserService {
       userId: user.id,
       email: user.email
     }
-    
+
     return this.authService.login(userPayload, password, user.password);
   }
+  
   /**
    * Add subscription for a user
    */
@@ -87,7 +89,7 @@ export class UserService implements IUserService {
   /**
    * Login a user and generate tokens
    */
-  async login(data: LoginRequestDTO): Promise<ITokenResponse> {
+  async login(data: LoginRequestDTO): Promise<{tokens: ITokenResponse, profiles: Partial<IProfile>[]}> {
 
     const {email , password } = data
 
@@ -104,7 +106,14 @@ export class UserService implements IUserService {
     };
 
     // Use auth service to login and generate tokens
-    return await this.authService.login(userPayload, password, user.password);
+    const tokens =  await this.authService.login(userPayload, password, user.password);
+
+    const profiles = await this.getProfiles(user.id);
+
+    return {
+      tokens, 
+      profiles
+    }
   }
 
 
@@ -156,5 +165,25 @@ export class UserService implements IUserService {
    */
   async addToMyList(userId: string, profileId: string, itemData: addMyListItemDTO): Promise<boolean> {
     return this.userRepository.addMyListItem(userId, profileId, itemData);
+  }
+
+  async getProfiles(userId: string): Promise<Partial<IProfile>[]> {
+    const profiles = await this.userRepository.getProfiles(userId);
+
+    if (!profiles) {
+      throw new Error ('User not found')
+    }
+
+    const partialProfile = profiles?.map(profile => {
+      return {
+        id: profile.id,
+        name: profile.name,
+        avater: profile.avatar
+      }
+    })
+
+    return partialProfile;
+
+
   }
 }
