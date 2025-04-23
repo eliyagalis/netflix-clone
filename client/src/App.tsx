@@ -4,7 +4,7 @@ import LoginPage from "./pages/LoginPage";
 
 import SignUpPage from "./pages/SignUpPage";
 
-import PaypalLogic from "./components/Fetures/paypal/paypalLogic";
+import PaypalLogic from "./feature/paypal/paypalLogic";
 import MainMoviesPage from "./pages/MainMoviesPage";
 import ChoosePaymentMethod from "./pages/ChoosePaymentMethod";
 

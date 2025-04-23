@@ -3,13 +3,12 @@ import Typography from '../components/shared/Typography'
 import { images } from '../data/images'
 // import { useNavigate } from 'react-router-dom'
 import { typography } from '../data/typography'
-import { useAppDispatch, useAppSelector } from '../store/store'
-import Button from '../components/shared/Button'
-import { colors } from '../data/colors'
+// import { useAppDispatch, useAppSelector } from '../store/store'
+import PaymentMethodButton from '../components/ui/PaymentMethodButton'
 
 const ChoosePaymentMethod:React.FC = () => {
-  const dispatch=useAppDispatch()
-  const step:number=useAppSelector((state)=>state.step);
+  // const dispatch=useAppDispatch()
+  // const step:number=useAppSelector((state)=>state.step);
 
   return (
 
@@ -23,16 +22,14 @@ const ChoosePaymentMethod:React.FC = () => {
           </Typography>
           <Typography className=' text-black font-medium my-3' size={typography.medium}>Secure for peace of mind. <br />Cancel easily online.</Typography>
 
-          <Button color={colors.buttons.secondary} border='border-gray-300' className='p-4 w-[40rem] h-[5rem] my-10 font-light' fontSize={typography.medium}>
-            <div className='flex flex-row m-1.5'>
-              <span className='text-left'>Credit or Debit Cart </span>
-              <Typography className='flex flex-row mx-4'>
-                  <img src={images.payment.visaLogo.src} alt={images.payment.visaLogo.alt} className='w-[3rem] h-[2rem] border !border-gray-300 rounded-sm mx-2' />
-                  <img src={images.payment.masterCardLogo.src} alt={images.payment.masterCardLogo.alt} className='w-[3rem] h-[2rem] border !border-gray-300 rounded-sm' />
-              </Typography>
-              <span className=''><i className="fa-solid fa-greater-than"></i></span>
-            </div>
-          </Button>
+          <PaymentMethodButton text="Credit or Debit Cart" imagesChildren={
+            <>
+              <img src={images.payment.visaLogo.src} alt={images.payment.visaLogo.alt} className='w-[3rem] h-[2rem] border !border-gray-300 rounded-sm mx-2' />
+              <img src={images.payment.masterCardLogo.src} alt={images.payment.masterCardLogo.alt} className='w-[3rem] h-[2rem] border !border-gray-300 rounded-sm' />
+            </>
+          }/>
+          <PaymentMethodButton text="Paypal" imagesChildren={<img src={images.payment.visaLogo.src} alt={images.payment.visaLogo.alt} className='w-[3rem] h-[2rem] border !border-gray-300 rounded-sm mx-2' />
+          }/>
         </div>
           {/* const Typography:React.FC<TypographyProps> = ({children, className, size}) => {
         return (
