@@ -23,13 +23,20 @@ export const images = {
             alt: "Netflix Background"
         },
     },
-
     payment:{
         lockPic:{
             src:"https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Lock.png",
             alt:"payment lock logo"
+        },
+        visaLogo:{
+            src:"https://logowik.com/content/uploads/images/857_visa.jpg",
+            alt:"visa logo"
+        },
+        masterCardLogo:{
+            src:"https://www.designportal.cz/wp-content/uploads/2019/01/mastercard-logo-pentagram-00-1140x641.jpg",
+            alt:"Mastercard logo"
         }
-
+    },
     registration: {
         src: 'https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Devices.png',
         alt: 'Netflix Devices Image',

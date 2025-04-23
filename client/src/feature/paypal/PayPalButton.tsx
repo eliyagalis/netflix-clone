@@ -15,7 +15,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlanAndUser,onS
         vault:true,
         intent:"subscription"
     }}>
-        <PayPalButtons style={{layout:'vertical',color:'gold',shape:'rect',label:'subscribe'}}
+        <PayPalButtons className="hidden" style={{layout:'vertical',color:"white",shape:'rect',label:'subscribe'}}
             createSubscription={async(_, actions) => {
                 if(!planName) {
                     console.error("Missing planName for subscription creation");
@@ -40,7 +40,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlanAndUser,onS
             }}
             onError={async(error) => {
                 console.error("Error creating subscription:", error);
-                navigate('/choosePlan') // Add a route for choosing a plan
+                navigate('/signup/planform') // Add a route for choosing a plan
             }}
         />
     </PayPalScriptProvider>

@@ -11,7 +11,7 @@ type SignUpPageProps = {
 
 const SignupLayout:React.FC<SignUpPageProps> = () => {
     return (
-        <div className={`text-${colors.text.primary} min-h-screen w-full flex flex-col`}>
+        <div className={`text-${colors.text.primary} bg-white min-h-screen w-full flex flex-col`}>
             <Header link='/' border>
                 <Link to="/login"
                     className={`${typography.small} hover:underline font-medium`}>
