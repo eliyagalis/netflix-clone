@@ -112,7 +112,7 @@ export default function MainCarousel({ movies, isIndexed }: CarouselProps) {
                     </div>
 
                     {/* info card */}
-                    <div className="w-full bg-gray-800 p-4">
+                    <div className="w-full bg-[#181818] p-4">
                         <h3 className="text-white text-lg font-bold">{preview.movie.title}</h3>
                         <p className="text-gray-400 text-sm">{preview.movie.description}</p>
                     </div>
