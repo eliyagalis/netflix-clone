@@ -10,10 +10,10 @@ import Typography from "../components/shared/Typography";
 import { typography } from "../data/typography";
 import LandingBackground from "../components/landing-page/LandingBackground";
 import LandingPoster from "../components/landing-page/LandingPoster";
-import CarouselFeature from "../components/landing-page/CarouselFeature";
 import PlanCard from "../components/landing-page/PlanCard";
 import ReasonsCard from "../components/landing-page/ReasonsCard";
 import { colors } from "../data/colors";
+import LandingCarouselFeature from "../components/landing-page/LandingCarouselFeature";
 
 const LandingPage = () => {
 
@@ -23,6 +23,7 @@ const LandingPage = () => {
             
             <div className="relative max-w-460 mx-auto">
                 <Header isSwitch>
+                    <div/>
                     <Button navLink={strings.landing.header.login.link} color={colors.buttons.secondary} rounded>
                         {strings.landing.header.login.text}
                     </Button>
@@ -35,7 +36,7 @@ const LandingPage = () => {
             <div className="relative z-50 w-8/10 max-w-350 mx-auto">
                 <Typography className="font-bold" size={typography.large}>{strings.landing.carousel.headline}</Typography>
                 
-                <CarouselFeature />
+                <LandingCarouselFeature />
 
                 <Typography className="font-medium" size={typography.medium}>{strings.landing.plans.headline}</Typography>
                 <div className="py-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-4">
