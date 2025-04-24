@@ -176,7 +176,7 @@ export class UserController {
         res
       }
     } catch (error) {
-      
+      handleError(res, error)
     }
   }
 }
