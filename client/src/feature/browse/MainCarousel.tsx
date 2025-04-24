@@ -1,87 +1,123 @@
-import React, { useRef } from 'react'
-import { Movie } from "../../models/Movie";
+import React, { useRef, useState, MouseEvent } from 'react';
+import { Movie } from '../../models/Movie';
 
-type CarouselProps = {
-    movies: Array<Movie>;
-    isIndexed?: boolean;
-}
+type CarouselProps = { movies: Movie[]; isIndexed?: boolean };
+const SCALE = 1.25; // preview 25 % larger
 
-const MainCarousel: React.FC<CarouselProps> = ({ movies, isIndexed }) => {
-
+export default function MainCarousel({ movies, isIndexed }: CarouselProps) {
     const carouselRef = useRef<HTMLDivElement>(null);
-    const scrollCarousel = (direction: "left" | "right") => {
-        if (carouselRef.current) {
-            const scrollAmount = 700;
-            carouselRef.current.scrollBy({
-                left: direction === "left" ? -scrollAmount : scrollAmount,
-                behavior: "smooth"
+
+    const [preview, setPreview] = useState<{
+        movie: Movie;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    } | null>(null);
+
+    const [isHoveringPreview, setHoveringPreview] = useState(false);
+
+    /* scrolling */
+    const scrollCarousel = (dir: 'left' | 'right') =>
+        carouselRef.current?.scrollBy({
+            left: dir === 'left' ? -100 : 100,
+            behavior: 'smooth'
+        });
+
+    /* hover tile */
+    const handleEnterTile =
+        (movie: Movie) => (e: MouseEvent<HTMLDivElement>) => {
+            if (!carouselRef.current) return;
+
+            const tileRect = e.currentTarget.getBoundingClientRect();
+            const trackRect = carouselRef.current.getBoundingClientRect(); // ← container
+
+            setPreview({
+                movie,
+                x: tileRect.left - trackRect.left,   // RELATIVE X
+                y: tileRect.top - trackRect.top,    // RELATIVE Y
+                width: tileRect.width,
+                height: tileRect.height
             });
-        }
-    };
+        };
+
+    const handleLeaveTile = () => !isHoveringPreview && setPreview(null);
 
     return (
         <div className="relative flex items-center px-0">
-            {/* Left Arrow */}
+            {/* arrows */}
+
             <button
-                className="btn absolute -left-0 z-10 w-2 py-15 bg-[rgba(145,145,145,0.5)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
-                onClick={() => scrollCarousel("left")}
+                className="btn absolute -left-5 z-10 w-2 py-15 bg-[rgba(145,145,145,0.5)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
+                onClick={() => scrollCarousel('left')}
             >
-                <i className="fa-solid fa-chevron-left"></i>
+                <i className="fa-solid fa-chevron-left" />
             </button>
 
-            {/* Carousel */}
+            {/* track */}
             <div
                 ref={carouselRef}
-                className="carousel overflow-y-visible overflow-x-scroll scroll-smooth p-5 py-10 flex snap-x snap-mandatory"            >
+                className="carousel overflow-visible overflow-x-scroll flex snap-x snap-mandatory p-2 py-10"
+            >
                 {movies.map((m, idx) => (
                     <div
-                    key={m.title}
-                    className="relative flex-none basis-1/6 snap-start px-2 group"
-                  >
-                    {/* fixed‑size placeholder keeps the row stable */}
-                    <div className="aspect-video w-full overflow-hidden rounded-xl shadow-lg">
-                      <img
-                        src={m.src}
-                        alt={m.title}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  
-                    {/* ▲ The *preview* that appears on hover */}
-                    <div
-                      className="absolute inset-0 origin-bottom z-50
-                                 scale-100 opacity-0 pointer-events-none
-                                 transition duration-300 ease-out
-                                 group-hover:scale-125 group-hover:-translate-y-0
-                                 group-hover:opacity-100 group-hover:z-20"
+                        key={m.title}
+                        onMouseEnter={handleEnterTile(m)}
+                        onMouseLeave={handleLeaveTile}
+                        className="relative flex-none basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 snap-start px-[2px] group"
                     >
-                      <img
-                        src={m.src}
-                        alt={m.title}
-                        className="h-full w-full object-cover rounded-xl shadow-2xl"
-                      />
+                        <div className="aspect-video w-full overflow-hidden shadow-lg rounded-sm">
+                            <img src={m.src} alt={m.title} className="object-cover w-full h-full" />
+                        </div>
+
+                        {isIndexed && (
+                            <span className="absolute top-0 -left-4 font-black text-[4.5rem] text-black myStroke">
+                                {idx + 1}
+                            </span>
+                        )}
                     </div>
-                  
-                    {isIndexed && (
-                      <span className="absolute top-0 -left-4 font-black text-[4.5rem] text-black myStroke">
-                        {idx + 1}
-                      </span>
-                    )}
-                  </div>
-                  
                 ))}
             </div>
 
-            {/* Right Arrow */}
             <button
-                className="btn absolute -right-0 z-10 w-2 py-15 bg-[rgba(145,145,145,0.5)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
-                onClick={() => scrollCarousel("right")}
+                className="btn absolute -right-2 z-10 w-2 py-15 bg-[rgba(145,145,145,0.5)] shadow-none rounded-xl border-0 font-thin text-white text-2xl"
+                onClick={() => scrollCarousel('right')}
             >
-                <i className="fa-solid fa-chevron-right"></i>
+                <i className="fa-solid fa-chevron-right" />
             </button>
-        </div >
 
-            )
+            {preview && (
+                <div
+                    className="absolute z-[1000] rounded-sm overflow-hidden shadow-2xl
+               transition-transform duration-100 pointer-events-auto"
+                    style={{
+                        left: preview.x + preview.width / 2 - (preview.width * SCALE) / 2,
+                        top: preview.y - preview.height,
+                        width: preview.width * SCALE,
+                        height: 'auto'
+                    }}
+                    onMouseEnter={() => setHoveringPreview(true)}
+                    onMouseLeave={() => {
+                        setHoveringPreview(false);
+                        setPreview(null);
+                    }}
+                >
+                    {/* poster */}
+                    <div style={{ width: '100%', height: preview.height * SCALE }}>
+                        <img
+                            src={preview.movie.src}
+                            alt={preview.movie.title}
+                            className="object-cover w-full h-full"
+                        />
+                    </div>
+
+                    {/* info card */}
+                    <div className="w-full bg-gray-800 p-4">
+                        <h3 className="text-white text-lg font-bold">{preview.movie.title}</h3>
+                        <p className="text-gray-400 text-sm">{preview.movie.description}</p>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
-
-export default MainCarousel

@@ -8,6 +8,11 @@ const Browse = () => {
     <div>
         <div>Title</div>
         <MainCarousel movies={movies}/>
+        <MainCarousel movies={movies}/>
+        <MainCarousel movies={movies}/>
+        <MainCarousel movies={movies}/>
+        <MainCarousel movies={movies}/>
+
     </div>
   )
 }
