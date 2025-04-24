@@ -17,7 +17,6 @@ import { store } from "./store/store";
 import TrailerMovie from "./components/shared/TrailerMovie";
 import BrowseLayout from "./pages/BrowseLayout";
 import Browse from "./pages/browse/Browse";
-=======
 import PaymentPickerPage from "./pages/PaymentPickerPage";
 import PaypalOptionPage from "./pages/PaypalOptionPage";
 
@@ -39,11 +38,11 @@ function App() {
 
           <Route path="/signup" element={<SignupLayout />}>
             <Route path="registration" element={<Registration />} />
-            <Route path="choosePaymentMethod" element={<ChoosePaymentMethod/>}/>
+            <Route path="choosePaymentMethod" element={<PaymentPickerPage/>}/>
             <Route path="regform" element={<Regform />} />
             <Route path="paymentPicker" element={<PaymentPickerPage/>}/>
             <Route path="paypalOption" element={<PaypalOptionPage/>}/>
-            <Route path="regform" element={<Register />} />
+            <Route path="regform" element={<Regform />} />
             <Route path="planform" element={<Planform />} />
             <Route path="payment" element={<Payment />} />
           </Route>
