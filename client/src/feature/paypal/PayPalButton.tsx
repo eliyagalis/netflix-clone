@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 interface PayPalButtonProps {
     planName:string,
     onSuccess:(subscriptionId:string)=>void,
-    checkPlanAndUser:(planName:string)=>Promise<string|undefined>;
+    checkPlan:(planName:string)=>Promise<string|undefined>;
 }
-const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlanAndUser,onSuccess}) => {
+const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlan,onSuccess}) => {
     const navigate=useNavigate()
   return (
     <PayPalScriptProvider options={{
@@ -21,7 +21,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlanAndUser,onS
                         console.error("Missing planName for subscription creation");
                         return Promise.reject(new Error("Missing plan name"));
                     }
-                    const servicePlanId=await checkPlanAndUser(planName);
+                    const servicePlanId=await checkPlan(planName);
                     if(!servicePlanId){
                         return Promise.reject(new Error("invalid plan"));
                     }

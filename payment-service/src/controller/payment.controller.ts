@@ -48,7 +48,6 @@ export default class PaymentController implements IPaymentController{
         } catch (error) {
             return next(error);
         }
-
     }
     async approvePaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>{ //done
         const {userId,userEmail}=req;

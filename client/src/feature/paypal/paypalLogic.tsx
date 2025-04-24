@@ -58,7 +58,7 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod}:PaypalL
       console.log(error)
     }
   }
-  const checkPlanAndUser = async (planName: string): Promise<string|undefined> => {
+  const checkPlan = async (planName: string): Promise<string|undefined> => {
     console.log("plan front:",planName)
     try {
       const response = await axios.post<ValidatePlanAndUserRes>('http://localhost:3000/api/v1/payment/paypal/plansCheck', {
@@ -82,7 +82,7 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod}:PaypalL
     // } 
   return (
     <>
-      <PayPalButton onSuccess={handleSuccessPayment} checkPlanAndUser={checkPlanAndUser} planName={planName}/>
+      <PayPalButton onSuccess={handleSuccessPayment} checkPlan={checkPlan} planName={planName}/>
       {successPayment.status&&(
         <div>success payment</div>
       ) }
