@@ -29,9 +29,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
         try{
             const refreshToken : string|null = req.cookies.refreshToken;
-            const response= await axios.get("http://localhost:3002/api/v1/refreshToken",{headers:{
-                Cookie:`refreshToken=${refreshToken}`
-            }});
+            const response= await axios.get("http://localhost:3002/api/v1/refreshToken",{withCredentials:true});
             const {refreshToken:refreshToken_res,accessToken:accessToken_res}=response.data;
 
             res.cookie('accessToken',accessToken_res,{ httpOnly:true, maxAge:15*60*1000, secure:true });

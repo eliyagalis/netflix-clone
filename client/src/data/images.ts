@@ -35,6 +35,14 @@ export const images = {
         masterCardLogo:{
             src:"https://www.designportal.cz/wp-content/uploads/2019/01/mastercard-logo-pentagram-00-1140x641.jpg",
             alt:"Mastercard logo"
+        },
+        paypalLogo:{
+            src:"https://png.pngtree.com/png-vector/20220531/ourmid/pngtree-paypal-card-online-payment-transaction-png-image_4799697.png"
+            ,alt:"Paypal logo"
+        },
+        yellowLock:{
+            src:"https://thumb.ac-illust.com/57/57819d5d0c443d2318dabb9a02fe62d3_t.jpeg",
+            alt:"lock img"
         }
     },
     registration: {
