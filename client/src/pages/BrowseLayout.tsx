@@ -10,7 +10,7 @@ const BrowseLayout = () => {
             <div className="w-9/10 mx-auto">
                 <Header link='/browse' isBrowse>
                     <nav className='flex items-center justify-between w-full'>
-                        <div className='flex items-center mx-5'>
+                        <div className='hidden md:flex items-center mx-5'>
                             <Link to={"/browse"}
                                 className={`text-white ${typography.xxsmall} mx-3 font-semibold`}>Home</Link>
                             <Link to={"/browse/genres/tv"}
@@ -21,6 +21,9 @@ const BrowseLayout = () => {
                                 className={`text-white ${typography.xxsmall} mx-3 font-semibold`}>New & Popular</Link>
                             <Link to={"/browse/mylist"}
                                 className={`text-white ${typography.xxsmall} mx-3 font-semibold`}>My List</Link>
+                        </div>
+                        <div className='flex md:hidden items-center mx-5'>
+                            Collapsing Nav
                         </div>
                         <div className='flex items-center'>
                             <p className='text-white'>Logout</p>
