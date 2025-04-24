@@ -8,7 +8,8 @@ import SignupRequestDTO from '../DTOs/signup.dto';
 import LoginRequestDTO from '../DTOs/login.dto';
 import IUser from '../interfaces/IUser';
 import { date } from 'joi';
-import UpdateRequestDTO from '../DTOs/update.dto';
+import { UpdateRequestDTO , AddProfileDTO, AddMyListItemDTO }from '../DTOs/update.dto';
+import { profile } from 'console';
 
 @injectable()
 export class UserController {
@@ -156,6 +157,26 @@ export class UserController {
       })
     } catch (error) {
       handleError(res, error);
+    }
+  }
+
+  async addProfile(req: Request, res: Response) {
+    try {
+      const userId = req.header('id');
+
+      if (!userId) {
+        return res.status(401).json({ message: "User ID not provided" });
+      }
+
+      const data: AddProfileDTO = req.body;
+
+      const user = this.userService.addProfile(userId, data);
+
+      if (!user) {
+        res
+      }
+    } catch (error) {
+      
     }
   }
 }

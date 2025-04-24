@@ -1,4 +1,4 @@
-export default interface UpdateRequestDTO {
+export interface UpdateRequestDTO {
     name?: string;
     password?: string;
     email?: string;
@@ -7,13 +7,13 @@ export default interface UpdateRequestDTO {
     phoneNumber?: string;
 }
 
-export interface addProfileDTO {
+export interface AddProfileDTO {
     name: string,
     avatar?: string,
     isKid?: boolean,
 }
 
-export interface addMyListItemDTO {
+export interface AddMyListItemDTO {
     contentId: string,
     type: 'movie' | 'series' ,
 }

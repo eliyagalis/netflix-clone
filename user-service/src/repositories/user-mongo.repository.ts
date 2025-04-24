@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import IUser, { UserStatus } from "../interfaces/IUser";
 import IUserRepository from "../interfaces/IUserRepository";
-import UpdateUserDTO, { addMyListItemDTO, addProfileDTO } from "../DTOs/update.dto";
+import { UpdateRequestDTO, AddMyListItemDTO, AddProfileDTO} from "../DTOs/update.dto";
 import { TOKENS } from "../tokens";
 import IUserAdapter from "../interfaces/IUserAdapter";
 import User from "../models/user-mongo.model"
@@ -46,7 +46,7 @@ export class UserMongoRepository implements IUserRepository {
     return this.userAdapter.toDomainUser(updatedUser);
   }
 
-  async addProfile(userId: string, profileDTO: addProfileDTO): Promise<IUser | null> {
+  async addProfile(userId: string, profileDTO: AddProfileDTO): Promise<IUser | null> {
     const profile = {
       name: profileDTO.name,
       avatar: profileDTO.avatar || 'default-avatar.png',
@@ -66,7 +66,7 @@ export class UserMongoRepository implements IUserRepository {
     return this.userAdapter.toDomainUser(updatedUser);
   }
 
-  async addMyListItem(userId: string, profileId: string, itemDTO: addMyListItemDTO): Promise<boolean> {
+  async addMyListItem(userId: string, profileId: string, itemDTO: AddMyListItemDTO): Promise<boolean> {
     const myListItem : IMyListItem = {
       contentId: itemDTO.contentId,
       type: itemDTO.type,
@@ -100,7 +100,7 @@ export class UserMongoRepository implements IUserRepository {
     return this.userAdapter.toDomainUser(user)
   }
 
-  async updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null> {
+  async updateUser(id: string, data: UpdateRequestDTO): Promise<IUser | null> {
     const updateData = { ...data, updatedAt: new Date() };
 
     // If password is being updated, hash it

@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 import { TOKENS } from '../tokens';
 import IUserRepository from '../interfaces/IUserRepository';
 import IUserService from '../interfaces/IUserService';
-import UpdateUserDTO, { addMyListItemDTO, addProfileDTO } from '../DTOs/update.dto';
+import { UpdateRequestDTO, AddMyListItemDTO, AddProfileDTO } from '../DTOs/update.dto';
 import IUser, { isActiveUser, UserStatus } from '../interfaces/IUser';
 import IProfile from '../interfaces/IProfile';
 import IMyListItem from '../interfaces/IMyListItem';
@@ -144,7 +144,7 @@ export class UserService implements IUserService {
   /**
    * Update user information
    */
-  async updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null> {
+  async updateUser(id: string, data: UpdateRequestDTO): Promise<IUser | null> {
     // If password is included, hash it first
     if (data.password) {
       data.password = await hash(data.password);
@@ -156,14 +156,14 @@ export class UserService implements IUserService {
   /**
    * Add a profile to a user account
    */
-  async addProfile(userId: string, profileData: addProfileDTO): Promise<IUser | null> {
+  async addProfile(userId: string, profileData: AddProfileDTO): Promise<IUser | null> {
     return this.userRepository.addProfile(userId, profileData);
   }
 
   /**
    * Add an item to a user's profile watchlist
    */
-  async addToMyList(userId: string, profileId: string, itemData: addMyListItemDTO): Promise<boolean> {
+  async addToMyList(userId: string, profileId: string, itemData: AddMyListItemDTO): Promise<boolean> {
     return this.userRepository.addMyListItem(userId, profileId, itemData);
   }
 
