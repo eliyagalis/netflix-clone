@@ -44,7 +44,7 @@ function App() {
           </Route>
 
           {/* <Route path="/main" element={<MainPage/>}/> */}
-          <Route path="/payment" element={<PaypalLogic planName="basic" paymentMethod="paypal" />} />
+          <Route path="/paymentPP" element={<PaypalLogic planName="basic" paymentMethod="paypal" />} />
           <Route path="/mainMoviePage" element={<MainMoviesPage />} />
           <Route path="/trailerMovie" element={<TrailerMovie/>}/>
 

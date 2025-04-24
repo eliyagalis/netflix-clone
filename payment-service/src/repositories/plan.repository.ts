@@ -20,7 +20,6 @@ export class PlanRepositoryPSql implements IPlanRepository{
         if( !plan.id||!plan.plan_name || validPlanName || !plan.price || !plan.description|| !plan.billing_interval){
             throw new Error("Please enter all the parameters!");
         }
-
         try{
             const newPlan:Plan=await Plan.create({
                 plan_id:plan.id,

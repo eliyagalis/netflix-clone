@@ -1,0 +1,71 @@
+services:
+  redis:
+    image: redis:7.0
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  proxy:
+    build:
+      context: ../api-gateway/
+    container_name: proxy
+    ports:
+      - "3000:3000"
+    env_file:
+      - ../api-gateway/.env
+    depends_on:
+      - payment_service
+      - user_service
+      - redis
+      - movie_service
+    networks:
+      - app_network
+    restart: always
+
+  movie_service:
+    build:
+      context: ../movie-service/
+    container_name: movie_service
+    ports:
+      - "3001:3001"
+    env_file:
+      - ../movie-service/.env
+    depends_on:
+      - redis
+    networks:
+      - app_network
+    restart: always
+
+  payment_service:
+    build:
+      context: ../payment-service/
+    container_name: payment_service
+    ports:
+      - "3003:3003"
+    env_file:
+      - ../payment-service/.env
+    depends_on:
+      - redis
+    networks:
+      - app_network
+    restart: always
+
+  user_service:
+    build:
+      context: ../user-service/
+    container_name: user_service
+    ports:
+      - "3002:3002"
+    env_file:
+      - ../user-service/.env
+    depends_on:
+      - redis
+    networks:
+      - app_network
+    restart: always
+
+networks:
+  app_network:
+    driver: bridge

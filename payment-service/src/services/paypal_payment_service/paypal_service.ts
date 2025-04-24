@@ -104,6 +104,7 @@ export default class PayPalService implements IPaymentService{
             throw new Error((error as Error).message);
         }
     }
+    
        async createUser(userId:string,userEmail:string):Promise<IUser>{
         if(!userId||!userEmail){
             throw new Error("user id or user name or user email is required on creating user!");
@@ -123,21 +124,11 @@ export default class PayPalService implements IPaymentService{
         //הפונקציה יוצרת מנוי חדש בפייפאל
     async saveSubscription(planName:string,user:IUser,subscription:IPayPalSubscriptionResponse):Promise<ISubscription>
     {
-        // if(!userId||!['basic','standard','premium'].includes(planName)){ //controller check
-        //     throw new Error("plan name or user id is required on creating subcription!");
-        // }
         try{
             const plan=await this.planRepository.findPlanByName(planName);
             if(!plan){
                 throw new Error("plan not found")
             }
-            // !data.user||
-            // !data.plan||
-            // !data.paypalData.id||
-            // !data.paypalData.status||
-            // !data.paypalData.start_time||
-            // !data.paypalData.create_time||
-            // !['active','cancelled','expired'].includes(data.paypalData.status)
             const subscriptionData: CreateSubscriptionDTO = {
                 user: user,
                 plan: plan,
@@ -178,6 +169,7 @@ export default class PayPalService implements IPaymentService{
             throw new Error((err as Error).message);
         }
     }
+
     async getUserById(userId:string):Promise<IUser|null>{
         if(!userId){
             throw new Error("user id is required!")
