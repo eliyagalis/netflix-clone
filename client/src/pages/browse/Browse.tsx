@@ -6,8 +6,8 @@ import LatestTrailer from '../../feature/browse/LatestTrailer'
 
 const Browse = () => {
   return (
-    <div>
-        <LatestTrailer trailer={movies[0]}/>
+    <div className=''>
+        {/* <LatestTrailer trailer={movies[0]}/> */}
         
         <MainCarousel title='Top 10' movies={movies}/>
 
