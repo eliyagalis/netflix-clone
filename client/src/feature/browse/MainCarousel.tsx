@@ -2,9 +2,14 @@ import React, { useRef, useState, MouseEvent } from 'react';
 import { Movie } from '../../models/Movie';
 import Typography from '../../components/shared/Typography';
 import { typography } from '../../data/typography';
+import Play from '../../assets/netflix-buttons-svgs/Play';
+import Add from '../../assets/netflix-buttons-svgs/Add';
+import Like from '../../assets/netflix-buttons-svgs/Like';
+import More from '../../assets/netflix-buttons-svgs/More';
+import { IMovieCard } from '../../types/IMovieCard';
 
 type CarouselProps = {
-    movies: Movie[];
+    movies: IMovieCard[];
     isIndexed?: boolean
     title: string;
 };
@@ -14,7 +19,7 @@ export default function MainCarousel({ movies, isIndexed, title }: CarouselProps
     const carouselRef = useRef<HTMLDivElement>(null);
 
     const [preview, setPreview] = useState<{
-        movie: Movie;
+        movie: IMovieCard;
         x: number;
         y: number;
         width: number;
@@ -32,7 +37,7 @@ export default function MainCarousel({ movies, isIndexed, title }: CarouselProps
 
     /* hover tile */
     const handleEnterTile =
-        (movie: Movie) => (e: MouseEvent<HTMLDivElement>) => {
+        (movie: IMovieCard) => (e: MouseEvent<HTMLDivElement>) => {
             if (!carouselRef.current) return;
 
             const tileRect = e.currentTarget.getBoundingClientRect();
@@ -75,7 +80,7 @@ export default function MainCarousel({ movies, isIndexed, title }: CarouselProps
                             className="relative flex-none basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 snap-start px-[2px] group"
                         >
                             <div className="aspect-video w-full overflow-hidden shadow-lg rounded-sm">
-                                <img src={m.src} alt={m.title} className="object-cover w-full h-full" />
+                                <img src={m.imageUrl} alt={m.title} className="object-cover w-full h-full" />
                             </div>
 
                             {isIndexed && (
@@ -96,12 +101,12 @@ export default function MainCarousel({ movies, isIndexed, title }: CarouselProps
 
                 {preview && (
                     <div
-                        className="absolute z-[1000] rounded-sm overflow-hidden shadow-2xl
+                        className="absolute z-10 rounded-sm overflow-hidden shadow-2xl
                transition-transform duration-100 pointer-events-auto"
                         style={{
-                            left: preview.x + preview.width / 2 - (preview.width * SCALE) / 2,
-                            top: preview.y - preview.height,
-                            width: preview.width * SCALE,
+                            left: preview.x + preview.width / 2 - (preview.width * 1.5) / 2,
+                            top: preview.y - preview.height / 2,
+                            width: preview.width * 1.5,
                             height: 'auto'
                         }}
                         onMouseEnter={() => setHoveringPreview(true)}
@@ -113,7 +118,7 @@ export default function MainCarousel({ movies, isIndexed, title }: CarouselProps
                         {/* poster */}
                         <div style={{ width: '100%', height: preview.height * SCALE }}>
                             <img
-                                src={preview.movie.src}
+                                src={preview.movie.imageUrl}
                                 alt={preview.movie.title}
                                 className="object-cover w-full h-full"
                             />
@@ -121,8 +126,33 @@ export default function MainCarousel({ movies, isIndexed, title }: CarouselProps
 
                         {/* info card */}
                         <div className="w-full bg-[#181818] p-4">
-                            <h3 className="text-white text-lg font-bold">{preview.movie.title}</h3>
-                            <p className="text-gray-400 text-sm">{preview.movie.description}</p>
+
+
+                            <div className='flex items-center justify-between'>
+                                <div className='flex items-center gap-2'>
+                                    <Play />
+                                    <Add />
+                                    <Like />
+                                </div>
+                                <More />
+                            </div>
+                            <div className='flex items-center m-2'>
+                                <div className=' px-2 border-[0.5px] border-[rgb(145,145,145)] w-fit'>{preview.movie.ageRating}</div>
+                                <div className='px-2 w-fit'>{preview.movie.duration}</div>
+                            </div>
+                            <div className="flex">
+                                {preview.movie.genre.map((g, idx) => (
+                                    <div key={g} className="w-fit flex items-center">
+                                        <span>{g}</span>
+                                        {idx !== preview.movie.genre.length - 1 && (
+                                            <span className="text-[rgb(145,145,145)] mx-3 flex items-center">
+                                                <i className="text-[5px] fa-solid fa-circle" />
+                                            </span>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
                         </div>
                     </div>
                 )}
