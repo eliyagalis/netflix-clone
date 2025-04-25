@@ -84,6 +84,7 @@ services:
       - ../payment-service/.env
     depends_on:
       - redis
+      - kafka
     networks:
       - app_network
     restart: always
@@ -97,7 +98,7 @@ services:
     env_file:
       - ../user-service/.env
     depends_on:
-      - redis
+      - kafka
     networks:
       - app_network
     restart: always

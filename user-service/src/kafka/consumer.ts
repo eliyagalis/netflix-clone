@@ -1,47 +1,49 @@
-import { Kafka } from 'kafkajs';
+// import { Kafka } from 'kafkajs';
 
-// Create Kafka client
-const kafka = new Kafka({
-  clientId: 'user-service',
-  brokers: ['localhost:9092']
-});
 
-const consumer = kafka.consumer({ 
-  groupId: 'user-service-group'
-});
+// const kafka = new Kafka({
+//   clientId: 'user-consumer',
+//   brokers: [process.env.KAFKA_BROKER || 'kafka:9092'],
+// });
 
-// Connect and subscribe at service startup
-async function startConsumer() {
-  await consumer.connect();
-  await consumer.subscribe({ 
-    topic: 'payment-events',
-    fromBeginning: false
-  });
+// const consumer = kafka.consumer({ groupId: 'user-group' });
 
-  await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
-      if (message.value) {
-        const paymentEvent = JSON.parse(message.value.toString());
-        console.log(`Received payment event: ${JSON.stringify(paymentEvent)}`);
-        
-        // Update user subscription in database
-        await updateUserSubscription(
-          paymentEvent.userId, 
-          paymentEvent.subscriptionId
-        );
-      }
-    }
-  });
-}
+// async function updateUserSubscription(userId:string, subscriptionId:string) {
+//     // Database logic to update user's subscription
+//     console.log(`Updated subscription for user ${userId} to ${subscriptionId}`);
+//   }
+// export const startConsumer = async () => {
+//   await consumer.connect();
+//   await consumer.subscribe({ topic: 'payment-events', fromBeginning: true });
 
-async function updateUserSubscription(userId, subscriptionId) {
-  // Database logic to update user's subscription
-  console.log(`Updated subscription for user ${userId} to ${subscriptionId}`);
-}
+//   await consumer.run({
+//     eachMessage: async ({ topic, partition, message }) => {
+//         if (message.value) {
+//             const paymentEvent = JSON.parse(message.value.toString());
+//             console.log(`Received payment event: ${JSON.stringify(paymentEvent)}`);
+            
+//             // Update user subscription in database
+//             await updateUserSubscription(
+//               paymentEvent.userId, 
+//               paymentEvent.subscriptionId
+//             );
+//           }
 
-startConsumer().catch(console.error);
+//     },
+//   });
+// };
 
-consumer.on(consumer.events.CRASH, async (event) => {
-    console.error('Consumer crashed:', event);
-    // Reconnect logic
-  });
+// consumer.on(consumer.events.CRASH, async (event) => {
+//     console.error('Consumer crashed:', event);
+//     setTimeout(async () => {
+//         try {
+//           console.log('🔄 Reconnecting to Kafka...');
+//           await consumer.connect();
+//           await consumer.subscribe({ topic: 'payment-events', fromBeginning: false });
+//           console.log('✅ Reconnected to Kafka!');
+//         } catch (err) {
+//           console.error('❌ Failed to reconnect:', err);
+//         }
+//       }, 3000);
+// });
+// startConsumer().catch(console.error);
