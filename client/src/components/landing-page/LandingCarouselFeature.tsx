@@ -5,7 +5,7 @@ import { useState } from 'react';
 import FloatingWindow from '../shared/FloatingWindow';
 
 
-const CarouselFeature = ({ }) => {
+const LandingCarouselFeature = ({ }) => {
   const [movieDetails, setMovieDetails] = useState<Movie | null>(null);
 
   return (
@@ -20,4 +20,4 @@ const CarouselFeature = ({ }) => {
   )
 }
 
-export default CarouselFeature
+export default LandingCarouselFeature
