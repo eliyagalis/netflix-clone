@@ -1,1 +1,84 @@
 @import "tailwindcss";
+@plugin "daisyui";
+
+.myStroke {
+    -webkit-text-stroke: 2px white;
+    text-stroke: 3px black;
+    text-shadow: 3px 0px 7px black;
+}
+
+.customTransition {
+    transition: all .3s;
+}
+
+/* input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px #00000000 inset !important;
+    -webkit-text-fill-color: inherit !important;
+  }
+  
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+  transition: background-color 5000s ease-in-out 0s;
+} 
+*/
+
+
+.blackInput:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px #ffffff00 inset !important;
+  -webkit-text-fill-color: white !important;
+}
+
+.blackInput:-webkit-autofill,
+.blackInput:-webkit-autofill:focus,
+.blackInput:-webkit-autofill:hover {
+background-color: transparent !important;
+color: white !important;
+transition: background-color 5000s ease-in-out 0s; /* Prevents autofill color from being visible */
+}
+
+
+.bg-plan-premium {
+  background: radial-gradient(
+      140.76% 131.96% at 100% 100%,
+      rgb(229, 9, 20) 0%,
+      rgba(74, 42, 150, 0.5) 73.57%,
+      rgba(74, 42, 150, 0) 100%
+    ),
+    rgb(29, 82, 157);
+}
+
+.bg-plan-basic {
+  background: radial-gradient(
+      140.76% 131.96% at 100% 100%,
+      rgb(109, 59, 227) 0%,
+      rgba(74, 42, 150, 0.5) 73.57%,
+      rgba(74, 42, 150, 0) 100%
+    ),
+    rgb(29, 82, 157);
+}
+
+.bg-plan-standard {
+  background: radial-gradient(
+      140.76% 131.96% at 100% 100%,
+      rgb(176, 56, 220) 0%,
+      rgba(74, 42, 150, 0.5) 73.57%,
+      rgba(74, 42, 150, 0) 100%
+    ),
+    rgb(29, 82, 157);
+}
+
+@keyframes scrollBackAndForth {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.scrolling-bg {
+  animation: scrollBackAndForth 50s linear infinite alternate;
+}

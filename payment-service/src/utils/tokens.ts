@@ -1,0 +1,31 @@
+export const Tokens={
+    userName:process.env.DB_USERNAME,
+    host:process.env.DB_HOST,
+    dbPort:process.env.DB_PORT,
+    name:process.env.DB_NAME,
+    password:process.env.DB_PASS,
+    IPlanAdapter:"IPlanAdapter",
+    IPlanRepository:"IPlanRepository",
+    ISubscriptionRepository:"ISubscriptionRepository",
+    IProductPaypalRequest:"IProductPaypalRequest",
+    IPaypalPlanRequest:"IPaypalPlanRequest",
+    IPaypalSubscriptionRequest:"IPaypalSubscriptionRequest",
+    IPaypalService:"IPaypalService",
+    IUserRepository:"IUserRepository",
+    IPaymentService:"IPaymentService",
+    IPaymentFacade:"IPaymentFacade",
+    IPaymentController:"IPaymentController",
+    controllerMethod:{
+        getSub:"get",
+        createSub:"create",
+        cancelSub:"cancel",
+        getAllSub:"getAll",
+        updateSub:"update",
+    },
+    NamedPaymentServices: {
+        PayPal: "PayPal",
+        Stripe: "Stripe",
+      }
+    // IPlan:"IPlan",
+    // IFullPlan:"IFullPlan",
+}
