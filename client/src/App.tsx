@@ -4,7 +4,6 @@ import LoginPage from "./pages/LoginPage";
 import PaypalLogic from "./feature/paypal/paypalLogic";
 import MainMoviesPage from "./pages/MainMoviesPage";
 
-import SignupLayout from "./pages/SignupLayout";
 import Planform from "./feature/signup/Planform";
 import Payment from "./feature/signup/Payment";
 import Regform from "./feature/signup/Regform";
@@ -15,10 +14,11 @@ import ScrollToTop from "./components/shared/ScrollToTop";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import TrailerMovie from "./components/shared/TrailerMovie";
-import BrowseLayout from "./pages/BrowseLayout";
+import BrowseLayout from "./pages/layouts/BrowseLayout";
 import Browse from "./pages/browse/Browse";
 import PaymentPickerPage from "./pages/PaymentPickerPage";
 import PaypalOptionPage from "./pages/PaypalOptionPage";
+import SignupLayout from "./pages/layouts/SignupLayout";
 
 
 

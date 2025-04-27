@@ -1,5 +1,5 @@
 import React from 'react'
-import CarouselFeature from '../../components/landing-page/LandingCarouselFeature'
+import CarouselFeature from '../../feature/landing/LandingCarouselFeature'
 import MainCarousel from '../../feature/browse/MainCarousel'
 import { movies } from '../../data/mock'
 import LatestTrailer from '../../feature/browse/LatestTrailer'

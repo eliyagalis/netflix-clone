@@ -1,6 +1,6 @@
 import { Outlet, } from 'react-router-dom'
-import Footer from '../components/shared/Footer'
-import MainHeader from '../components/shared/MainHeader'
+import Footer from '../../components/shared/Footer'
+import MainHeader from '../../components/shared/MainHeader'
 
 const BrowseLayout = () => {
     return (

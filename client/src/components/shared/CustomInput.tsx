@@ -39,8 +39,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         placeholder=" "
         onBlur={handleBlur}
         className={`${className}
-          peer w-full px-5 pt-6 pb-2 text-lg font-medium border
-          placeholder-transparent 
+          peer w-full px-5 pt-6 pb-2 text-lg font-medium border placeholder-transparent 
           ${rounded ? 'rounded-full' : 'rounded-md'}
           ${showError ? 'border-red-500' : success ? 'border-green-500' : 'border-gray-500'}
         `}
@@ -53,8 +52,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
 
       <label
         htmlFor={placeholder}
-        className={`
-          absolute left-5 top-2 text-xs transition-all
+        className={`absolute left-5 top-2 text-xs transition-all
           peer-placeholder-shown:top-5 peer-placeholder-shown:text-lg
           peer-focus:top-2 peer-focus:text-xs
         `}

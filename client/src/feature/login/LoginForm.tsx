@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginFormData, loginSchema } from '../schemas/authSchemas';
-import CustomInput from '../components/shared/CustomInput';
-import Button from '../components/shared/Button';
-import { typography } from '../data/typography';
+import { LoginFormData, loginSchema } from '../../schemas/authSchemas';
+import CustomInput from '../../components/shared/CustomInput';
+import Button from '../../components/shared/Button';
+import { typography } from '../../data/typography';
 import { Link } from 'react-router-dom';
 
 const LoginForm = () => {

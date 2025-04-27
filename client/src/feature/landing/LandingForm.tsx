@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { EmailFormData, emailValidationSchema } from "../schemas/authSchemas";
+import { EmailFormData, emailValidationSchema } from "../../schemas/authSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomInput from "../components/shared/CustomInput";
-import { strings } from "../data/strings";
-import Button from "../components/shared/Button";
-import { colors } from "../data/colors";
-import { typography } from "../data/typography";
+import CustomInput from "../../components/shared/CustomInput";
+import { strings } from "../../data/strings";
+import Button from "../../components/shared/Button";
+import { colors } from "../../data/colors";
+import { typography } from "../../data/typography";
 
 const LandingForm = () => {
   const navigate = useNavigate();

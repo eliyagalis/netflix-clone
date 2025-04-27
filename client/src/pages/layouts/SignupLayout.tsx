@@ -1,8 +1,8 @@
-import Header from '../components/shared/Header'
+import Header from '../../components/shared/Header'
 import { Link, Outlet } from 'react-router-dom'
-import { typography } from '../data/typography'
-import { colors } from '../data/colors'
-import Footer from '../components/shared/Footer'
+import { typography } from '../../data/typography'
+import { colors } from '../../data/colors'
+import Footer from '../../components/shared/Footer'
 
 type SignUpPageProps = {
     children?: React.ReactNode
@@ -12,7 +12,6 @@ const SignupLayout:React.FC<SignUpPageProps> = () => {
     return (
         <div className={`text-${colors.text.primary} bg-white min-h-screen w-full flex flex-col`}>
             <Header link='/' border>
-                <div></div>            
                 <Link to="/login"
                     className={`${typography.small} hover:underline font-medium`}>
                     Sign In
