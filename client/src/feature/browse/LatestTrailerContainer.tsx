@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Movie } from '../../models/Movie'
 import TrailerMovie from '../../components/shared/TrailerMovie';
 import PosterMovie from '../../components/shared/PosterMovie';
+import { ICarouselCard } from '../../types/ICarouselCard';
 
 type LatestTrailerProps = {
-  trailer: Movie;
+  trailer: ICarouselCard;
 }
 
 const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
