@@ -1,11 +1,13 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { PayPalButtons,PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { useNavigate } from 'react-router-dom';
 interface PayPalButtonProps {
     planName:string,
     onSuccess:(subscriptionId:string)=>void,
     checkPlan:(planName:string)=>Promise<string|undefined>;
+    clicked:boolean
 }
+
 const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlan,onSuccess}) => {
     const navigate=useNavigate()
   return (
@@ -14,8 +16,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlan,onSuccess}
         vault:true,
         intent:"subscription"
     }}>
-        <div ref={paypalButtonRef}>
-            <PayPalButtons style={{layout:'vertical',color:"gold",shape:'rect',label:'subscribe'}}
+        <PayPalButtons style={{layout:'vertical',color:"gold",shape:'rect',label:'subscribe'}}
                 createSubscription={async(_, actions) => {
                     if(!planName) {
                         console.error("Missing planName for subscription creation");
@@ -43,9 +44,8 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlan,onSuccess}
                     navigate('/signup/planform') // Add a route for choosing a plan
                 }}
             />
-        </div>
-    </PayPalScriptProvider>
 
+    </PayPalScriptProvider>
   )
 }
 

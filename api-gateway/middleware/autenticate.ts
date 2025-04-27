@@ -26,7 +26,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     }catch(err){
 
         console.log("access token isnt valid- start checking refresh token");
-
         try{
             const refreshToken : string|null = req.cookies.refreshToken;
             const response= await axios.get("http://localhost:3002/api/v1/refreshToken",{withCredentials:true});

@@ -6,7 +6,6 @@ import MainMoviesPage from "./pages/MainMoviesPage";
 
 import SignupLayout from "./pages/SignupLayout";
 import Planform from "./feature/signup/Planform";
-import Payment from "./feature/signup/Payment";
 import Regform from "./feature/signup/Regform";
 import Registration from "./feature/signup/Registration";
 
@@ -14,11 +13,12 @@ import ScrollToTop from "./components/shared/ScrollToTop";
 
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import TrailerMovie from "./components/shared/TrailerMovie";
 import BrowseLayout from "./pages/BrowseLayout";
 import Browse from "./pages/browse/Browse";
 import PaymentPickerPage from "./pages/PaymentPickerPage";
 import PaypalOptionPage from "./pages/PaypalOptionPage";
+import CustomPayPalButton from "./feature/paypal/costum";
+import PaypalOptionForm from "./feature/paypal/costumOptions";
 
 
 
@@ -33,8 +33,8 @@ function App() {
 
           {/* <Route path="/old" element={<OldLandingPage />} /> */}
           {/* <Route path="/main" element={<MainPage/>}/> */}
-          <Route path="/payment" element={<PaypalLogic planName="basic" paymentMethod="paypal"/>}/>
           <Route path="/mainMoviePage" element={<MainMoviesPage/>}/>
+          
 
           <Route path="/signup" element={<SignupLayout />}>
             <Route path="registration" element={<Registration />} />
@@ -44,18 +44,16 @@ function App() {
             <Route path="paypalOption" element={<PaypalOptionPage/>}/>
             <Route path="regform" element={<Regform />} />
             <Route path="planform" element={<Planform />} />
-            <Route path="payment" element={<Payment />} />
           </Route>
 
-          <Route path="browse" element={<BrowseLayout />}>
+          <Route path="/browse" element={<BrowseLayout />}>
             <Route index element={<Browse />} />
             
           </Route>
 
           {/* <Route path="/main" element={<MainPage/>}/> */}
-          <Route path="/paymentPP" element={<PaypalLogic planName="basic" paymentMethod="paypal" />} />
+          <Route path="/payment" element={<PaypalLogic isClicked={false} planName="basic" paymentMethod="paypal" />} />
           <Route path="/mainMoviePage" element={<MainMoviesPage />} />
-          <Route path="/trailerMovie" element={<TrailerMovie/>}/>
 
         </Routes>
       </Router>

@@ -1,10 +1,11 @@
 version: '3'
 services:
   redis:
-    image: redis:7.0
+    image: redis:latest
     container_name: redis
     ports:
       - "6379:6379"
+    command: ["redis-server","--appendonly","yes"]
     networks:
       - app_network
 
@@ -37,6 +38,7 @@ services:
       - "5173:5173"
     volumes:
       - ../client:/app
+      - /app/node_modules
     command: npm run dev
     depends_on:
       - proxy
@@ -54,7 +56,6 @@ services:
     depends_on:
       - payment_service
       - user_service
-      - redis
       - movie_service
     networks:
       - app_network
@@ -85,6 +86,8 @@ services:
     depends_on:
       - redis
       - kafka
+    volumes:
+      - ../payment-service/certs:/app/payment-service/certs
     networks:
       - app_network
     restart: always

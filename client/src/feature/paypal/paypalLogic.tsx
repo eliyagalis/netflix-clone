@@ -2,26 +2,33 @@ import React, {useEffect, useState } from 'react'
 import PayPalButton from './PayPalButton';
 import axios from 'axios';
 import { AxiosError } from 'axios';
+import { typography } from '../../data/typography';
 
 // import { useNavigate } from 'react-router-dom';
 interface PaypalLogicProps {
   planName:string,
   paymentMethod:string,
+  isClicked:boolean
 }
 interface CompletedPayRes{
   message:string,
   subscriptionId:string,
   status:string
 }
-interface ValidatePlanAndUserRes{
+interface ValidatePlanRes{
   message:string,
   planId:string
 }
-const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod}:PaypalLogicProps) => {
+// 
+
+// const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod}:PaypalLogicProps) => {
+
+const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod,isClicked}:PaypalLogicProps) => {
 
   // const navigate=useNavigate()
   const [successPayment, setSuccessPayment] = useState({status:false,msg:""});
-  useEffect(() => {
+
+  useEffect(() => { //למחוק אחר כך כשיהיה יוזר--
     const handelDeleteUserSubscription=async()=>{
       if(successPayment.status){
         return;
@@ -61,7 +68,7 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod}:PaypalL
   const checkPlan = async (planName: string): Promise<string|undefined> => {
     console.log("plan front:",planName)
     try {
-      const response = await axios.post<ValidatePlanAndUserRes>('http://localhost:3000/api/v1/payment/paypal/plansCheck', {
+      const response = await axios.post<ValidatePlanRes>('http://localhost:3000/api/v1/payment/paypal/plansCheck', {
         paymentMethod: "paypal",
         planName: planName
       });
@@ -82,14 +89,17 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod}:PaypalL
     // } 
   return (
     <>
-      <PayPalButton onSuccess={handleSuccessPayment} checkPlan={checkPlan} planName={planName}/>
+      <PayPalButton clicked={isClicked} onSuccess={handleSuccessPayment} checkPlan={checkPlan} planName={planName}/>
       {successPayment.status&&(
-        <div>success payment</div>
+        <div className={`text-success font-medium ${typography.small}`}>
+            payment process success
+        </div>
       ) }
       {/* afterSuccessfulPayment() */}
     </>
   )
 }
+
 
 export default PaypalLogic
 
