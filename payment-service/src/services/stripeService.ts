@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import { CreatePaymentPlanDTO } from "../DTO'S/paypal.service.dto";
+import { CreatePaymentPlanDTO, ProducePayEventDTO } from "../DTO'S/paypal.service.dto";
 import { updatePaypalSubscriptionDTO } from "../DTO'S/subscription.dto";
 import { IPaymentService } from "../interfaces/IPaymentService";
 import { IFullPlan } from "../interfaces/IPlan";
@@ -10,6 +10,7 @@ import { ISubscriptionRepository} from "../repositories/subscription";
 import IPlanRepository from "../interfaces/IPlanRepository";
 import { IPayPalSubscriptionResponse } from "src/interfaces/IPaypalResponses";
 import { IUser } from "src/interfaces/IUser";
+import { readBuilderProgram } from "typescript";
 
 
 export default class StripeService implements IPaymentService {
@@ -45,6 +46,11 @@ export default class StripeService implements IPaymentService {
     async savePlanOnDb(planId:string,planName:string):Promise<IFullPlan>{
         return {} as IFullPlan;
     }
+    async sendPaymentStatusEvent(paymentData:ProducePayEventDTO):Promise<void>{
+        await {};
+        return;
+    }
+    
     async existPlanByName(planName:string):Promise<string|null>{
         const plan=await this.planRepository.findPlanByName(planName);
        return plan ? plan.id:null;

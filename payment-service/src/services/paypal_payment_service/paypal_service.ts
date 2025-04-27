@@ -10,10 +10,11 @@ import { ISubscription } from "../../interfaces/ISubscription";
 import { ISubscriptionRepository} from "../../repositories/subscription";
 import { CreateSubscriptionDTO, updatePaypalSubscriptionDTO } from "../../DTO'S/subscription.dto";
 import { IUserRepository } from "../../repositories/user.repository";
-import { CreatePaymentPlanDTO } from "../../DTO'S/paypal.service.dto";
+import { CreatePaymentPlanDTO, ProducePayEventDTO } from "../../DTO'S/paypal.service.dto";
 import { IPaymentService } from "../../interfaces/IPaymentService";
 import IPlanRepository from "../../interfaces/IPlanRepository";
 import { IUser } from "src/interfaces/IUser";
+// import { producePaymentEvent } from "src/kafka/producer";
 
 
 export default class PayPalService implements IPaymentService{
@@ -104,6 +105,7 @@ export default class PayPalService implements IPaymentService{
             throw new Error((error as Error).message);
         }
     }
+
        async createUser(userId:string,userEmail:string):Promise<IUser>{
         if(!userId||!userEmail){
             throw new Error("user id or user name or user email is required on creating user!");
@@ -123,21 +125,11 @@ export default class PayPalService implements IPaymentService{
         //הפונקציה יוצרת מנוי חדש בפייפאל
     async saveSubscription(planName:string,user:IUser,subscription:IPayPalSubscriptionResponse):Promise<ISubscription>
     {
-        // if(!userId||!['basic','standard','premium'].includes(planName)){ //controller check
-        //     throw new Error("plan name or user id is required on creating subcription!");
-        // }
         try{
             const plan=await this.planRepository.findPlanByName(planName);
             if(!plan){
                 throw new Error("plan not found")
             }
-            // !data.user||
-            // !data.plan||
-            // !data.paypalData.id||
-            // !data.paypalData.status||
-            // !data.paypalData.start_time||
-            // !data.paypalData.create_time||
-            // !['active','cancelled','expired'].includes(data.paypalData.status)
             const subscriptionData: CreateSubscriptionDTO = {
                 user: user,
                 plan: plan,
@@ -178,6 +170,15 @@ export default class PayPalService implements IPaymentService{
             throw new Error((err as Error).message);
         }
     }
+    
+    async sendPaymentStatusEvent(paymentData:ProducePayEventDTO):Promise<void>{
+    //     await producePaymentEvent({
+    //         userId: paymentData.userId,
+    //         subscriptionId: paymentData.subscriptionId,
+    //         status: paymentData.status,
+    //     });
+    };
+
     async getUserById(userId:string):Promise<IUser|null>{
         if(!userId){
             throw new Error("user id is required!")
@@ -206,8 +207,6 @@ export default class PayPalService implements IPaymentService{
                 throw new Error("this subscription is'nt active or not exist");
             }
             await cancelPaypalSubscription(subscription.subscription_id,accessToken);
-            // await this.userRepository.deleteUser(subscription!.user_id);
-            //למרות שהCASADE מתבצע אוטומטית כאשר המנוי נמחק- עדיין ארצה לא להתנות בידיו את כל המחיקה וארצה לבצע זאת עצמאית
             if(!haveSubTwice){
                 return await this.subscriptionRepository.cancelPostgreSqlSubscription(subscription.subscription_id); 
             }

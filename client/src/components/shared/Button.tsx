@@ -10,7 +10,8 @@ type ButtonProps = {
   rounded?: boolean;
   fontSize?: string;
   type?: "button" | "submit" | "reset";
-  border?:string
+  border?:string,
+  onClickFunc?:()=>void;
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   navLink,
   fontSize,
   rounded,
+  onClickFunc,
   border="border-none"
 }) => {
   const navigate = useNavigate();
@@ -28,6 +30,10 @@ const Button: React.FC<ButtonProps> = ({
   const handleClick = () => {
     if (navLink) {
       navigate(navLink);
+      return;
+    }
+    if (onClickFunc) {
+      onClickFunc();
     }
   };
 

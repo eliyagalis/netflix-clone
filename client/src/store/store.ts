@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector,TypedUseSelectorHook, useDispatch } from "react-redux";
 import stepReducer from '../store/slices/loginSteps'
+import planReducer from '../store/slices/plansSubSlices'
 export const store = configureStore({
     reducer: {
-        step:stepReducer
+        step:stepReducer,
+        plan:planReducer
     }
 });
 
