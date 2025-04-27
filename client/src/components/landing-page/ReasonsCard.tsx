@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react'
 import Card from '../shared/Card';
 import { typography } from '../../data/typography';
-import Tv from '../../assets/Tv';
-import Down from '../../assets/Down';
-import Telescope from '../../assets/Telescope';
-import Profile from '../../assets/Profile';
+import Tv from '../../assets/info-svgs/Tv';
+import Down from '../../assets/info-svgs/Down';
+import Telescope from '../../assets/info-svgs/Telescope';
+import Profile from '../../assets/info-svgs/Profile';
 
 type ReasonsCardProps = {
     className?: string;
