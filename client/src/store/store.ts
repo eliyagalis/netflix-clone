@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector,TypedUseSelectorHook, useDispatch } from "react-redux";
 import stepReducer from '../store/slices/loginSteps'
-import signupReducer from '../store/slices/signupSlice'
+import authReducer from '../store/slices/authSlices'
 import planReducer from '../store/slices/plansSubSlices'
-
+import signupReducer from '../store/slices/signupSlice'
 
 export const store = configureStore({
     reducer: {
         step:stepReducer,
+        auth: authReducer,
         signup: signupReducer,
         plan:planReducer
     }

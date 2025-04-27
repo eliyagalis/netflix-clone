@@ -1,12 +1,12 @@
 export interface IUser {
-    id: string; // Optional for new users before saving
+    id: string;
     email: string;
     password: string;
     firstName?: string;
     lastName?: string;
     phoneNumber?: string;
     subscriptionId?: string;
-    profiles: any[]; // Array of profile objects
+    profiles: any[];
     status: UserStatus;
     lastLogin?: Date;
     createdAt: Date;

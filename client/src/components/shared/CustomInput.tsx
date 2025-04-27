@@ -41,7 +41,7 @@ const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(({
         onBlur={handleBlur}
         className={`${className}
           peer w-full px-5 pt-6 pb-2 text-lg font-medium border placeholder-transparent 
-          ${rounded ? 'rounded-full' : 'rounded-md'}
+          ${rounded ? 'rounded-full' : 'rounded-none'}
           ${showError ? 'border-red-500' : success ? 'border-green-500' : 'border-gray-500'}
         `}
         style={{

@@ -14,6 +14,8 @@ import PaypalOptionPage from "./pages/PaypalOptionPage";
 import SignupLayout from "./pages/layouts/SignupLayout";
 import BrowseLayout from "./pages/layouts/BrowseLayout";
 import Browse from "./pages/browse/Browse";
+import Password from "./feature/signup/Password";
+import Logout from "./pages/Logout";
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/mainMoviePage" element={<MainMoviesPage/>}/>
+          <Route path="/logout" element={<Logout />} />
 
           <Route path="/signup" element={<SignupLayout />}>
             <Route path="registration" element={<Registration />} />
@@ -33,6 +36,7 @@ function App() {
             <Route path="paypalOption" element={<PaypalOptionPage/>}/>
             <Route path="regform" element={<Regform />} />
             <Route path="planform" element={<Planform />} />
+            <Route path="password" element={<Password />} />
           </Route>
 
           <Route path="/browse" element={<BrowseLayout />}>
