@@ -1,6 +1,8 @@
 import { createClient, RedisClientType } from 'redis'
 import { handleError } from './handle-error-request';
-const redisClient:RedisClientType= createClient();
+const redisClient:RedisClientType= createClient({
+    url:process.env.REDIS_URL||'redis://redis:6379'
+});
 
 const connectRedisClient = async () => {
     try {

@@ -48,7 +48,6 @@ export default class PaymentController implements IPaymentController{
         } catch (error) {
             return next(error);
         }
-
     }
     async approvePaymentProcess(req:Request,res:Response,next:NextFunction):Promise<Response|void>{ //done
         const {userId,userEmail}=req;
@@ -77,12 +76,11 @@ export default class PaymentController implements IPaymentController{
             console.log("user created successfully");
             const subscription=await this.paymentService.saveSubscription(planName,user,paypalSubscription);
             console.log(`Subscription approved and saved successfully! subscription:---- ${subscription}`);
+            await this.paymentService.sendPaymentStatusEvent({userId,subscriptionId:subscription.subscription_id,status:subscription.status})
             return res.status(200).json({
                 message: "Subscription approved and saved successfully",
-                subscriptionId:subscription!.subscription_id,
                 status:subscription!.status
-                //subscription: userSubscription // Return the subscription object if needed
-              });        
+            });        
         } catch (error) {
             console.log("Error creating subscription:",error);
             return next(error);
@@ -115,6 +113,7 @@ export default class PaymentController implements IPaymentController{
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
             await this.paymentService.cancelSubscription(userId,false);
             await this.paymentService.deleteUserFromDb(userId);
+            await this.paymentService.sendPaymentStatusEvent({userId,subscriptionId:null,status:"cancelled"});
             return res.status(200).json({message:"subscription canceled successfully"});
         }catch(err){
             console.log("Error canceling subscription:",err);
