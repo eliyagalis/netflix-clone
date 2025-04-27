@@ -7,12 +7,21 @@ import { strings } from "../../data/strings";
 import Button from "../../components/shared/Button";
 import { colors } from "../../data/colors";
 import { typography } from "../../data/typography";
-import { useDispatch } from "react-redux";
 import { setEmail } from "../../store/slices/signupSlice";
+import { useAppDispatch } from "../../store/store";
 
 const LandingForm = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const dispatch = useAppDispatch();
+
+  const onSubmit = (data: EmailFormData) => {
+
+    dispatch(setEmail(data.email));
+    //If user exists
+    navigate("/signup/password");
+    navigate("/signup/registration");
+  };
 
   const {
     register,
@@ -23,12 +32,6 @@ const LandingForm = () => {
     resolver: zodResolver(emailValidationSchema),
     mode: "onChange",
   });
-
-  const onSubmit = (data: EmailFormData) => {
-    // Logic to handle email submission
-    dispatch(setEmail(data.email));
-    navigate("/signup/registration");
-  };
 
   return (
     <form
@@ -42,7 +45,7 @@ const LandingForm = () => {
           rounded
           className="blackInput"
           error={errors.email?.message}
-          success={touchedFields.email && !errors.email &&  !!watch("email")}
+          success={touchedFields.email && !errors.email && !!watch("email")}
           {...register("email")}
         />
       </div>

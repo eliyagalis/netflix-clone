@@ -22,14 +22,14 @@ const Header: React.FC<HeaderProps> = ({ children, className, link, border = fal
     return (
         <header className={`${className} relative z-10 flex justify-center mx-auto w-full left-0 top-0 
                     ${border ? "border-b-[0.5px] border-[rgb(230,230,230)]" : ""} overflow-hidden`}>
-            <div className="w-full px-5 sm:px-8 md:px-10 my-5 flex">
+            <div className="w-full px-5 md:px-10 my-2 md:my-5 flex">
                 <div className={`flex items-center justify-between w-full ${link && "cursor-pointer"}`} onClick={clickHandler}>
 
                     {<img
                         src={images.logo.src}
                         alt={images.logo.alt}
                         className={`${isSwitch ? "hidden lg:block" : "block"} 
-                        w-36 max-w-full`}
+                        w-20 md:w-36 max-w-full`}
                     />}
 
                     {isSwitch && (

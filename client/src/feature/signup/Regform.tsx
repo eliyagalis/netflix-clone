@@ -7,11 +7,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { setPassword, setSignupData } from '../../store/slices/signupSlice';
+import { setSignupData } from '../../store/slices/signupSlice';
+import { nextStep } from '../../store/slices/loginSteps';
 
 const Regform = () => {
   const dispatch = useAppDispatch();
   const signup = useAppSelector((state) => state.signup);
+  const plan = useAppSelector((state) => state.plan);
+  const step = useAppSelector((state) => state.step);
+  const auth = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
@@ -24,19 +28,24 @@ const Regform = () => {
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
     defaultValues: {
-      email: signup.email,
+      email: signup?.email,
       password: '',
     },
   });
 
   const onSubmit = (data: { email: string; password: string }) => {
     dispatch(setSignupData(data));
-    navigate('/signup/planform');
+    dispatch(nextStep());
+    
+    if(plan.planName) 
+      navigate('/signup/paymentPicker');
+  
+    else navigate('/signup/planform');
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-100">
-      <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP 1 OF 3</h3>
+      <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.step} OF 3</h3>
       <h1 className={`${typography.large} font-bold mb-3`}>
         Create a password to start your membership
       </h1>
