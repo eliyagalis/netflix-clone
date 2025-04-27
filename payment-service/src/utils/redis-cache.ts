@@ -1,6 +1,6 @@
 import { createClient, RedisClientType } from 'redis'
 const redisClient:RedisClientType= createClient({
-     url: process.env.REDIS_PORT_URL
+     url: process.env.REDIS_PORT_URL||'redis://redis:6379'
 });
 
 const connectRedisClient = async () => {

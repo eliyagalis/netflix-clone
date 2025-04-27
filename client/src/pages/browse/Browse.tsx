@@ -1,11 +1,12 @@
 import React from 'react'
-import CarouselFeature from '../../components/landing-page/LandingCarouselFeature'
 import MainCarousel from '../../feature/browse/MainCarousel'
 import { movies } from '../../data/mock'
-import LatestTrailer from '../../feature/browse/LatestTrailer'
+import LatestTrailerContainer from '../../feature/browse/LatestTrailerContainer'
 
 const Browse = () => {
   return (
+    <div>
+        <LatestTrailerContainer trailer={movies[0]}/>
     <div className=''>
         {/* <LatestTrailer trailer={movies[0]}/> */}
         

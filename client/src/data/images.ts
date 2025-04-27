@@ -48,5 +48,7 @@ export const images = {
     registration: {
         src: 'https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Devices.png',
         alt: 'Netflix Devices Image',
+    },
+    main:{
     }
 }
