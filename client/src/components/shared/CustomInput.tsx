@@ -11,7 +11,7 @@ interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({
+const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(({
   placeholder,
   error,
   rounded = false,
@@ -22,7 +22,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   inputColor = '#ffffff',
   className = '',
   ...props
-}) => {
+}, ref) => {
   const [hasBlurred, setHasBlurred] = useState(false);
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -35,6 +35,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   return (
     <div className="relative w-full">
       <input
+        ref={ref}
         id={placeholder}
         placeholder=" "
         onBlur={handleBlur}
@@ -73,6 +74,6 @@ const CustomInput: React.FC<CustomInputProps> = ({
       )}
     </div>
   );
-};
+});
 
 export default CustomInput;

@@ -7,9 +7,12 @@ import { strings } from "../../data/strings";
 import Button from "../../components/shared/Button";
 import { colors } from "../../data/colors";
 import { typography } from "../../data/typography";
+import { useDispatch } from "react-redux";
+import { setEmail } from "../../store/slices/signupSlice";
 
 const LandingForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -22,9 +25,9 @@ const LandingForm = () => {
   });
 
   const onSubmit = (data: EmailFormData) => {
-    console.log("Success", data);
-    // Logic
-    navigate("/signup/");
+    // Logic to handle email submission
+    dispatch(setEmail(data.email));
+    navigate("/signup/registration");
   };
 
   return (
