@@ -21,8 +21,7 @@ const CollapseQuestion: React.FC<CollapseQuestionProps> = ({ title, subtitle1, s
                         {subtitle1}
                         {subtitle2 &&
                             <>
-                                <br />
-                                <br />
+                                <div className="my-6" />
                                 {subtitle2}
                             </>
                         }

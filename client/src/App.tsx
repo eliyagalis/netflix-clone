@@ -3,12 +3,9 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import PaypalLogic from "./feature/paypal/paypalLogic";
 import MainMoviesPage from "./pages/MainMoviesPage";
-
-import SignupLayout from "./pages/SignupLayout";
 import Planform from "./feature/signup/Planform";
 import Regform from "./feature/signup/Regform";
 import Registration from "./feature/signup/Registration";
-
 import ScrollToTop from "./components/shared/ScrollToTop";
 
 import { Provider } from "react-redux";
@@ -20,8 +17,6 @@ import PaypalOptionPage from "./pages/PaypalOptionPage";
 import CustomPayPalButton from "./feature/paypal/costum";
 import PaypalOptionForm from "./feature/paypal/costumOptions";
 
-
-
 function App() {
   return (
     <Provider store={store}>
@@ -30,9 +25,6 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-
-          {/* <Route path="/old" element={<OldLandingPage />} /> */}
-          {/* <Route path="/main" element={<MainPage/>}/> */}
           <Route path="/mainMoviePage" element={<MainMoviesPage/>}/>
           
 

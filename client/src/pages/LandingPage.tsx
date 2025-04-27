@@ -5,7 +5,7 @@ import Button from "../components/shared/Button";
 import { seo } from "../seo/helmetStrings";
 import HelmetHandler from "../components/shared/HelmetHandler";
 import { strings } from "../data/strings";
-import LandingForm from "../feature/LandingForm";
+import LandingForm from "../feature/landing/LandingForm";
 import Typography from "../components/shared/Typography";
 import { typography } from "../data/typography";
 import LandingBackground from "../components/landing-page/LandingBackground";
@@ -13,7 +13,7 @@ import LandingPoster from "../components/landing-page/LandingPoster";
 import PlanCard from "../components/landing-page/PlanCard";
 import ReasonsCard from "../components/landing-page/ReasonsCard";
 import { colors } from "../data/colors";
-import LandingCarouselFeature from "../components/landing-page/LandingCarouselFeature";
+import LandingCarouselFeature from "../feature/landing/LandingCarouselFeature";
 
 const LandingPage = () => {
 
@@ -23,7 +23,6 @@ const LandingPage = () => {
             
             <div className="relative max-w-460 mx-auto">
                 <Header isSwitch>
-                    <div/>
                     <Button navLink={strings.landing.header.login.link} color={colors.buttons.secondary} rounded>
                         {strings.landing.header.login.text}
                     </Button>

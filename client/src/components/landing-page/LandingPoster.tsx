@@ -1,7 +1,7 @@
 import { images } from "../../data/images"
 import { typography } from "../../data/typography"
 import { strings } from "../../data/strings"
-import LandingForm from "../../feature/LandingForm"
+import LandingForm from "../../feature/landing/LandingForm"
 import Typography from "../shared/Typography"
 import PosterArch from "./PosterArch"
 

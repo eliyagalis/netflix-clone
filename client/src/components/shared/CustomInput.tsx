@@ -11,7 +11,7 @@ interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({
+const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(({
   placeholder,
   error,
   rounded = false,
@@ -22,7 +22,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   inputColor = '#ffffff',
   className = '',
   ...props
-}) => {
+}, ref) => {
   const [hasBlurred, setHasBlurred] = useState(false);
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -35,12 +35,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
   return (
     <div className="relative w-full">
       <input
+        ref={ref}
         id={placeholder}
         placeholder=" "
         onBlur={handleBlur}
         className={`${className}
-          peer w-full px-5 pt-6 pb-2 text-lg font-medium border
-          placeholder-transparent 
+          peer w-full px-5 pt-6 pb-2 text-lg font-medium border placeholder-transparent 
           ${rounded ? 'rounded-full' : 'rounded-md'}
           ${showError ? 'border-red-500' : success ? 'border-green-500' : 'border-gray-500'}
         `}
@@ -53,8 +53,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
 
       <label
         htmlFor={placeholder}
-        className={`
-          absolute left-5 top-2 text-xs transition-all
+        className={`absolute left-5 top-2 text-xs transition-all
           peer-placeholder-shown:top-5 peer-placeholder-shown:text-lg
           peer-focus:top-2 peer-focus:text-xs
         `}
@@ -75,6 +74,6 @@ const CustomInput: React.FC<CustomInputProps> = ({
       )}
     </div>
   );
-};
+});
 
 export default CustomInput;
