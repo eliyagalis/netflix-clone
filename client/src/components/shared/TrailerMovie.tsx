@@ -13,7 +13,6 @@ type TrailerMovieProps = {
 // isPlaying=true
 const TrailerMovie: React.FC<TrailerMovieProps> = ({url,initialMuted}) => {
   const [isPlaying, setIsPlaying] = useState(false);
-
   
 return(
   <div className='w-full overflow-hidden object-cover aspect-video'>

@@ -1,13 +1,14 @@
-import React, {useCallback, useEffect, useMemo, useState } from 'react'
+import React, {useCallback, useEffect, useState } from 'react'
 import PayPalButton from './PayPalButton';
 import axios from 'axios';
 import { AxiosError } from 'axios';
 import { typography } from '../../data/typography';
 import { useAppSelector } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
 
 // import { useNavigate } from 'react-router-dom';
 interface PaypalLogicProps {
-  planName:string,
+  // planName:string,
   paymentMethod:string,
   isClicked:boolean
 }
@@ -26,7 +27,7 @@ interface ValidatePlanRes{
 
 const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:PaypalLogicProps) => {
 
-  // const navigate=useNavigate()
+  const navigate=useNavigate()
   const [successPayment, setSuccessPayment] = useState({status:false,msg:""});
   const planName=useAppSelector((state)=>state.plan.planName)
   useEffect(() => { //למחוק אחר כך כשיהיה יוזר--
@@ -62,8 +63,8 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
           })
           console.log("res data:",res.data.message)
           setSuccessPayment({status:true,msg:"payment process success!"});
-        //שליחה ליוזר את המנוי - אם יש לו מנוי יוכל להיכנס ולפסוח על זה
-      } catch (error) {
+          navigate('/browse')
+        } catch (error) {
         console.log(error)
       }
   },[planName])
@@ -91,10 +92,11 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
     // } 
   return (
     <>
-      <PayPalButton clicked={isClicked} onSuccess={handleSuccessPayment} checkPlan={checkPlan} planName={planName}/>
+      <PayPalButton clicked={isClicked} onSuccess={handleSuccessPayment} checkPlan={checkPlan}/>
       {successPayment.status&&(
         <div className={`text-success font-medium ${typography.small}`}>
             payment process success
+            n
 
         </div>
       ) }

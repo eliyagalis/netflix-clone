@@ -9,11 +9,6 @@ import Registration from "./feature/signup/Registration";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import PaymentPickerPage from "./pages/PaymentPickerPage";
-import PaypalOptionPage from "./pages/PaypalOptionPage";
-
-import CustomPayPalButton from "./feature/paypal/costum";
-import PaypalOptionForm from "./feature/paypal/costumOptions";
 import { lazy, Suspense } from "react";
 
 
@@ -36,7 +31,6 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/mainMoviePage" element={<MainMoviesPage/>}/>
           <Route path="/logout" element={<Logout />} />
 
           <Route path="/signup" element={<SignupLayout />}>
@@ -66,7 +60,7 @@ function App() {
             
           </Route>
 
-          <Route path="/payment" element={<PaypalLogic isClicked={false} planName="basic" paymentMethod="paypal" />} />
+          <Route path="/payment" element={<PaypalLogic isClicked={false} paymentMethod="paypal" />} />
           <Route path="/mainMoviePage" element={<MainMoviesPage />} />
 
         </Routes>

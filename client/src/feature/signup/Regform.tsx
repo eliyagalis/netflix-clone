@@ -9,6 +9,7 @@ import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { setSignupData } from '../../store/slices/signupSlice';
 import { nextStep } from '../../store/slices/loginSteps';
+import { login } from '../../store/slices/authSlices';
 
 const Regform = () => {
   const dispatch = useAppDispatch();
