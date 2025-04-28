@@ -16,10 +16,6 @@ const TrailerMovie: React.FC<TrailerMovieProps> = ({url,initialMuted}) => {
   
 return(
   <div className='w-full overflow-hidden object-cover aspect-video'>
-    {/* <video
-      src={url} muted={initialMuted}  autoPlay className='w-full object-cover brightness-50'
-    /> */}
-    {/* <iframe src={url}  frameborder="0"></iframe> */}
       <ReactPlayer
         url={url}// או קובץ MP4
         playing={isPlaying}

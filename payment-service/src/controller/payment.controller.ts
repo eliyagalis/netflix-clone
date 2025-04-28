@@ -125,7 +125,9 @@ export default class PaymentController implements IPaymentController{
         const {paymentMethod}=req.body;
         try{
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
-            if(await this.paymentService.deleteUserFromDb(userId)){
+            const getUser=await this.paymentService.getUserById(userId);
+            if(getUser){
+                await this.paymentService.deleteUserFromDb(userId);
                 console.log("user deleted successfully");
                 return res.status(200).json({message:"user deleted successfully"});
             }

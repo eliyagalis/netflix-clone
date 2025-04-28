@@ -1,4 +1,3 @@
-version: '3'
 services:
   redis:
     image: redis:latest
@@ -35,7 +34,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: client_dev
     ports:
-      - "5173:5173"
+      - "5174:5174"
     volumes:
       - ../client:/app
       - /app/node_modules
@@ -44,28 +43,6 @@ services:
       - proxy
     networks:
       - app_network
-
-  proxy:
-    build:
-      context: ../api-gateway/
-    container_name: proxy
-    ports:
-      - "3000:3000"
-    # environment:
-    # - USERS_SERVICE_URL=http://users-service:3002
-    # - PAYMENTS_SERVICE_URL=https://payments-service:3003
-    # - MOVIES_SERVICE_URL=http://movies-service:3001
-    # - STREAMING_SERVICE_URL=http://streaming-service:3004
-    env_file:
-      - ../api-gateway/.env
-    depends_on:
-      - payment_service
-      - user_service
-      - movie_service
-    networks:
-      - app_network
-    restart: always
-
   movie_service:
     build:
       context: ../movie-service/
@@ -107,6 +84,26 @@ services:
       - ../user-service/.env
     depends_on:
       - kafka
+    networks:
+      - app_network
+    restart: always
+  proxy:
+    build:
+      context: ../api-gateway/
+    container_name: proxy
+    ports:
+      - "3000:3000"
+    # environment:
+    # - USERS_SERVICE_URL=http://users-service:3002
+    # - PAYMENTS_SERVICE_URL=https://payments-service:3003
+    # - MOVIES_SERVICE_URL=http://movies-service:3001
+    # - STREAMING_SERVICE_URL=http://streaming-service:3004
+    env_file:
+      - ../api-gateway/.env
+    depends_on:
+      - payment_service
+      - user_service
+      - movie_service
     networks:
       - app_network
     restart: always

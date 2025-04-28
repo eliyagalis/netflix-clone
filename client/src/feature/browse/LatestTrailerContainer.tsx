@@ -3,6 +3,7 @@ import TrailerMovie from '../../components/shared/TrailerMovie';
 import PosterMovie from '../../components/shared/PosterMovie';
 import { ICarouselCard } from '../../types/ICarouselCard';
 import Button from '../../components/shared/Button';
+import DetailsBigMovieContainer from '../../components/ui/browse/DetailsBigMovieContainer';
 
 type LatestTrailerProps = {
   trailer: ICarouselCard;
@@ -13,11 +14,11 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   const [containerTrailerWidth, setContainerTrailerWidth] = useState(0);
   const [containerTrailerHight, setContainerTrailerHight] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
-
+  const [isPlaying,setIsPlaying]=useState(false)
   useEffect(() => {
     setTimeout(()=>{
       setIsPoster(true);
-    },6000)
+    },5000)
     const updateSizeByScreen=()=>{
       // const width=window.innerWidth*0.90;
 
@@ -36,13 +37,15 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   const handleMuted=()=>{
     setIsMuted(!isMuted);
   }
+
   // //'https://www.youtube.com/watch?v=PMeHdc25BGE&pp=ygUFbW92aWU%3D'
   // const TrailerMovie: React.FC<TrailerMovieProps> = ({url,initialMuted,isPlaying=true,className,posterUrl}) => {
   return (
-    <div className="relative w-full top-0 opacity-90 left-0" style={{ minHeight:containerTrailerHight, minWidth:containerTrailerWidth }}>
-      <div>
+    <div className="relative w-full top-0 opacity-90 left-0 border-b-0" style={{ minHeight:containerTrailerHight, minWidth:containerTrailerWidth }}>
+      {/* <div>
         {/* <Button><i className=''></i></Button> */}
-      </div>
+      {/* </div>  */}
+      <DetailsBigMovieContainer title='MOVIE' description='Lorem ipsum bala bala bala bala balalalaa dsfsdfsgr cdsvfdbfgthnhnhgnfvsfdgtbfdcsdefdx fefefefsfs' mediaType='movie'/>
       {isPoster?
       (
         //isPlaying={isPoster}

@@ -10,14 +10,16 @@ config()
 export const paypalRouter:Router=Router();
 const paymentController=container.get<IPaymentController>(Tokens.IPaymentController);
 
-paypalRouter.post('/initP',[
+paypalRouter.get('/initP',
+[
     validatePaymentMethodFieldReq,
     // autenticateRule,
     errorValidator
-],(req:Request,res:Response,next:NextFunction)=>{
+],
+(req:Request,res:Response,next:NextFunction)=>{
     paymentController.saveAllPlansInit(req,res,next);
 });
-paypalRouter.post('/deleteUser', (req:Request,res:Response,next:NextFunction)=>{
+paypalRouter.delete('/deleteUser', (req:Request,res:Response,next:NextFunction)=>{
         console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
         req.userId = req.headers['x-user-id'] as string;
         req.userEmail = req.headers['x-user-email'] as string;
