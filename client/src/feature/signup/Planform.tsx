@@ -19,6 +19,7 @@ const Planform = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const step = useAppSelector((state) => state.step);
+    const auth = useAppSelector((state)=> state.auth);
 
     const validPlans: string[] = [
         strings.signup.plans.planform.basic.title,
@@ -32,7 +33,11 @@ const Planform = () => {
         if (validPlans.includes(selectedPlan)) {
             dispatch(setPlan(selectedPlan));
             dispatch(nextStep());
-            navigate('/signup/paymentPicker');
+            if (auth.isSignedIn) {
+                navigate('/signup/paymentPicker');
+            }
+            else
+                navigate('/signup/registration');
         }
     };
 

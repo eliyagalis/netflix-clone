@@ -16,6 +16,7 @@ import BrowseLayout from "./pages/layouts/BrowseLayout";
 import Browse from "./pages/browse/Browse";
 import Password from "./feature/signup/Password";
 import Logout from "./pages/Logout";
+import Signup from "./feature/signup/Signup";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/logout" element={<Logout />} />
 
           <Route path="/signup" element={<SignupLayout />}>
+            <Route index element={<Signup />} />
             <Route path="registration" element={<Registration />} />
             <Route path="choosePaymentMethod" element={<PaymentPickerPage/>}/>
             <Route path="regform" element={<Regform />} />

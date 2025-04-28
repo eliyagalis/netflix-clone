@@ -46,7 +46,7 @@ const Regform = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-100">
       <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.step} OF 3</h3>
-      <h1 className={`${typography.large} font-bold mb-3`}>
+      <h1 className={`${typography.large} font-semibold mb-3`}>
         Create a password to start your membership
       </h1>
       <h6 className={`${typography.small}`}>Just a few more steps and you're done!</h6>
