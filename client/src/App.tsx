@@ -36,7 +36,6 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/mainMoviePage" element={<MainMoviesPage/>}/>
           <Route path="/logout" element={<Logout />} />
 
           <Route path="/signup" element={<SignupLayout />}>
@@ -66,7 +65,7 @@ function App() {
             
           </Route>
 
-          <Route path="/payment" element={<PaypalLogic isClicked={false} planName="basic" paymentMethod="paypal" />} />
+          <Route path="/payment" element={<PaypalLogic isClicked={false} paymentMethod="paypal" />} />
           <Route path="/mainMoviePage" element={<MainMoviesPage />} />
 
         </Routes>
