@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addProfile, removeProfile, setProfiles } from '../../store/slices/profilesSlice';
+import { addProfile, removeProfile, setCurrentProfile, setProfiles } from '../../store/slices/profilesSlice';
 import ProfileCard from './ProfileCard';
 import AddProfileCard from './AddProfileCard';
 import EditProfileModal from './EditProfileModal';
@@ -28,8 +28,7 @@ const ProfileList: React.FC = () => {
     if (isEditing) {
       setEditingProfile(profile);
     } else {
-      console.log(`Selected profile: ${profile.name}`);
-      // You can navigate to Browse page, start watching, etc.
+      dispatch(setCurrentProfile(profile))
     }
   };
 
