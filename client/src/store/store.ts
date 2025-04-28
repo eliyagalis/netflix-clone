@@ -4,13 +4,15 @@ import stepReducer from './slices/stepsSlice'
 import authReducer from '../store/slices/authSlice'
 import planReducer from '../store/slices/plansSubSlice'
 import signupReducer from '../store/slices/signupSlice'
+import profilesReducer from '../store/slices/profilesSlice';
 
 export const store = configureStore({
     reducer: {
         step:stepReducer,
         auth: authReducer,
         signup: signupReducer,
-        plan:planReducer
+        plan:planReducer,
+        profiles: profilesReducer
     }
 });
 
