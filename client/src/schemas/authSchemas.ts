@@ -28,6 +28,13 @@ export const emailValidationSchema = z.object({
     .email("Please enter a valid email address."),
 });
 
+export const passwordValidationSchema = z.object({
+  password: z.string().nonempty("Password is required.")
+    .min(6, "Password should be between 6 and 60 characters.")
+    .max(60, "Password should be between 6 and 60 characters."),
+});
+
 export type SignupFormData = z.infer<typeof signupSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type EmailFormData = z.infer<typeof emailValidationSchema>;
+export type PasswordFormData = z.infer<typeof passwordValidationSchema>;

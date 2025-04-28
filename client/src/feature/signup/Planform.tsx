@@ -3,21 +3,42 @@ import { typography } from '../../data/typography';
 import { strings } from '../../data/strings';
 import { colors } from '../../data/colors';
 import Button from '../../components/shared/Button';
-import PlanformCardGroup from '../../components/planform-page/PlanformCard';
 import { useNavigate } from 'react-router-dom';
+import PlanformCard from '../../components/planform-page/PlanformCard';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { setPlan } from '../../store/slices/plansSubSlice';
+import { nextStep } from '../../store/slices/stepsSlice';
+
 
 const Planform = () => {
+
     const [selectedPlan, setSelectedPlan] = useState<string>(
-        strings.signup.plans.planform.basic.title
+        "Premium"
     );
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const step = useAppSelector((state) => state.step);
+    const auth = useAppSelector((state)=> state.auth);
+
+    const validPlans: string[] = [
+        strings.signup.plans.planform.basic.title,
+        strings.signup.plans.planform.standard.title,
+        strings.signup.plans.planform.premium.title
+    ];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Selected plan:", selectedPlan);
-        //logic
-        navigate('/signup/payment');
+
+        if (validPlans.includes(selectedPlan)) {
+            dispatch(setPlan(selectedPlan));
+            dispatch(nextStep());
+            if (auth.isSignedIn) {
+                navigate('/signup/paymentPicker');
+            }
+            else
+                navigate('/signup/registration');
+        }
     };
 
     const plans = [
@@ -32,13 +53,13 @@ const Planform = () => {
             className="mx-auto max-w-[560px] md:max-w-[1100px]"
         >
             <h3 className={`${typography.xxsmall} font-medium mt-3`}>
-                STEP 2 OF 3
+                STEP {step.currentStep} OF 3
             </h3>
             <h1 className={`${typography.large} font-semibold my-2`}>
                 Choose the plan that’s right for you
             </h1>
 
-            <PlanformCardGroup
+            <PlanformCard
                 plans={plans}
                 selectedPlan={selectedPlan}
                 setSelectedPlan={setSelectedPlan}

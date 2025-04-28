@@ -1,12 +1,15 @@
 import { typography } from "../../data/typography";
 import { Plan } from "./PlanformCard";
 
-const NarrowPlanDetails: React.FC<{ plan: Plan }> = ({ plan }) => (
+const NarrowPlanDetails: React.FC<{ plan: Plan }> = ({ plan }) => {
+    if (!plan) return null;
+
+    return (
     <ul className="text-gray-600 list">
         <li className="list-row flex py-2 w-full">
             <div className="w-full flex justify-between flex-row items-center">
                 <p className={`font-medium ${typography.xxsmall} text-[#767676]`}>Monthly price</p>
-                <p className={`font-medium ${typography.small}`}>{plan.monthlyPrice}</p>
+                <p className={`font-medium ${typography.small}`}>{plan?.monthlyPrice}</p>
             </div>
         </li>
         <li className="list-row flex py-2 w-full">
@@ -48,6 +51,6 @@ const NarrowPlanDetails: React.FC<{ plan: Plan }> = ({ plan }) => (
             </div>
         </li>
     </ul>
-);
+    )};
 
 export default NarrowPlanDetails;

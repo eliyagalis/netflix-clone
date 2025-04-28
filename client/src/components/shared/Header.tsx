@@ -8,10 +8,9 @@ type HeaderProps = {
     border?: boolean;
     link?: string;
     isSwitch?: boolean;
-    isBrowse?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ children, className, link, border = false, isBrowse, isSwitch }) => {
+const Header: React.FC<HeaderProps> = ({ children, className, link, border = false, isSwitch }) => {
     const navigate = useNavigate();
 
     const clickHandler = () => {
@@ -21,15 +20,16 @@ const Header: React.FC<HeaderProps> = ({ children, className, link, border = fal
     };
 
     return (
-        <header className={`${className} relative z-10 flex justify-center mx-auto w-full left-0 top-0 ${border ? "border-b-[0.5px] border-[rgb(230,230,230)]" : ""} overflow-hidden`}>
-            <div className="w-full px-5 sm:px-8 md:px-10 my-5 flex">
-                <div className={`flex items-center ${link && "cursor-pointer"}`} onClick={clickHandler}>
+        <header className={`${className} relative z-10 flex justify-center mx-auto w-full left-0 top-0 
+                    ${border ? "border-b-[0.5px] border-[rgb(230,230,230)]" : ""} overflow-hidden`}>
+            <div className="w-full px-5 md:px-10 my-2 md:my-5 flex">
+                <div className={`flex items-center justify-between w-full ${link && "cursor-pointer"}`} onClick={clickHandler}>
 
                     {<img
                         src={images.logo.src}
                         alt={images.logo.alt}
                         className={`${isSwitch ? "hidden lg:block" : "block"} 
-                        ${isBrowse ? "w-24" : "w-36"} max-w-full`}
+                        w-20 md:w-36 max-w-full`}
                     />}
 
                     {isSwitch && (
@@ -39,12 +39,8 @@ const Header: React.FC<HeaderProps> = ({ children, className, link, border = fal
                             className="block lg:hidden w-7 sm:w-6 max-w-full"
                         />
                     )}
-                </div>
-                <div className="flex items-center w-full justify-between">
                     {children}
                 </div>
-                
-
             </div>
         </header>
     );

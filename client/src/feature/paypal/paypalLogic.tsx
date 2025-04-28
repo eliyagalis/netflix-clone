@@ -1,12 +1,14 @@
-import React, {useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useState } from 'react'
 import PayPalButton from './PayPalButton';
 import axios from 'axios';
 import { AxiosError } from 'axios';
 import { typography } from '../../data/typography';
+import { useAppSelector } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
 
 // import { useNavigate } from 'react-router-dom';
 interface PaypalLogicProps {
-  planName:string,
+  // planName:string,
   paymentMethod:string,
   isClicked:boolean
 }
@@ -23,11 +25,11 @@ interface ValidatePlanRes{
 
 // const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod}:PaypalLogicProps) => {
 
-const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod,isClicked}:PaypalLogicProps) => {
+const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:PaypalLogicProps) => {
 
-  // const navigate=useNavigate()
+  const navigate=useNavigate()
   const [successPayment, setSuccessPayment] = useState({status:false,msg:""});
-
+  const planName=useAppSelector((state)=>state.plan.planName)
   useEffect(() => { //למחוק אחר כך כשיהיה יוזר--
     const handelDeleteUserSubscription=async()=>{
       if(successPayment.status){
@@ -46,26 +48,27 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod,isClicke
     handelDeleteUserSubscription();
   },[])
   
-  const handleSuccessPayment = async(subscriptionId:string) => {
-    console.log("payment success",subscriptionId);
-    try {
-        const res=await axios.post<CompletedPayRes>('http://localhost:3000/api/v1/payment/paypal/paymentCompleted',{
-          subscriptionId:subscriptionId,
-          planName:planName,
-          paymentMethod:paymentMethod
-        },{
-            headers:{
-              'Content-Type':'application/json'
-            }
-        })
-        console.log("res data:",res.data.message)
-      setSuccessPayment({status:true,msg:"payment process success!"});
-      //שליחה ליוזר את המנוי - אם יש לו מנוי יוכל להיכנס ולפסוח על זה
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  const checkPlan = async (planName: string): Promise<string|undefined> => {
+  const handleSuccessPayment =useCallback( 
+    async(subscriptionId:string) => {
+      console.log("payment success",subscriptionId);
+      try {
+          const res=await axios.post<CompletedPayRes>('http://localhost:3000/api/v1/payment/paypal/paymentCompleted',{
+            subscriptionId:subscriptionId,
+            planName:planName,
+            paymentMethod:paymentMethod
+          },{
+              headers:{
+                'Content-Type':'application/json'
+              }
+          })
+          console.log("res data:",res.data.message)
+          setSuccessPayment({status:true,msg:"payment process success!"});
+          navigate('/browse')
+        } catch (error) {
+        console.log(error)
+      }
+  },[planName])
+  const checkPlan= useCallback( async (): Promise<string|undefined> => {
     console.log("plan front:",planName)
     try {
       const response = await axios.post<ValidatePlanRes>('http://localhost:3000/api/v1/payment/paypal/plansCheck', {
@@ -79,7 +82,7 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod,isClicke
         return "";
       }, 0);
     }
-  };
+  },[planName])
     // const afterSuccessfulPayment=()=>{
     //   ( <div>{successPayment.msg}</div>)
     //   setTimeout(()=>{
@@ -89,10 +92,12 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({planName,paymentMethod,isClicke
     // } 
   return (
     <>
-      <PayPalButton clicked={isClicked} onSuccess={handleSuccessPayment} checkPlan={checkPlan} planName={planName}/>
+      <PayPalButton clicked={isClicked} onSuccess={handleSuccessPayment} checkPlan={checkPlan}/>
       {successPayment.status&&(
         <div className={`text-success font-medium ${typography.small}`}>
             payment process success
+            n
+
         </div>
       ) }
       {/* afterSuccessfulPayment() */}

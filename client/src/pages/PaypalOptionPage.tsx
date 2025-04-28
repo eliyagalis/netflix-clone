@@ -8,14 +8,14 @@ import PaypalOptionForm from '../feature/paypal/PaypalOptionForm'
 
 const PaypalOptionPage = () => {
   
-    const planObj=useAppSelector((state)=>state.plan);
+    const planObj = useAppSelector((state)=>state.plan);
 
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center mx-auto'>
         <div className='pt-[3rem] text-black flex flex-col h-screen items-start text-left w-full max-w-[40rem]'>
         <Typography size={typography.xxsmall}>STEP 3 OF 3</Typography>
         <Typography className=' font-semibold mb-6 text-4xl' size="">Set up your PayPal</Typography>
-        <PlansDetailPaypalOption planName={planObj.planName} planPrice={planObj.price}/>
+        <PlansDetailPaypalOption planName={planObj.planName? planObj.planName: "premium"} planPrice={planObj.planPrice}/>
         <div className='max-w-[30rem] max-h-[5.5rem] justify-start flex flex-row h-full w-full border-2 mt-4 border-gray-200 rounded-sm pl-2 pr-2 pt-3'>
             <PaymentIcon className='max-h-[6rem] max-w-[6rem] w-full'/>
             <span >
@@ -27,7 +27,7 @@ const PaypalOptionPage = () => {
             <>
                 By checking the checkbox below, you agree to our <span className='text-blue-600'>Terms of Use, Privacy Statement</span>, and that you are over 18. 
                 Netflix will automatically continue your membership and charge the membership fee
-                (currently ₪{planObj.price}/month) to your payment method until you cancel. You may cancel at any time to avoid future charges.
+                (currently ₪{planObj.planPrice}/month) to your payment method until you cancel. You may cancel at any time to avoid future charges.
             </>
         </Typography>
         <PaypalOptionForm/>

@@ -1,10 +1,7 @@
-export interface IMovieCard {
-    id: number;
-    title: string;
-    imageUrl: string;
-    releaseDate: string;
-    ageRating: string;
-    duration: string;
-    genre: string[];
+import { ICarouselCard } from "./ICarouselCard";
+
+export interface IMovieCard extends ICarouselCard {
+    type: "Movie";
+    duration: number;
     trailerUrl: string;
 }

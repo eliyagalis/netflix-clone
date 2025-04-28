@@ -1,12 +1,19 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginFormData, loginSchema } from '../schemas/authSchemas';
-import CustomInput from '../components/shared/CustomInput';
-import Button from '../components/shared/Button';
-import { typography } from '../data/typography';
-import { Link } from 'react-router-dom';
+import { LoginFormData, loginSchema } from '../../schemas/authSchemas';
+import CustomInput from '../../components/shared/CustomInput';
+import Button from '../../components/shared/Button';
+import { typography } from '../../data/typography';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../store/store';
+import { useDispatch } from 'react-redux';
 
 const LoginForm = () => {
+
+  const auth = useAppSelector((state)=>state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -19,9 +26,10 @@ const LoginForm = () => {
   });
 
   const onSubmit = (data: LoginFormData) => {
-    console.log('Success', data);
-    // Logic
-    // navigate("/signup");
+    //if user is real
+    // dispatch(login(data));
+    // auth.user?.status?.toString() == 'ACTIVE'? navigate('/browse') : navigate('/signup')
+    
   };
 
   return (

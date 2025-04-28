@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { ChangeEvent, useRef, useState } from 'react'
+import React, { ChangeEvent,  useState } from 'react'
 import { agreeToTermsPaypalDetails, PaypalOptionFormData } from '../../schemas/paypalMethodSchema';
 import { useForm } from 'react-hook-form';
 import CheckBoxPaypalOption from '../../components/ui/CheckBoxPaypalOption';
@@ -8,7 +8,6 @@ import { typography } from '../../data/typography';
 import PaypalLogic from './paypalLogic';
 
 const PaypalOptionForm = () => {
-    const paypalButtonRef = useRef<HTMLDivElement | null>(null);
     const [isChecked, setIsChecked] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +35,8 @@ const PaypalOptionForm = () => {
             <Button type='submit' className={`mt-8 w-[30rem] h-[5rem] items-center z-[999] ${!isChecked? "disabled cursor-not-allowed ":"visible"}`} fontSize={typography.large}>Continue to PayPal</Button>
             {isChecked&& (
                 <div className="absolute inset-0 opacity-0 z-10">
-                    <PaypalLogic isClicked planName="basic" paymentMethod="paypal"/>
+                  {/* //planName={planNameFromStore} */}
+                    <PaypalLogic isClicked={isClicked}  paymentMethod="paypal"/>
                 </div>
             )}
             

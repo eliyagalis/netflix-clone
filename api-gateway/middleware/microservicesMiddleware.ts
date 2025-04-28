@@ -47,7 +47,7 @@ export const microServiceMiddleware=(app:Application):void=>
     }, createProxyMiddleware({
         target: movies_service_url,
         changeOrigin: true,
-        pathRewrite: (path,req)=>{return `/api/v1/movies/${req.path}`}        
+        pathRewrite: (path,req)=>{return `/api/v1/movies${req.path}`}        
     }));
      
     
@@ -75,7 +75,19 @@ export const microServiceMiddleware=(app:Application):void=>
                     // req.userName = "devUser";
                 }
             },
-            error:(err,req)=>{console.log(req)}}
+            proxyRes:async(proxyRes,req,res)=>{
+                if(req.path.includes("/paymentCompleted")&& proxyRes.statusCode===200){
+                    try {
+                        const userId = req.headers['x-user-id'];
+                        await axios.post('/',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
+
+                    } catch (error) {
+                        
+                    }
+                }
+            }
+            error:(err,req)=>{console.log(req)}},
+
     }))
     //('/streaming')
     app.use(`${url}/playMovie`,authenticate,(req:Request,res:Response,next:NextFunction)=>{

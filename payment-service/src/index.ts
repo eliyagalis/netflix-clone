@@ -10,8 +10,8 @@ config();
 const startPaymentService=async()=>{
     const port=process.env.PORT||3003;
     console.log("-----------------------------------------------------")
-    const keyPath = '/app/payment-service/certs/server.key';
-    const certPath = '/app/payment-service/certs/server.cert';
+    const keyPath ='/app/payment-service/certs/server.key';
+    const certPath ='/app/payment-service/certs/server.cert';
     // const keyPath = path.join(__dirname, process.env.CA_SERVER_KEY!);
     // console.log(keyPath," ---------------")
     // const certPath = path.join(__dirname, '../payment-service/certs/server.cert');
