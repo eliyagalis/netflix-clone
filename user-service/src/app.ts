@@ -10,13 +10,15 @@ const app: Application = express()
 app.use(express.json())
 app.use(
   cors({
-    credentials: true,
-    origin: ["http://localhost:5173"],
+    origin: '*',
+    credentials: true
   })
 );
 
 app.use(cookieParser());
 
-app.use("/api/users", userRouter);
+// app.use('*' ,()=>console.log("1234123"))
+
+app.use("/api/v1/users", userRouter);
 
 export { app };

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Application} from "express";
+import { application, Application} from "express";
 import {createProxyMiddleware} from "http-proxy-middleware";
 import  { rateLimit } from "express-rate-limit";
 import { config } from "dotenv";
@@ -30,13 +30,14 @@ export const microServiceMiddleware=(app:Application):void=>
         throw new Error("One or more environment variables are missing");
     }
 
-    app.use(`${url}/users`,(req:Request,res:Response,next:NextFunction)=>{
+    app.use(`${url}/users`,async (req:Request,res:Response,next:NextFunction)=>{
+
         console.log("Moving to users service...");
         next(); 
     },createProxyMiddleware({
         target:users_service_url,
         changeOrigin:true,
-        pathRewrite: (path,req)=>{return `/api/v1/users/${req.path}`}        
+        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}        
     }))
     //, authenticate
     app.use(`${url}/movies`,(req: Request, res: Response, next: NextFunction) => {
@@ -86,9 +87,9 @@ export const microServiceMiddleware=(app:Application):void=>
         changeOrigin:true,
         pathRewrite:(path,req)=>{return `/api/v1/movies/${req.path}`}
     }))
-    app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
-        console.log("somethimg went wrong, Moving to error handler...");
-        next(errorHandler)
-    })
+    // app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
+    //     console.log("somethimg went wrong, Moving to error handler...");
+    //     next(errorHandler)
+    // })
 }
 
