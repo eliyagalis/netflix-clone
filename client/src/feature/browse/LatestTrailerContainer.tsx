@@ -41,7 +41,7 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   return (
     <div className="relative w-full top-0 opacity-90 left-0" style={{ minHeight:containerTrailerHight, minWidth:containerTrailerWidth }}>
       <div>
-        <Button><i className=''></i></Button>
+        {/* <Button><i className=''></i></Button> */}
       </div>
       {isPoster?
       (

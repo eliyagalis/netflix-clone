@@ -9,9 +9,10 @@ const Signup = () => {
     const auth = useAppSelector((state) => state.auth);
     const step = useAppSelector((state) => state.step);
     const navigate = useNavigate();
-    if (auth.isSignedIn && auth.user?.subscriptionId) {
-        return <Navigate to={'/browse'} />
-    }
+
+    // if (auth.isSignedIn && auth.user?.subscriptionId) {
+    //     return <Navigate to={'/browse'} />
+    // }
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,7 +25,7 @@ const Signup = () => {
                 className='w-15 mt-15'
             />
             <h3 className={`${typography.xxsmall} font-medium mt-3`}>
-                STEP {step.step} OF 3
+                STEP {step.currentStep} OF 3
             </h3>
             <h1 className={`${typography.large} font-semibold mb-5`}>
                 Choose your plan.

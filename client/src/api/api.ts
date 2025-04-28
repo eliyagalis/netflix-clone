@@ -1,8 +1,9 @@
+import { apiBaseUrl } from "../config/config";
 import { LoginFormData, SignupFormData } from "../schemas/authSchemas";
 import { IUser } from "../types/IUser";
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: apiBaseUrl,
     timeout: 1000 * 60,
     withCredentials: true,
 })
