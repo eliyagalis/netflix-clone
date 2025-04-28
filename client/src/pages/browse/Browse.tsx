@@ -2,8 +2,17 @@ import React from 'react'
 import MainCarousel from '../../feature/browse/MainCarousel'
 import { movies } from '../../data/mock'
 import LatestTrailerContainer from '../../feature/browse/LatestTrailerContainer'
+import { useAppSelector } from '../../store/store'
+import { Navigate } from 'react-router-dom'
 
 const Browse = () => {
+
+  const auth = useAppSelector((state)=>state.auth);
+  
+  if (auth.user?.status?.toString() !== 'ACTIVE') {
+    return <Navigate to={"/"} replace />
+  }
+
   return (
     <div>
         <LatestTrailerContainer trailer={movies[0]}/>
@@ -16,6 +25,7 @@ const Browse = () => {
         <MainCarousel title='Action' movies={movies}/>
     </div>
     </div>
+  </div>
   )
 }
 

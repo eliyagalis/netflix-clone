@@ -1,15 +1,27 @@
 import { useNavigate } from "react-router-dom";
-import { EmailFormData, emailValidationSchema } from "../schemas/authSchemas";
+import { EmailFormData, emailValidationSchema } from "../../schemas/authSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomInput from "../components/shared/CustomInput";
-import { strings } from "../data/strings";
-import Button from "../components/shared/Button";
-import { colors } from "../data/colors";
-import { typography } from "../data/typography";
+import CustomInput from "../../components/shared/CustomInput";
+import { strings } from "../../data/strings";
+import Button from "../../components/shared/Button";
+import { colors } from "../../data/colors";
+import { typography } from "../../data/typography";
+import { setEmail } from "../../store/slices/signupSlice";
+import { useAppDispatch } from "../../store/store";
 
 const LandingForm = () => {
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+
+  const onSubmit = (data: EmailFormData) => {
+
+    dispatch(setEmail(data.email));
+    //If user exists
+    navigate("/signup/password");
+    navigate("/signup/registration");
+  };
 
   const {
     register,
@@ -20,12 +32,6 @@ const LandingForm = () => {
     resolver: zodResolver(emailValidationSchema),
     mode: "onChange",
   });
-
-  const onSubmit = (data: EmailFormData) => {
-    console.log("Success", data);
-    // Logic
-    navigate("/signup/");
-  };
 
   return (
     <form
@@ -39,7 +45,7 @@ const LandingForm = () => {
           rounded
           className="blackInput"
           error={errors.email?.message}
-          success={touchedFields.email && !errors.email &&  !!watch("email")}
+          success={touchedFields.email && !errors.email && !!watch("email")}
           {...register("email")}
         />
       </div>

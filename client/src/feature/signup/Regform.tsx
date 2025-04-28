@@ -6,40 +6,47 @@ import CustomInput from '../../components/shared/CustomInput';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { setSignupData } from '../../store/slices/signupSlice';
+import { nextStep } from '../../store/slices/loginSteps';
 
 const Regform = () => {
-  const [userData, setUserData] = useState<{ email: string; password: string }>({
-    email: '',
-    password: ''
-  });
+  const dispatch = useAppDispatch();
+  const signup = useAppSelector((state) => state.signup);
+  const plan = useAppSelector((state) => state.plan);
+  const step = useAppSelector((state) => state.step);
+  const auth = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
   const {
-      register,
-      handleSubmit,
-      watch,
-      formState: { errors, touchedFields },
-    } = useForm<SignupFormData>({
-      resolver: zodResolver(signupSchema),
-      mode: 'onChange',
-      
-    });
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, touchedFields },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: signup?.email,
+      password: '',
+    },
+  });
 
-  const onSubmit = (data: SignupFormData) => {
-    //logic
-    navigate('/signup/planform');
+  const onSubmit = (data: { email: string; password: string }) => {
+    dispatch(setSignupData(data));
+    dispatch(nextStep());
+    
+    if(plan.planName) 
+      navigate('/signup/paymentPicker');
+  
+    else navigate('/signup/planform');
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto max-w-100"
-    >
-      <h3 className={`${typography.xxsmall} font-medium mt-10`}>
-        STEP 1 OF 3
-      </h3>
-      <h1 className={`${typography.large} font-bold mb-3`}>
+    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-100">
+      <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.step} OF 3</h3>
+      <h1 className={`${typography.large} font-semibold mb-3`}>
         Create a password to start your membership
       </h1>
       <h6 className={`${typography.small}`}>Just a few more steps and you're done!</h6>
@@ -47,11 +54,11 @@ const Regform = () => {
 
       <div className="my-2">
         <CustomInput
-          className='focus:ring-blue-500'
+          className="focus:ring-blue-500"
           placeholder="Email"
-          background='white'
-          placeholderColor='#555555'
-          inputColor='black'
+          background="white"
+          placeholderColor="#555555"
+          inputColor="black"
           error={errors.email?.message}
           success={touchedFields.email && !errors.email && !!watch('email')}
           {...register('email')}
@@ -61,9 +68,9 @@ const Regform = () => {
         <CustomInput
           placeholder="Add a password"
           type="password"
-          background='white'
-          placeholderColor='#555555'
-          inputColor='black'
+          background="white"
+          placeholderColor="#555555"
+          inputColor="black"
           error={errors.password?.message}
           success={touchedFields.password && !errors.password && !!watch('password')}
           {...register('password')}
@@ -71,13 +78,12 @@ const Regform = () => {
       </div>
 
       <div className="w-full flex">
-        <Button type="submit" fontSize={typography.large} className={` w-full h-16 my-6 mb-18 mx-auto`}>
+        <Button type="submit" fontSize={typography.large} className="w-full h-16 my-6 mb-18 mx-auto">
           Next
         </Button>
       </div>
     </form>
+  );
+};
 
-  )
-}
-
-export default Regform
+export default Regform;

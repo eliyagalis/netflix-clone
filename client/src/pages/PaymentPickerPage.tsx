@@ -12,8 +12,10 @@ const PaymentPickerPage:React.FC = () => {
   // const step:number=useAppSelector((state)=>state.step);
   return (
       <div className='pt-[50px] flex flex-col items-center h-screen text-center'>
+
+      <div className='pt-[40px] flex flex-col md:items-center h-auto md:text-center'>
         <img src={images.payment.lockPic.src} alt={images.payment.lockPic.alt} className='w-[60px] h-[60px] my-10'/>
-        <div className=' justify-center'>
+        <div className=' justify-center mb-20'>
           <PaymentMethodText/>
           <span className='flex flex-row text-black font-light text-sm justify-end'>End-to-End encrypted 
             <img src={images.payment.yellowLock.src} alt={images.payment.yellowLock.alt} className='w-[2rem] h-[1.5rem]'/>

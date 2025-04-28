@@ -15,13 +15,13 @@ export type Plan = {
     isMostPopular?: boolean;
 };
 
-type PlanformCardGroupProps = {
+type PlanformCardProps = {
     plans: Plan[];
     selectedPlan: string;
     setSelectedPlan: (value: string) => void;
 };
 
-const PlanformCardGroup: React.FC<PlanformCardGroupProps> = ({
+const PlanformCard: React.FC<PlanformCardProps> = ({
     plans,
     selectedPlan,
     setSelectedPlan
@@ -61,12 +61,8 @@ const PlanformCardGroup: React.FC<PlanformCardGroupProps> = ({
                                         <p className="text-sm font-semibold">{plan.subtitle}</p>
                                     </div>
 
-                                    <input
-                                        type="radio"
-                                        id={plan.title}
-                                        name="plan"
-                                        className={`hidden`}
-                                        checked={isSelected}
+                                    <input type="radio" id={plan.title} name="plan"
+                                        className={`hidden`} checked={isSelected}
                                         onChange={() => setSelectedPlan(plan.title)}
                                     />
 
@@ -120,11 +116,11 @@ const PlanformCardGroup: React.FC<PlanformCardGroupProps> = ({
 
             <div className="block md:hidden w-full my-5">
                 <div>
-                    <NarrowPlanDetails plan={plans.find(p => p.title === selectedPlan)!} />
+                    {plans && <NarrowPlanDetails plan={plans.find(p => p.title === selectedPlan)!} />}
                 </div>
             </div>
         </div>
     );
 };
 
-export default PlanformCardGroup;
+export default PlanformCard;
