@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   const onSubmit = async(data: LoginFormData) => {
     const res = await loginRequest(data);
-    console.log()
+    console.log(res);
     //if user is real
     // dispatch(login(data));
     // auth.user?.status?.toString() == 'ACTIVE'? navigate('/browse') : navigate('/signup')
