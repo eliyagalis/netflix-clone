@@ -1,3 +1,4 @@
+import axios from "axios";
 import { apiBaseUrl } from "../config/config";
 import { LoginFormData, SignupFormData } from "../schemas/authSchemas";
 import { IUser } from "../types/IUser";
