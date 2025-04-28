@@ -9,11 +9,6 @@ import Registration from "./feature/signup/Registration";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import PaymentPickerPage from "./pages/PaymentPickerPage";
-import PaypalOptionPage from "./pages/PaypalOptionPage";
-
-import CustomPayPalButton from "./feature/paypal/costum";
-import PaypalOptionForm from "./feature/paypal/costumOptions";
 import { lazy, Suspense } from "react";
 
 
