@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 interface PayPalButtonProps {
     planName:string,
     onSuccess:(subscriptionId:string)=>void,
-    checkPlan:(planName:string)=>Promise<string|undefined>;
+    checkPlan:()=>Promise<string|undefined>;
     clicked:boolean
 }
 
@@ -22,7 +22,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlan,onSuccess}
                         console.error("Missing planName for subscription creation");
                         return Promise.reject(new Error("Missing plan name"));
                     }
-                    const servicePlanId=await checkPlan(planName);
+                    const servicePlanId=await checkPlan();
                     if(!servicePlanId){
                         return Promise.reject(new Error("invalid plan"));
                     }
@@ -49,7 +49,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({planName,checkPlan,onSuccess}
   )
 }
 
-export default PayPalButton
+export default React.memo(PayPalButton);
 
 // //      <div id="paypal-button-container-P-9GT50560L5615082SNAAWG3Y"></div>
 // <script src="https://www.paypal.com/sdk/js?client-id=AYjAWvcwwDc1USNaKZ_Oc-5LlZxKXPk3Y1McezDyxdO_n4G8FjB9c6vn8uYAmHRRTkdwIuckVz2xegGp&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>

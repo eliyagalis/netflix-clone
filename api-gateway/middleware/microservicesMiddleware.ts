@@ -37,7 +37,7 @@ export const microServiceMiddleware=(app:Application):void=>
         target:users_service_url,
         changeOrigin:true,
         pathRewrite: (path,req)=>{
-            console.log("path:",`${req.path}`,`${payment_service_url}`);
+            console.log("path:",`${req.path}`,`${users_service_url}`);
             return `/api/v1/users${req.path}`;
         }      
     }))
@@ -49,7 +49,7 @@ export const microServiceMiddleware=(app:Application):void=>
     }, createProxyMiddleware({
         target: movies_service_url,
         changeOrigin: true,
-        pathRewrite: (path,req)=>{return `/api/v1/movies/${req.path}`}        
+        pathRewrite: (path,req)=>{return `/api/v1/movies${req.path}`}        
     }));
      
     

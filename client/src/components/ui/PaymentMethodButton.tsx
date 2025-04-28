@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import Button from '../shared/Button'
 import { colors } from '../../data/colors'
 import { typography } from '../../data/typography'
@@ -6,7 +6,7 @@ import { typography } from '../../data/typography'
 interface LogoCard{
   text:string,
   imagesChildren: React.ReactElement<HTMLImageElement> | React.ReactElement<HTMLImageElement>[],
-  navigateLink?:string
+  navigateLink?:string,
 }
 const PaymentMethodButton:React.FC<LogoCard> = ({text,imagesChildren,navigateLink}) => {
 
