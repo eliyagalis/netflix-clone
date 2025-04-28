@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { PasswordFormData, passwordValidationSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { nextStep } from '../../store/slices/loginSteps';
+import { nextStep } from '../../store/slices/stepsSlice';
 
 const Password = () => {
     const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ const Password = () => {
     return (
         
         <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-100">
-            <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.step} OF 3</h3>
+            <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.currentStep} OF 3</h3>
             <h1 className={`${typography.large} font-semibold mb-3`}>
                 Welcome back!
             </h1>

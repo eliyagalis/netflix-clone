@@ -6,8 +6,8 @@ import Button from '../../components/shared/Button';
 import { useNavigate } from 'react-router-dom';
 import PlanformCard from '../../components/planform-page/PlanformCard';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { setPlan } from '../../store/slices/plansSubSlices';
-import { nextStep } from '../../store/slices/loginSteps';
+import { setPlan } from '../../store/slices/plansSubSlice';
+import { nextStep } from '../../store/slices/stepsSlice';
 
 
 const Planform = () => {
@@ -53,7 +53,7 @@ const Planform = () => {
             className="mx-auto max-w-[560px] md:max-w-[1100px]"
         >
             <h3 className={`${typography.xxsmall} font-medium mt-3`}>
-                STEP {step.step} OF 3
+                STEP {step.currentStep} OF 3
             </h3>
             <h1 className={`${typography.large} font-semibold my-2`}>
                 Choose the plan that’s right for you

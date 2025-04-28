@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector,TypedUseSelectorHook, useDispatch } from "react-redux";
-import stepReducer from '../store/slices/loginSteps'
-import authReducer from '../store/slices/authSlices'
-import planReducer from '../store/slices/plansSubSlices'
+import stepReducer from './slices/stepsSlice'
+import authReducer from '../store/slices/authSlice'
+import planReducer from '../store/slices/plansSubSlice'
 import signupReducer from '../store/slices/signupSlice'
 
 export const store = configureStore({
@@ -13,6 +13,8 @@ export const store = configureStore({
         plan:planReducer
     }
 });
+
+
 
 export type RootState = ReturnType<typeof store.getState>; //מחזיר את הטייפים של כל הסטייטים
 export type AddDispatch = typeof store.dispatch; // מחזיר את הטייפים של כל הפונקציה ACTION

@@ -7,9 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { setSignupData } from '../../store/slices/signupSlice';
-import { nextStep } from '../../store/slices/loginSteps';
-import { login } from '../../store/slices/authSlices';
+import { nextStep } from '../../store/slices/stepsSlice';
+import { setEmail } from '../../store/slices/signupSlice';
 
 const Regform = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +34,7 @@ const Regform = () => {
   });
 
   const onSubmit = (data: { email: string; password: string }) => {
-    dispatch(setSignupData(data));
+    dispatch(setEmail(data.email));
     dispatch(nextStep());
     
     if(plan.planName) 
@@ -46,7 +45,7 @@ const Regform = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-100">
-      <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.step} OF 3</h3>
+      <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.currentStep} OF 3</h3>
       <h1 className={`${typography.large} font-semibold mb-3`}>
         Create a password to start your membership
       </h1>
