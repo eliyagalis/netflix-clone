@@ -27,7 +27,7 @@ const authSlice = createSlice({
             if (state.user) {
                 state.user = { ...state.user, ...action.payload };
             }
-        },
+        }
     },
 });
 export const { login, logout, updateUser } = authSlice.actions;

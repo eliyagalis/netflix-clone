@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TrailerMovie from '../../components/shared/TrailerMovie';
 import PosterMovie from '../../components/shared/PosterMovie';
 import { ICarouselCard } from '../../types/ICarouselCard';
+import Button from '../../components/shared/Button';
 
 type LatestTrailerProps = {
   trailer: ICarouselCard;
@@ -39,6 +40,9 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   // const TrailerMovie: React.FC<TrailerMovieProps> = ({url,initialMuted,isPlaying=true,className,posterUrl}) => {
   return (
     <div className="relative w-full top-0 opacity-90 left-0" style={{ minHeight:containerTrailerHight, minWidth:containerTrailerWidth }}>
+      <div>
+        <Button><i className=''></i></Button>
+      </div>
       {isPoster?
       (
         //isPlaying={isPoster}

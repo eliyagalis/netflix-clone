@@ -11,8 +11,6 @@ const PaymentPickerPage:React.FC = () => {
   // const dispatch=useAppDispatch()
   // const step:number=useAppSelector((state)=>state.step);
   return (
-      <div className='pt-[50px] flex flex-col items-center h-screen text-center'>
-
       <div className='pt-[40px] flex flex-col md:items-center h-auto md:text-center'>
         <img src={images.payment.lockPic.src} alt={images.payment.lockPic.alt} className='w-[60px] h-[60px] my-10'/>
         <div className=' justify-center mb-20'>
@@ -27,7 +25,6 @@ const PaymentPickerPage:React.FC = () => {
             </>
           }/>
           <PaymentMethodButton navigateLink="/signup/paypalOption" text="Paypal" imagesChildren={<img src={images.payment.paypalLogo.src} alt={images.payment.visaLogo.alt} className='w-[3rem] h-[2.2rem] border !border-gray-300 rounded-sm mx-2 bg-white' />}/>
-        
         </div>
       </div>
   )
