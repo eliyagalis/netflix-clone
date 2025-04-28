@@ -18,7 +18,8 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
       setIsPoster(true);
     },6000)
     const updateSizeByScreen=()=>{
-      //
+      // const width=window.innerWidth*0.90;
+
       const width=window.innerWidth*0.90;
       const height=width*(9/16);
       setContainerTrailerWidth(width);
@@ -37,7 +38,7 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   // //'https://www.youtube.com/watch?v=PMeHdc25BGE&pp=ygUFbW92aWU%3D'
   // const TrailerMovie: React.FC<TrailerMovieProps> = ({url,initialMuted,isPlaying=true,className,posterUrl}) => {
   return (
-    <div className="relative w-full opacity-90 left-0 " style={{ height:containerTrailerHight, width:containerTrailerWidth }}>
+    <div className="relative w-full top-0 opacity-90 left-0" style={{ minHeight:containerTrailerHight, minWidth:containerTrailerWidth }}>
       {isPoster?
       (
         //isPlaying={isPoster}

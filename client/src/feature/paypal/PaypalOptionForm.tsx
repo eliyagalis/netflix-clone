@@ -8,9 +8,9 @@ import { typography } from '../../data/typography';
 import PaypalLogic from './paypalLogic';
 
 const PaypalOptionForm = () => {
-    const paypalButtonRef = useRef<HTMLDivElement | null>(null);
     const [isChecked, setIsChecked] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
+    
     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
       setIsChecked(e.target.checked);
     };
