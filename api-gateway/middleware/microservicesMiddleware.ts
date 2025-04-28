@@ -80,12 +80,13 @@ export const microServiceMiddleware=(app:Application):void=>
     //('/streaming')
     app.use(`${url}/playMovie`,authenticate,(req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to stream service...");
+        console.log(req.path);
         next(); 
     },
         createProxyMiddleware({
         target:streaming_service_url,
         changeOrigin:true,
-        pathRewrite:(path,req)=>{return `/api/v1/movies/${req.path}`}
+        pathRewrite:(path,req)=>{return `/api/v1/movies${req.path}`}
     }))
     // app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
     //     console.log("somethimg went wrong, Moving to error handler...");
