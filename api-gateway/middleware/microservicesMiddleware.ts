@@ -54,7 +54,6 @@ export const microServiceMiddleware=(app:Application):void=>
 //authenticate להוסיף למידל וור
     app.use(`${url}/payment`,(req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to payment service...");
-              // בדיקה לדו-סביבתי (פיתוח בלבד)
         next(); 
     },createProxyMiddleware({
         target:payment_service_url,
