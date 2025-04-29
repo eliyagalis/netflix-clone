@@ -21,7 +21,6 @@ const Browse = () => {
 
   return (
     <div>
-      
       <LatestTrailerContainer trailer={movies[0]} />
       <div className='w-11/12 mx-auto z-999'>
         {/* <LatestTrailer trailer={movies[0]}/> */}

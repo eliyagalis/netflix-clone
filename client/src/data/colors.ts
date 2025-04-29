@@ -10,6 +10,11 @@ export const colors = {
         hover: 'hover:bg-[#cecece]',
         text: 'text-[rgb(15,15,15)]',
       },
+      dark: {
+        bg: 'bg-[#141414]',
+        hover: 'hover:bg-black',
+        text: 'text-white',
+      }
     },
     text: {
       primary: 'text-black',

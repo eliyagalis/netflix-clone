@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      className={`btn ${border} ${className} ${rounded ? "rounded-full" : ""}
+      className={`btn ${border} ${rounded ? "rounded-full" : ""}
         ${color.bg} ${color.hover} ${color.text} ${className} ${fontSize}
         shadow transition-all duration-300
       `}

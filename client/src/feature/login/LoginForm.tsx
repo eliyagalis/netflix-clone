@@ -29,6 +29,7 @@ const LoginForm = () => {
   const onSubmit = async(data: LoginFormData) => {
     const res = await loginRequest(data);
     
+    console.log('trying');
     console.log(res);
     //if user is real
     // dispatch(login(data));

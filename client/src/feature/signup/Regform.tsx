@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { typography } from '../../data/typography';
 import Button from '../../components/shared/Button';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +8,7 @@ import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { nextStep } from '../../store/slices/stepsSlice';
 import { setEmail } from '../../store/slices/signupSlice';
+import { signupRequest } from '../../api/api';
 
 const Regform = () => {
   const dispatch = useAppDispatch();
@@ -33,14 +33,19 @@ const Regform = () => {
     },
   });
 
-  const onSubmit = (data: { email: string; password: string }) => {
-    dispatch(setEmail(data.email));
-    dispatch(nextStep());
+  const onSubmit = async(data: { email: string; password: string }) => {
+    const res = await(signupRequest(data));
+    console.log(res);
+    if (res) {
+
+      dispatch(setEmail(data.email));
+      dispatch(nextStep());
+      navigate('/signup/planform');
+    }
     
     if(plan.planName) 
       navigate('/signup/paymentPicker');
   
-    else navigate('/signup/planform');
   };
 
   return (

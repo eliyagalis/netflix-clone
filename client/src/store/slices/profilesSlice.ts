@@ -26,9 +26,16 @@ const profilesSlice = createSlice({
     },
     setCurrentProfile: (state, action: PayloadAction<IProfilePreview>)=> {
       state.currentProfile = action.payload;
+    },
+    resetCurrentProfile: (state)=> {
+      state.currentProfile = null;
+    },
+    resetProfiles: (state) => {
+      state.currentProfile = null;
+      state.profiles = [];
     }
   },
 });
 
-export const { setProfiles, addProfile, removeProfile, setCurrentProfile } = profilesSlice.actions;
+export const { setProfiles, addProfile, removeProfile, setCurrentProfile, resetCurrentProfile, resetProfiles } = profilesSlice.actions;
 export default profilesSlice.reducer;
