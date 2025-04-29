@@ -38,7 +38,7 @@ export const microServiceMiddleware=(app:Application):void=>
         target:users_service_url,
         changeOrigin:true,
         secure:false,
-        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}        
+        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}
     }))
     //, authenticate
     app.use(`${url}/movies`,(req: Request, res: Response, next: NextFunction) => {
