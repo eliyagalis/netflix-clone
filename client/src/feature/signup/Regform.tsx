@@ -8,7 +8,7 @@ import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { nextStep } from '../../store/slices/stepsSlice';
 import { setEmail } from '../../store/slices/signupSlice';
-import { signupRequest } from '../../api/api';
+import { signupRequest } from '../../api/authApi';
 
 const Regform = () => {
   const dispatch = useAppDispatch();

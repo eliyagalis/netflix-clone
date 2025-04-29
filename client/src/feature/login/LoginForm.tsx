@@ -7,7 +7,7 @@ import { typography } from '../../data/typography';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
-import { loginRequest } from '../../api/api';
+import { loginRequest } from '../../api/authApi';
 
 const LoginForm = () => {
 
