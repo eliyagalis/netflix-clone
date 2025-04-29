@@ -37,7 +37,6 @@ const Regform = () => {
     const res = await(signupRequest(data));
     console.log(res);
     if (res) {
-
       dispatch(setEmail(data.email));
       dispatch(nextStep());
       navigate('/signup/planform');
