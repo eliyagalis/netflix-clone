@@ -64,14 +64,7 @@ export class TMDBService {
     return await handleApiRequest<MovieResponse>("upComingMovies",()=>this.makeRequest<MovieResponse>('/movie/upcoming', { page }));
   
   }
-  async convertMovieToMp4(url:string){
-      ytdl(url, { filter: 'audioandvideo' })
-      .pipe(fs.createWriteStream('public/videos/trailer.mp4'))
-      .on('finish', () => {
-        const file=fs.readFileSync('public/videos/trailer.mp4');
-        return file;
-    });
-  };
+ 
   async getMovieDetails(movieId: number): Promise<MovieDetails> {
     return await handleApiRequest<MovieDetails>(`movieIdDetail:${movieId}`,()=>this.makeRequest<MovieDetails>(`/movie/${movieId}`));
   }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import TrailerMovie from '../../components/shared/TrailerMovie';
 import PosterMovie from '../../components/shared/PosterMovie';
 import { ICarouselCard } from '../../types/ICarouselCard';
-import Button from '../../components/shared/Button';
 import DetailsBigMovieContainer from '../../components/ui/browse/DetailsBigMovieContainer';
 
 type LatestTrailerProps = {

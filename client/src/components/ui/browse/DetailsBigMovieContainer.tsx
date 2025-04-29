@@ -35,8 +35,8 @@ const DetailsBigMovieContainer:React.FC<MovieDetails> = ({title,description,medi
           <i className='fa-solid fa-play'></i>
         </Button>
         {/* onClickFunc={()=>(<></>)} */}
-        <Button type='button' onClickFunc={()=>{}} className='bg-gray-600 max-w-60 max-h-30 p-5 opacity-50 rounded-md flex flex-row hover:opacity-20  text-white' >
-          <Typography size={typography.large} className=' text-white'>More info</Typography>
+        <Button type='button' onClickFunc={()=>{}} className='bg-gray-600 max-w-60 max-h-30 p-5 opacity-50 rounded-md flex flex-row hover:opacity-20  text-white'>
+          <Typography size={typography.large} className=' text-white hover:text-white'>More info</Typography>
           <span className='max-w-12 max-h-12'><IoIosInformationCircleOutline /></span>
         </Button>
       </div>

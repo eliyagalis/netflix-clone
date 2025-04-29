@@ -61,7 +61,6 @@ function App() {
           </Route>
 
           <Route path="/payment" element={<PaypalLogic isClicked={false} paymentMethod="paypal" />} />
-          <Route path="/mainMoviePage" element={<MainMoviesPage />} />
 
         </Routes>
       </Router>

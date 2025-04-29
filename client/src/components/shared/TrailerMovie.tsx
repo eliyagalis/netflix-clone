@@ -18,7 +18,7 @@ return(
   <div className='w-full overflow-hidden object-cover aspect-video'>
       <ReactPlayer
         url={url}// או קובץ MP4
-        playing={isPlaying}
+        // playing={isPlaying}
         muted={initialMuted}
         controls={true}
         width="100%"
