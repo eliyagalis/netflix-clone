@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IProfilePreview } from '../../types/IProfile';
 import CustomInput from '../shared/CustomInput';
+import Button from '../shared/Button';
+import { colors } from '../../data/colors';
 
 interface EditProfileModalProps {
   profile: IProfilePreview;
@@ -24,17 +26,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ profile, onSave, on
           <img className='w-30' src={profile.avatar} />
           <CustomInput placeholder='Profile Name' value={name} onChange={(e) => setName(e.target.value)} />
         </div>
-      </div>
-      <div className='flex flex-row justify-between gap-8 m-10'>
-        <button onClick={handleSave} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+      <div className='flex flex-row mt-10 w-30 gap-5'>
+      <Button onClickFunc={handleSave} className='rounded-none px-6' color={colors.buttons.secondary}>
           Save
-        </button>
-        <button onClick={() => profile.id && onDelete(profile.id)} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+        </Button>
+        <Button onClickFunc={() => profile.id && onDelete(profile.id)} 
+          className='rounded-none px-6 border-1 border-white' border='border-1' color={colors.buttons.dark}>
           Delete
-        </button>
-        <button onClick={onClose} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+        </Button>
+        <Button onClickFunc={onClose} color={colors.buttons.dark} border='border-1' className="rounded-none px-6 border-1 border-white">
           Cancel
-        </button>
+        </Button>
+        
+      </div>
       </div>
     </div>
   );

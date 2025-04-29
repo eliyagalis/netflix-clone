@@ -20,14 +20,14 @@ export interface AuthResponse extends BaseApiResponse {
 export const loginRequest = async (
     formData: LoginFormData
 ): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>("/api/users/login", formData);
+    const { data } = await api.post<AuthResponse>("/api/v1/users/login", formData);
     return data;
 };
 
 export const signupRequest = async (
     formData: SignupFormData
 ): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>("/api/users/signup", {
+    const { data } = await api.post<AuthResponse>("/api/v1/users/signup", {
         email: formData.email,
         password: formData.password,
     });
@@ -38,7 +38,6 @@ export const getUserRequest = async (): Promise<IUser> => {
     const { data } = await api.get<IUser>("/api/users/me");
     return data;
 };
-
 
 export const logoutRequest = async (): Promise<void> => {
     await api.post("/api/users/logout");

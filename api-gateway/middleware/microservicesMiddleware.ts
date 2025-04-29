@@ -85,7 +85,7 @@ export const microServiceMiddleware=(app:Application):void=>
                         
                     }
                 }
-            }
+            },
             error:(err,req)=>{console.log(req)}},
 
     }))

@@ -1,8 +1,10 @@
 import { Outlet, } from 'react-router-dom'
 import Footer from '../../components/shared/Footer'
 import MainHeader from '../../components/shared/MainHeader'
+import { useAppSelector } from '../../store/store';
 
 const BrowseLayout = () => {
+    
     return (
         <div className="flex flex-col min-h-screen bg-[#141414] text-white">
             <MainHeader />

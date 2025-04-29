@@ -5,6 +5,8 @@ import AddProfileCard from './AddProfileCard';
 import EditProfileModal from './EditProfileModal';
 import { IProfilePreview } from '../../types/IProfile';
 import { useAppDispatch, useAppSelector } from '../../store/store';
+import Button from '../shared/Button';
+import { colors } from '../../data/colors';
 
 const ProfileList: React.FC = () => {
   const { profiles } = useAppSelector((state) => state.profiles);
@@ -55,13 +57,16 @@ const ProfileList: React.FC = () => {
         )}
       </div>
 
-      <button
-        className="mt-10 text-white border border-gray-400 px-6 py-2 rounded 
-        hover:bg-white hover:text-black transition hover:cursor-pointer"
-        onClick={() => setIsEditing(!isEditing)}
+      <Button
+        color={isEditing? colors.buttons.primary : colors.buttons.dark} 
+        border={isEditing? 'border-none' : 'border border-gray-400 rounded-none'}
+        className={`mt-10 text-white px-6 py-2 
+        ${!isEditing && 'hover:bg-white hover:text-black'}
+        transition hover:cursor-pointer`}
+        onClickFunc={() => setIsEditing(!isEditing)}
       >
-        {isEditing ? 'Done' : 'Manage'}
-      </button>
+        {isEditing ? 'Done' : 'Manage Profiles'}
+      </Button>
 
       {editingProfile && (
         <EditProfileModal
