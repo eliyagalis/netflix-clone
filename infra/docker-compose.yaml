@@ -35,7 +35,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: client_dev
     ports:
-      - "5173:5173"
+      - "5174:5174"
     volumes:
       - ../client:/app
       - /app/node_modules
