@@ -9,18 +9,19 @@ import ProfileFeature from '../../feature/browse/ProfileFeature'
 const Browse = () => {
 
   const auth = useAppSelector((state) => state.auth);
+  const profiles = useAppSelector((state)=> state.profiles);
 
   // if (auth.user?.status?.toString() !== 'ACTIVE') {
   //   // return <Navigate to={"/"} replace />
   // }
 
+  if (!profiles.currentProfile) {
+    return <ProfileFeature/>
+  }
+
   return (
     <div>
-      <ProfileFeature profiles={[
-        {id:'1', avatar: '', name: 'Daniel'},
-        {id:'2', avatar: '', name: 'Adele'},
-        {id:'3', avatar: '', name: 'Eliya'},
-        ]} limit={5}/>
+      
       <LatestTrailerContainer trailer={movies[0]} />
       <div className='w-11/12 mx-auto z-999'>
         {/* <LatestTrailer trailer={movies[0]}/> */}

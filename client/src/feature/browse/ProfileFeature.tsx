@@ -2,12 +2,8 @@ import ProfileList from '../../components/profiles/ProfileList';
 import { useAppSelector } from '../../store/store';
 
 const ProfileFeature = () => {
-
-    const profiles = useAppSelector((state) => state.profiles);
     return (
         <>
-            {
-                !profiles.currentProfile &&
                 <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-[#141414] z-[100]">
 
                     <div className="bg-black min-h-screen w-full pt-20">
@@ -15,7 +11,6 @@ const ProfileFeature = () => {
                         <ProfileList />
                     </div>
                 </div>
-            }
         </>);
 
 };
