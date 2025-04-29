@@ -37,6 +37,7 @@ export const microServiceMiddleware=(app:Application):void=>
     },createProxyMiddleware({
         target:users_service_url,
         changeOrigin:true,
+        secure:false,
         pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}        
     }))
     //, authenticate
