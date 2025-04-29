@@ -30,7 +30,7 @@ export const microServiceMiddleware=(app:Application):void=>
         throw new Error("One or more environment variables are missing");
     }
 
-    app.use(`${url}/users`,async (req:Request,res:Response,next:NextFunction)=>{
+    app.use(`${url}/users`,(req:Request,res:Response,next:NextFunction)=>{
 
         console.log("Moving to users service...");
         next(); 
@@ -79,16 +79,17 @@ export const microServiceMiddleware=(app:Application):void=>
                 if(req.path.includes("/paymentCompleted")&& proxyRes.statusCode===200){
                     try {
                         const userId = req.headers['x-user-id'];
-                        await axios.post('/',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
-
+                        const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
+                        return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
                     } catch (error) {
-                        
+                        console.log("something went wrong")
+                        throw new Error("something went wrong");
                     }
                 }
             }
-            error:(err,req)=>{console.log(req)}},
+            
 
-    }))
+}}))
     //('/streaming')
     app.use(`${url}/playMovie`,authenticate,(req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to stream service...");
