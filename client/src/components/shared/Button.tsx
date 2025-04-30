@@ -12,6 +12,7 @@ type ButtonProps = {
   type?: "button" | "submit" | "reset";
   border?:string,
   onClickFunc?:()=>void;
+
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   fontSize,
   rounded,
   onClickFunc,
-  border="border-none"
+  border="border-none",
 }) => {
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type={type}
       className={`btn ${border} ${className} ${rounded ? "rounded-full" : ""}
-        ${color.bg} ${color.hover} ${color.text} ${className} ${fontSize}
+        ${color.bg} ${color.hover} ${color.text} ${className} ${fontSize} 
         shadow transition-all duration-300
       `}
       onClick={handleClick}

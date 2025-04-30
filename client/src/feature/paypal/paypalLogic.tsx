@@ -96,7 +96,7 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
       {successPayment.status&&(
         <div className={`text-success font-medium ${typography.small}`}>
             payment process success
-            n
+            
 
         </div>
       ) }

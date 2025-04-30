@@ -43,6 +43,7 @@ services:
       - proxy
     networks:
       - app_network
+      
   movie_service:
     build:
       context: ../movie-service/

@@ -79,7 +79,7 @@ export class UserController {
 
       if (!refreshToken) {
         res.status(401).json({ message: "Refresh token is required" });
-        return;
+        
       }
 
       const accessToken = await this.userService.refreshToken(refreshToken);

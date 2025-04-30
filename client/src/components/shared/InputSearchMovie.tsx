@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { searchMoviesFormData, searchMoviesSchema } from '../../schemas/searchMoviesInput';
 import { IMediaList, IMovieList, ISeriesList } from '../../types/IMovieList';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
+import MovieResults from '../../feature/searchMovies/MovieRes';
 
 const SearchMovie = () => {
   const [searchIsClicked, setSearchIsClicked] = useState({beforeInputOpened:false,afterInputFilled:false});
@@ -28,22 +29,25 @@ const SearchMovie = () => {
       navigate('/browse');
     }
     const onSubmit = async(data:searchMoviesFormData ) => {
-      try {
+      console.log("submit")
+      setSearchIsClicked(prev=>({...prev,afterInputFilled:true}));
+      return (<MovieResults searchTerm={data.textInput}/>)
+      // try {
 
-        const moviesByQuery=await axios.get<IMediaList>(`http://localhost:3000/movies/search?q=${data.textInput}`);
-        setMoviesArray(moviesByQuery.data.movieAndSeries);
-        setSearchIsClicked(prev=>({...prev,afterInputFilled:true}));
-        return (<></>
-        )
-      } catch (error) {
-        const defaultMovies=await axios.get<IMediaList>('/getMovies');//תביא לי סתם סרטים מהמאגר
-        setMoviesArray(defaultMovies.data.movieAndSeries);
-      }
+      //   const moviesByQuery=await axios.get<IMediaList>(`http://localhost:3000/movies/search?q=${data.textInput}`);
+      //   setMoviesArray(moviesByQuery.data.movieAndSeries);
+      //   return (<></>
+      //   )
+      // } catch (error) {
+      //   const defaultMovies=await axios.get<IMediaList>('/getMovies');//תביא לי סתם סרטים מהמאגר
+      //   setMoviesArray(defaultMovies.data.movieAndSeries);
+      // }
     };
   return (
     <>
      {searchIsClicked.beforeInputOpened?(
-      <form onSubmit={handleSubmit(onSubmit)} >
+      <>
+          <form onSubmit={handleSubmit(onSubmit)} >
             <div className='ease-in border-white border-2 bg-none m-w-90 mh-70 p-1 text-white flex flex-row justify-between mx-auto mr-4'>
               <button className={`${textValue?'visible':'hidden'} ${closeInputIsClicked&& 'hidden'} bg-none mr-2`} onClick={handleCloseInputBtn}>
                 <i className="fa-solid fa-xmark max-w-24 max-h-24"></i>
@@ -51,16 +55,17 @@ const SearchMovie = () => {
               <input placeholder='Titles of movies or series...' className={`${closeInputIsClicked&& `hidden ease-out placeholder:hidden`} outline-none focus:outline-none flex-grow bg-transparent border-none border-transparent placeholder-white/80 ml-2`} {...register("textInput")}/>
               <button type='submit' className='max-w-50 max-h-50'><i className="fa-solid fa-magnifying-glass w-full h-full transition ml-2 mr-3"/></button>
             </div>
-      </form>
-        // {searchIsClicked.afterInputFilled &&(
-        //   <MoviesFromSearch mediaList={moviesArray}/>
-        // )}
+          </form>
+          {searchIsClicked.afterInputFilled &&(
+            <MovieResults searchTerm={textValue}/>
+          )}
+      </>
 
       ):(
         <button 
           onClick={()=>{
             setSearchIsClicked({beforeInputOpened:true,afterInputFilled:false})
-            setCloseInputIsClicked(false)
+            setCloseInputIsClicked(false);
           }} 
           className='max-w-50 max-h-50 mr-4'>
             <i className={`fa-solid fa-magnifying-glass w-full h-full ${searchIsClicked.beforeInputOpened? 'scale-150 hidden':'hidden'} `} />

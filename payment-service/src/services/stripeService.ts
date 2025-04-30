@@ -19,15 +19,7 @@ export default class StripeService implements IPaymentService {
         @inject(Tokens.ISubscriptionRepository) private subscriptionRepository:ISubscriptionRepository,
         @inject(Tokens.IUserRepository) private userRepository:IUserRepository
     ){}
-    // async createProduct():Promise<string>{
-    //     return "Stripe Product ID";
-    // }
 
-    // async createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>{
-    //     return {} as IFullPlan;
-    // }
-
-   
     async approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>{
         return {} as IPayPalSubscriptionResponse;
     }

@@ -30,9 +30,9 @@ const kafkaAdmin = async () => {
         },
       ],
     });
-    console.log('✅ Topic created successfully');
+    console.log('Topic created successfully');
   } catch (err) {
-    console.error('❌ Failed to create topic:', err);
+    console.error('Failed to create topic:', err);
   } finally {
     await admin.disconnect();
   }

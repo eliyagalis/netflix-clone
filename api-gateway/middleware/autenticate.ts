@@ -6,27 +6,30 @@ import errorHandlerFunc from "../src/utils/errorHandlerFunc";
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try{
+        if (req.path.endsWith('/login') || req.path.endsWith('/signup')||req.path.endsWith('/email')) {
+            console.log('Bypassing authentication for public route:', req.path);
+            return next();
+        }
         const accessToken= req.cookies.accessToken||req.headers['authorization']?.split(" ")[1]||req.cookies.firstStepAuth;
         if(!accessToken){
             errorHandlerFunc(Object.assign(new Error("user unauthorized,no valid access token!"),{status:404}), res);
         }
         const user=verifyUser(accessToken);
         if (process.env.NODE_ENV === 'development') {
-            req.userId = '123';
-            // req.userName = 'devUser';
-            req.userEmail = 'dev@example.com';
+            req.headers["x-user-id"]="550e8400-e29b-41d4-a716-446655440000"
+            req.headers["x-user-email"] = 'dev@example.com';
             next();
         }
         else{
-            req.userId=user!.id;
-            req.userName=user!.name;
-            req.userEmail=user!.email;
+            req.headers["x-user-id"] = user!.id;
+            req.headers["x-user-email"]=user!.email;
             next();
         }
     }catch(err){
 
         console.log("access token isnt valid- start checking refresh token");
         try{
+           
             const refreshToken : string|null = req.cookies.refreshToken;
             const response= await axios.get("http://localhost:3002/api/v1/refreshToken",{withCredentials:true});
             const {refreshToken:refreshToken_res,accessToken:accessToken_res}=response.data;
@@ -38,7 +41,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             next();
 
         }catch(err){
-            errorHandlerFunc(Object.assign(new Error("user unAuthorized"), { status: 401 }), res);
+            errorHandlerFunc((new Error((err as Error).message)), res);
             //העתקת תכונות הERR לאובייקט חדש שבתוכו יש גם תכונת סטטוס
         }
     }

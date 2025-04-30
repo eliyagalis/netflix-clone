@@ -1,63 +1,88 @@
-import React, { useRef, useEffect } from 'react'
-import { useInfiniteQuery }        from '@tanstack/react-query'
+import React, { useRef, useEffect, useState } from 'react'
+import { useInfiniteQuery,useQueryClient }        from '@tanstack/react-query'
 import axios                        from 'axios'
-import { IMediaList } from '../../types/IMovieList'
-import Card from '../../components/shared/Card'
+import { IMediaList, IMovieList, ISeriesList } from '../../types/IMovieList'
+import MainCarousel from '../browse/MainCarousel'
+import { IMovieCard } from '../../types/IMovieCard'
+import { ISeriesCard } from '../../types/ISeriesCard'
+import { useNavigate } from 'react-router-dom'
 
 interface MovieResultsProps {
   searchTerm: string
-  onClose:    () => void
 }
 
-export default function MovieResults({ searchTerm, onClose }: MovieResultsProps) {
-  // 1. מחזיקים את ה־infiniteQuery
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    remove     // זה שתרפרש את ה־cache (React Query)
-  } = useInfiniteQuery(
-    ['movies', searchTerm],               // <-- queryKey (מזהה ייחודי)
-    ({ pageParam = 1 }) =>
-      axios
-        .get<IMediaList>(`/movies/search?q=${encodeURIComponent(searchTerm)}&page=${pageParam}&pageSize=20`)
-        .then(res => res.data),{getNextPageParam: last => last.page < last.totalPages ? last.page + 1 : undefined}
-  )
 
-  // 2. בונים מערך אחיד מסדרות + סרטים
-  const allMovies = data?.pages.flatMap(p => p.movieAndSeries) ?? []
+const MovieResults=({ searchTerm }: MovieResultsProps) =>{
+  const [isError, setIsError] = useState(false);
+  const [moviesRes, setMoviesRes] = useState<(IMovieCard|ISeriesCard)[]>([])
+  const navigate=useNavigate();
+  const queryClient = useQueryClient();//נותן גישה ל־cache של react-query (למשל למחיקה).
+  
+  const { 
+     data,
+     fetchNextPage, //מביא את העמוד הבא.
+      hasNextPage, 
+      isFetchingNextPage } = useInfiniteQuery<IMediaList, Error>( // מאפשר שליפה מדורגת של נתונים (pagination).
+    { 
+      queryKey: ['movies', searchTerm], 
+      queryFn: async({ pageParam = 1 }) => {
+        try {
+          const moviesFromApi=await axios.get<IMediaList>(`http://localhost:3000/api/v1/movies/search?q=${encodeURIComponent(searchTerm)}&page=${pageParam}&pageSize=20`)
+          setMoviesRes(prev => [...prev, ...(moviesFromApi.data.movieAndSeries as (IMovieCard | ISeriesCard)[])]);
+          return moviesFromApi.data;
+        } catch (error) {
+          console.log(error);
+          setIsError(true);
+        }
+      },
+      // getNextPageParam: (last) => data.pages < last.totalPages ? last.page + 1 : undefined, // מחזירה את מספר העמוד הבא, או undefined אם נגמרו העמודים
+       
+  })
+  // const allMovies = data?.pages.flatMap(p => p.movieAndSeries) ?? []
 
-  // 3. Intersection Observer לפרגמנט האחרון
+
   const sentinelRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    if (!sentinelRef.current || !hasNextPage) return
-    const obs = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) fetchNextPage()
+    if (!sentinelRef.current || !hasNextPage) 
+      return;
+    const obs = new IntersectionObserver(entries => { // נוצר Observer שצופה מתי האלמנט sentinelRef נכנס לפריים.
+      if (entries[0].isIntersecting) 
+        fetchNextPage();  // כשזה קורה → קוראים ל־fetchNextPage.
     })
-    obs.observe(sentinelRef.current)
-    return () => obs.disconnect()
+    obs.observe(sentinelRef.current);
+    return () => obs.disconnect(); // מתנתק אוטומטית כאשר הקומפוננטה מוסרת.
   }, [fetchNextPage, hasNextPage])
 
   // 4. כפתור סגירה שמנקה גם את ה־cache
   const handleClose = () => {
-    remove()   // מוחק את כל הנתונים ששמורים תחת queryKey = ['movies', searchTerm]
-    onClose()  // קודם כל יתנתק מ-MovieResults
+    queryClient.removeQueries({ queryKey: ['movies', searchTerm] });
+    navigate('/browse')  // קודם כל יתנתק מ-MovieResults
   }
 
   return (
-    <div className="results-container">
-      <button onClick={handleClose}>✕</button>
-      <div className="grid gap-4">
-        {allMovies.map(item => (
-          <Card
-            key={'id' in item ? item.id : item.serieId}
-            movie={item}
-          />
-        ))}
-      </div>
-      {hasNextPage && <div ref={sentinelRef} style={{ height: 1 }} />}
+    <div className="results-container bg-black z-[999]">
+      <button onClick={handleClose} className='top-0 left-0 text-white'>✕</button>
+      {!isError? (
+        <MainCarousel isCarousel={false} movies={moviesRes} />
+      ):( <></>
+      // <DefaultSearchComponent/>
+      )}
+  
+      {/*   שנשים  לאלמנט רפרנס בתחתית הדף כדי לצפות מתי המשתמש הגיע לתחתית  */}
+      {hasNextPage && <div ref={sentinelRef} style={{ height: 1 }} />} 
+      {/* כשה־div עם ref={sentinelRef} נכנס לפריים (scroll למטה), אנחנו מביאים עוד עמוד (fetchNextPage()). */}
       {isFetchingNextPage && <span><i className='loading-spinner'></i></span>}
     </div>
   )
+      {/* <div className="grid gap-4" ref={cardRef}>
+        {allMovies.map(item => (
+          <CarouselItem 
+            index={'id' in item ? item.id : item.serieId}
+            item={item}
+            onMouseEnter={handleEnterTile}
+            onMouseLeave={handleLeaveTile}
+          />
+        ))}
+      </div> */}
 }
+export default MovieResults;

@@ -89,10 +89,6 @@ export default class PaymentController implements IPaymentController{
     async getSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {userId}=req;
         const {paymentMethod}=req.body;
-        // const validateRequestResult=this.paymentReqValidations(userId);
-        // if(validateRequestResult){
-        //     return validateRequestResult as Response;
-        // }  
         try {
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
             const subscription=await this.paymentService.getSubscription(userId);
@@ -105,7 +101,6 @@ export default class PaymentController implements IPaymentController{
             return next(error);
         }
     }
-   
     async cancelSubscription(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {userId}=req;
         const {paymentMethod}=req.body;

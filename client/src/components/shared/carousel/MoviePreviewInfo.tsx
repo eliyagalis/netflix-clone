@@ -4,9 +4,10 @@ import Play from '../../../assets/netflix-buttons-svgs/Play';
 import Add from '../../../assets/netflix-buttons-svgs/Add';
 import Like from '../../../assets/netflix-buttons-svgs/Like';
 import More from '../../../assets/netflix-buttons-svgs/More';
+import { ISeriesCard } from '../../../types/ISeriesCard';
 
 interface MoviePreviewInfoProps {
-  movie: IMovieCard;
+  movie: IMovieCard|ISeriesCard;
 }
 
 export const MoviePreviewInfo: React.FC<MoviePreviewInfoProps> = ({ movie }) => {
@@ -22,7 +23,7 @@ export const MoviePreviewInfo: React.FC<MoviePreviewInfoProps> = ({ movie }) => 
       </div>
       <div className="flex items-center m-2">
         <div className="px-2 border-[0.5px] border-[rgb(145,145,145)] w-fit">{movie.ageRating}</div>
-        <div className="px-2 w-fit">{movie.duration}</div>
+        <div className="px-2 w-fit">{movie.type=="Movie"? movie.duration:`${movie.seasons} season`}</div>
       </div>
       <div className="flex">
       {movie.genre.map((g, idx) => (

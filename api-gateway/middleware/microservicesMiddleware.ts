@@ -1,5 +1,5 @@
 import axios from "axios";
-import { application, Application} from "express";
+import { application, Application, json} from "express";
 import {createProxyMiddleware} from "http-proxy-middleware";
 import  { rateLimit } from "express-rate-limit";
 import { config } from "dotenv";
@@ -30,13 +30,13 @@ export const microServiceMiddleware=(app:Application):void=>
         throw new Error("One or more environment variables are missing");
     }
 
-    app.use(`${url}/users`,async (req:Request,res:Response,next:NextFunction)=>{
-
+    app.use(`${url}/users`,authenticate,async (req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to users service...");
         next(); 
     },createProxyMiddleware({
         target:users_service_url,
         changeOrigin:true,
+        secure:false,
         pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}        
     }))
     //, authenticate
@@ -70,9 +70,6 @@ export const microServiceMiddleware=(app:Application):void=>
                 if (process.env.NODE_ENV === 'development') {
                     proxyReq.setHeader("x-user-id","550e8400-e29b-41d4-a716-446655440000");
                     proxyReq.setHeader("x-user-email","dev@gmail.com");
-                    // req.userId = "devUserId";
-                    // req.userEmail = "dev@gmail.com";
-                    // req.userName = "devUser";
                 }
             },
             proxyRes:async(proxyRes,req,res)=>{
@@ -85,6 +82,9 @@ export const microServiceMiddleware=(app:Application):void=>
                         console.log("something went wrong")
                         throw new Error("something went wrong");
                     }
+                }
+                else{
+                    return res;
                 }
             }
             // error:(err,req)=>{console.log(req)}
@@ -102,9 +102,9 @@ export const microServiceMiddleware=(app:Application):void=>
         changeOrigin:true,
         pathRewrite:(path,req)=>{return `/api/v1/movies${req.path}`}
     }))
-    // app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
-    //     console.log("somethimg went wrong, Moving to error handler...");
-    //     next(errorHandler)
-    // })
+    app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
+        console.log("somethimg went wrong, Moving to error handler...");
+        next(errorHandler)
+    })
 }
 
