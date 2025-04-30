@@ -9,19 +9,22 @@ import { colors } from "../../data/colors";
 import { typography } from "../../data/typography";
 import { setEmail } from "../../store/slices/signupSlice";
 import { useAppDispatch } from "../../store/store";
+import { checkEmailExist } from "../../api/authApi";
 
 const LandingForm = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = (data: EmailFormData) => {
+  const onSubmit = async (data: EmailFormData) => {
 
     dispatch(setEmail(data.email));
+    const res = await checkEmailExist(data);
+    console.log(res);
     
-    //If user exists
-    navigate("/signup/password");
-    navigate("/signup/registration");
+    // navigate("/signup/password");
+    
+    // navigate("/signup/registration");
   };
 
   const {

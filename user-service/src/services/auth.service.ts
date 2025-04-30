@@ -19,7 +19,7 @@ export class AuthService implements IAuthSrvice {
    */
   async login(userPayload: IUserPayload, password: string, hashedPassword: string): Promise<ITokenResponse> {
 
-    const isPasswordValid = this.verifyPassword(password, hashedPassword)
+    const isPasswordValid = await this.verifyPassword(password, hashedPassword)
 
     //#TODO add sleep for security
 
