@@ -68,6 +68,17 @@ export class UserController {
         handleError(res, error);
       }
     }
+
+    // user status 
+    // profilePreview  
+  }
+
+  async loginAfterPayment(req: Request, res: Response) {
+    try {
+      
+    } catch (error) {
+      handleError(res, error);
+    }
   }
 
   /**
@@ -173,10 +184,30 @@ export class UserController {
       const user = this.userService.addProfile(userId, data);
 
       if (!user) {
-        res
+        return res.status(401).json({ message: "User not found" });
       }
     } catch (error) {
       handleError(res, error)
+    }
+  }
+
+  async checkEmailExist(req : Request, res: Response ) {
+    try {
+      const email = req.header('email');
+
+      if (!email) {
+        return res.status(401).json({ message: "User email not provided" });
+      }
+
+      const user = this.userService.findByEmail(email);
+
+      if (!user) {
+        return res.status(401).json({ message: "User email not found" });
+      }
+
+      return res.status(200).json({message: "User exists"});
+    } catch (error) {
+      
     }
   }
 }

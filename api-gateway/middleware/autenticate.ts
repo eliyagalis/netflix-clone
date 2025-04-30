@@ -6,6 +6,11 @@ import errorHandlerFunc from "../src/utils/errorHandlerFunc";
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try{
+        if (req.path.endsWith('/login') || req.path.endsWith('/signup')){
+            console.log('Bypassing authentication for public route:', req.path);
+            return next();
+        }
+
         const accessToken= req.cookies.accessToken||req.headers['authorization']?.split(" ")[1]||req.cookies.firstStepAuth;
         if(!accessToken){
             errorHandlerFunc(Object.assign(new Error("user unauthorized,no valid access token!"),{status:404}), res);
