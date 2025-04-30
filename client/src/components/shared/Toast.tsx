@@ -1,15 +1,12 @@
 import React from 'react'
 
-const Toast = () => {
+const Toast = ({ errorMessage }: { errorMessage: string }) => {
     return (
-        <div><div className="toast toast-top toast-center">
-            <div className="alert alert-">
-                <span>New mail arrived.</span>
+        <div className="toast toast-top toast-center">
+            <div className={`alert alert-error`}>
+                <span>{errorMessage}</span>
             </div>
-            <div className="alert alert-success">
-                <span>Message sent successfully.</span>
-            </div>
-        </div></div>
+        </div>
     )
 }
 

@@ -42,3 +42,8 @@ export const getUserRequest = async (): Promise<IUser> => {
 export const logoutRequest = async (): Promise<void> => {
   await api.post("/api/users/logout");
 };
+
+export const getNewAccessToken = async (): Promise<string> => {
+    const { data } = await api.post<{ token: string }>("/api/v1/users/refresh");
+    return data.token;
+  };

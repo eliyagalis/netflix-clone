@@ -7,11 +7,14 @@ import { typography } from '../../data/typography';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
-import { loginRequest } from '../../api/authApi';
+import { loginRequest, getUserRequest } from '../../api/authApi';
+import { setAccessToken, setUser } from '../../store/slices/authSlice';
+import { useState } from 'react';
 
 const LoginForm = () => {
+  const [toast, setToast] = useState<string | null>(null);
 
-  const auth = useAppSelector((state)=>state.auth);
+  const auth = useAppSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,18 +26,26 @@ const LoginForm = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: 'onChange',
-
   });
 
-  const onSubmit = async(data: LoginFormData) => {
-    const res = await loginRequest(data);
-    
-    console.log('trying');
-    console.log(res);
-    //if user is real
-    // dispatch(login(data));
-    // auth.user?.status?.toString() == 'ACTIVE'? navigate('/browse') : navigate('/signup')
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const res = await loginRequest(data);
+      dispatch(setAccessToken(res.token));
+      const user = await getUserRequest();
+      dispatch(setUser(user));
 
+      if (user.status?.toString() === 'ACTIVE') {
+        navigate('/browse');
+      } else {
+        navigate('/signup');
+      }
+    } catch (error: any) {
+      if (error.response?.status === 404)
+        setToast("Sorry, we can't find an account with this email address. Please try again or create a new account.");
+      else
+        setToast(error.response?.data?.message || "Login failed");
+    }
   };
 
   return (
@@ -44,11 +55,17 @@ const LoginForm = () => {
     >
       <h2 className="text-2xl font-bold text-white">Sign In</h2>
 
+      {toast && (
+        <div className="alert alert-warning rounded text-lg p-2 mb-4">
+          {toast}
+        </div>
+      )}
+
       <div>
         <CustomInput
-          className='blackInput'
+          className="blackInput"
           placeholder="Email address"
-          background='#121212'
+          background="#121212"
           error={errors.email?.message}
           success={touchedFields.email && !errors.email && !!watch('email')}
           {...register('email')}
@@ -57,41 +74,41 @@ const LoginForm = () => {
 
       <div>
         <CustomInput
-          className='blackInput'
+          className="blackInput"
           placeholder="Password"
           type="password"
-          background='#121212'
+          background="#121212"
           error={errors.password?.message}
           success={touchedFields.password && !errors.password && !!watch('password')}
           {...register('password')}
         />
       </div>
 
-      <Button
-        type="submit"
-        className="w-full"
-        fontSize={typography.xxsmall}
-      >
+      <Button type="submit" className="w-full" fontSize={typography.xxsmall}>
         Sign In
       </Button>
 
-      <Link type='button' className="w-full my-5 text-center underline text-white block hover:text-gray-300" to={"/"}>
+      <Link type="button" className="w-full my-5 text-center underline text-white block hover:text-gray-300" to={'/'}>
         Forgot Password?
       </Link>
       <div className="flex items-center mb-4">
-        <input type="checkbox"
-          id='rememberMe'
-          className="checkbox w-5 h-5 checkbox-neutral border-gray-300 rounded-sm
-        checked:bg-white checked:text-black"
-          title='Remember me' />
-        <label
-          htmlFor='rememberMe'
-          className="text-gray-300 ml-2">Remember me</label>
+        <input
+          type="checkbox"
+          id="rememberMe"
+          className="checkbox w-5 h-5 checkbox-neutral border-gray-300 rounded-sm checked:bg-white checked:text-black"
+          title="Remember me"
+        />
+        <label htmlFor="rememberMe" className="text-gray-300 ml-2">
+          Remember me
+        </label>
       </div>
       <span className="text-gray-300">
-        New to Netflix? <Link type='button' className="font-bold hover:underline" to={"/"}>Sign up now.</Link>
+        New to Netflix?{' '}
+        <Link type="button" className="font-bold hover:underline" to={'/'}>
+          Sign up now.
+        </Link>
       </span>
-    </form >
+    </form>
   );
 };
 
