@@ -15,7 +15,6 @@ import IUserBuilder from '../interfaces/IUserBuilder';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
 import UserBuilder from '../builders/user.builder';
 import LoginRequestDTO from '../DTOs/login.dto';
-import { profile } from 'console';
 
 @injectable()
 export class UserService implements IUserService {

@@ -26,4 +26,8 @@ router.post("/update", (req: Request, res: Response) => {
   userController.updateUser(req, res);
 });
 
+router.post("/email", (req: Request, res: Response) => {
+    userController.checkEmailExist(req,res);
+})
+
 export default router;

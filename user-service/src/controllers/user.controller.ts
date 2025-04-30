@@ -9,7 +9,7 @@ import LoginRequestDTO from '../DTOs/login.dto';
 import IUser from '../interfaces/IUser';
 import { date } from 'joi';
 import { UpdateRequestDTO , AddProfileDTO, AddMyListItemDTO }from '../DTOs/update.dto';
-import { profile } from 'console';
+
 
 @injectable()
 export class UserController {
@@ -181,7 +181,7 @@ export class UserController {
 
       const data: AddProfileDTO = req.body;
 
-      const user = this.userService.addProfile(userId, data);
+      const user = await this.userService.addProfile(userId, data);
 
       if (!user) {
         return res.status(401).json({ message: "User not found" });
@@ -199,7 +199,7 @@ export class UserController {
         return res.status(401).json({ message: "User email not provided" });
       }
 
-      const user = this.userService.findByEmail(email);
+      const user = await this.userService.findByEmail(email);
 
       if (!user) {
         return res.status(401).json({ message: "User email not found" });
