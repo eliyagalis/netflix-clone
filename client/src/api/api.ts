@@ -10,6 +10,12 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export interface ApiResponse<T = any> {
+  message: string;
+  data?: T;
+  exists?: boolean;
+}
+
 api.interceptors.request.use((config) => {
   const token = store.getState().auth.accessToken;
   if (token) {

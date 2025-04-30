@@ -3,14 +3,18 @@ import { images } from '../../data/images'
 import { typography } from '../../data/typography'
 import Button from '../../components/shared/Button'
 import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../../store/store'
+import { UserStatus } from '../../types/IUser'
 
 const Registration = () => {
     const navigate = useNavigate();
+    const auth = useAppSelector((state)=>state.auth);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        navigate('/signup/regform');
+        if (auth.user?.status === UserStatus.INITIAL)
+            navigate('/signup/regform');
     }
 
     return (
