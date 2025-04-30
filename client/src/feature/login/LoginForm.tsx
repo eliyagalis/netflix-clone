@@ -7,6 +7,7 @@ import { typography } from '../../data/typography';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
+import { loginRequest } from '../../api/authApi';
 
 const LoginForm = () => {
 
@@ -25,11 +26,15 @@ const LoginForm = () => {
 
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = async(data: LoginFormData) => {
+    const res = await loginRequest(data);
+    
+    console.log('trying');
+    console.log(res);
     //if user is real
     // dispatch(login(data));
     // auth.user?.status?.toString() == 'ACTIVE'? navigate('/browse') : navigate('/signup')
-    
+
   };
 
   return (

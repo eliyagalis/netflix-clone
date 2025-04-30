@@ -37,7 +37,8 @@ export const microServiceMiddleware=(app:Application):void=>
     },authenticate,createProxyMiddleware({
         target:users_service_url,
         changeOrigin:true,
-        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}        
+        secure:false,
+        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}
     }))
 
     app.use(`${url}/movies`,(req: Request, res: Response, next: NextFunction) => {
@@ -85,8 +86,8 @@ export const microServiceMiddleware=(app:Application):void=>
                         throw new Error("something went wrong");
                     }
                 }
-            }
-            
+            },
+            error:(err,req)=>{console.log(req)}},
 
 }}))
     //('/streaming')
