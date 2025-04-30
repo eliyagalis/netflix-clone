@@ -148,7 +148,7 @@ export class UserController {
    */
   async updateUser(req: Request, res: Response) {
     try {
-      const userId = req.header('id');
+      const userId = req.header('user_id');
 
       if (!userId) {
         return res.status(401).json({ message: "User ID not provided" });
@@ -173,7 +173,7 @@ export class UserController {
 
   async addProfile(req: Request, res: Response) {
     try {
-      const userId = req.header('id');
+      const userId = req.header('user_id');
 
       if (!userId) {
         return res.status(401).json({ message: "User ID not provided" });
