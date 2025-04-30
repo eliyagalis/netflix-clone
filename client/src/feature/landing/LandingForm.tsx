@@ -17,14 +17,17 @@ const LandingForm = () => {
   const dispatch = useAppDispatch();
 
   const onSubmit = async (data: EmailFormData) => {
+    try {
+      const res = await checkEmailExist(data);
+      dispatch(setEmail(data.email));
+      if (res.exists)
+        navigate("/signup/password");
+      else
+        navigate("/signup/registration");
 
-    dispatch(setEmail(data.email));
-    const res = await checkEmailExist(data);
-    console.log(res);
-    
-    // navigate("/signup/password");
-    
-    // navigate("/signup/registration");
+    } catch (error) {
+      
+    }
   };
 
   const {
