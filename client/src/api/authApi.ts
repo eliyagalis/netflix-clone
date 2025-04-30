@@ -1,44 +1,44 @@
-import axios from "axios";
-import { apiBaseUrl } from "../config/config";
-import { LoginFormData, SignupFormData } from "../schemas/authSchemas";
+import api from "./api";
+import { EmailFormData, LoginFormData, SignupFormData } from "../schemas/authSchemas";
 import { IUser } from "../types/IUser";
 
-const api = axios.create({
-    baseURL: apiBaseUrl,
-    timeout: 1000 * 60,
-    withCredentials: true,
-})
-
 export interface BaseApiResponse {
-    message: string;
+  message: string;
 }
 
 export interface AuthResponse extends BaseApiResponse {
-    token: string;
+  token: string;
 }
 
 export const loginRequest = async (
-    formData: LoginFormData
+  formData: LoginFormData
 ): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>("/api/v1/users/login", formData);
-    return data;
+  const { data } = await api.post<AuthResponse>("/api/v1/users/login", formData);
+  return data;
 };
 
 export const signupRequest = async (
-    formData: SignupFormData
+  formData: SignupFormData
 ): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>("/api/v1/users/signup", {
-        email: formData.email,
-        password: formData.password,
-    });
-    return data;
+  const { data } = await api.post<AuthResponse>("/api/v1/users/signup", {
+    email: formData.email,
+    password: formData.password,
+  });
+  return data;
 };
 
-export const getUserRequest = async (): Promise<IUser> => {
-    const { data } = await api.get<IUser>("/api/users/me");
+export const checkIfExsist = async (
+    formData: EmailFormData
+): Promise<AuthResponse> => {
+    const { data } = await api.post<AuthResponse>("/api/v1/users/", {formData});
     return data;
+}
+
+export const getUserRequest = async (): Promise<IUser> => {
+  const { data } = await api.get<IUser>("/api/users/me");
+  return data;
 };
 
 export const logoutRequest = async (): Promise<void> => {
-    await api.post("/api/users/logout");
+  await api.post("/api/users/logout");
 };

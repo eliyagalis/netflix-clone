@@ -18,6 +18,7 @@ const LandingForm = () => {
   const onSubmit = (data: EmailFormData) => {
 
     dispatch(setEmail(data.email));
+    
     //If user exists
     navigate("/signup/password");
     navigate("/signup/registration");
