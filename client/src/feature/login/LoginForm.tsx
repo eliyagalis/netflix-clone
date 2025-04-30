@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { loginRequest, getUserRequest } from '../../api/authApi';
 import { setAccessToken, setUser } from '../../store/slices/authSlice';
 import { useState } from 'react';
+import Toast from '../../components/shared/Toast';
 
 const LoginForm = () => {
   const [toast, setToast] = useState<string | null>(null);
@@ -30,6 +31,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
+      setToast(null);
       const res = await loginRequest(data);
       dispatch(setAccessToken(res.token));
       const user = await getUserRequest();
@@ -44,7 +46,7 @@ const LoginForm = () => {
       if (error.response?.status === 404)
         setToast("Sorry, we can't find an account with this email address. Please try again or create a new account.");
       else
-        setToast(error.response?.data?.message || "Login failed");
+        setToast(error.response?.data?.message || "Login failed.");
     }
   };
 

@@ -1,13 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 
-const Toast = ({ errorMessage }: { errorMessage: string }) => {
+const Toast = ({ errorMessage, duration = 3000 }: { errorMessage: string; duration?: number }) => {
+    const [visible, setVisible] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setVisible(false);
+        }, duration);
+
+        return () => clearTimeout(timer); // clean up
+    }, [duration]);
+
+    if (!visible) return null;
+
     return (
         <div className="toast toast-top toast-center">
-            <div className={`alert alert-error`}>
+            <div className="flex items-center alert alert-error">
                 <span>{errorMessage}</span>
+                <button 
+                    className="btn btn-sm btn-ghost"
+                    onClick={() => setVisible(false)}
+                >
+                    ✕
+                </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Toast
+export default Toast;
