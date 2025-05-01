@@ -15,6 +15,8 @@ import IUserBuilder from '../interfaces/IUserBuilder';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
 import UserBuilder from '../builders/user.builder';
 import LoginRequestDTO from '../DTOs/login.dto';
+import { EventBus, EventTypes, PaymentSuccessEvent, SubscriptionCanceledEvent, SubscriptionUpdatedEvent, } from '../utils/eventBus';
+import { handleError } from '../utils/handle-error-request';
 
 @injectable()
 export class UserService implements IUserService {
@@ -22,9 +24,80 @@ export class UserService implements IUserService {
   constructor(
     @inject(TOKENS.IUserRepository) private userRepository: IUserRepository,
     @inject(TOKENS.IAuthService) private authService: IAuthService,
-    @inject(TOKENS.IUserBuilder) private userBuilder: IUserBuilder
-  ) { }
+    @inject(TOKENS.IUserBuilder) private userBuilder: IUserBuilder,
+    @inject(TOKENS.EventBus) private eventBus: EventBus
+  ) {
+    this.initEventSubscriptions();
+  }
 
+  private initEventSubscriptions(): void {
+    // Handle payment success events
+    this.eventBus.subscribe(EventTypes.PAYMENT_SUCCESS,
+      async (event: PaymentSuccessEvent) => {
+        try {
+          await this.handlePaymentSuccess(event);
+        } catch (error) {
+          console.error('Error handling payment success event:', error);
+        }
+      }
+    );
+
+    this.eventBus.subscribe(EventTypes.SUBSCRIPTION_CANCELED,
+      async (event: SubscriptionCanceledEvent) => {
+        try {
+          await this.handleSubscriptionCanceled(event);
+        } catch (error) {
+          console.error('Error handling subscription canceled event:', error);
+        }
+      }
+    );
+
+    this.eventBus.subscribe(EventTypes.SUBSCRIPTION_UPDATED,
+      async (event: SubscriptionUpdatedEvent) => {
+        try {
+          await this.handleSubscriptionUpdated(event);
+        } catch (error) {
+          console.error('Error handling subscription updated event:', error);
+        }
+      }
+    );
+  }
+
+  private async handlePaymentSuccess(event: PaymentSuccessEvent): Promise<void> {
+    const { userId, subscriptionId, planId } = event;
+    console.log(`Handling payment success for user ${userId} with subscription ${subscriptionId}`);
+
+    await this.updateSubscription(userId, {
+      subscriptionId,
+      // planId,
+      // status: 'active',
+      updatedAt: new Date()
+    });
+  }
+
+  private async handleSubscriptionCanceled(event: SubscriptionCanceledEvent): Promise<void> {
+    const { userId, subscriptionId } = event;
+    console.log(`Handling subscription canceled for user ${userId} with subscription ${subscriptionId}`);
+
+    await this.updateSubscription(userId, {
+      subscriptionId,
+      // planId: '',  // Clear plan ID
+      // status: 'canceled',
+      updatedAt: new Date()
+    });
+  }
+
+  private async handleSubscriptionUpdated(event: SubscriptionUpdatedEvent): Promise<void> {
+    const { userId, subscriptionId, planId, status } = event;
+    console.log(`Handling subscription update for user ${userId} with subscription ${subscriptionId}`);
+
+    await this.updateSubscription(userId, {
+      subscriptionId,
+      // planId,
+      // status,
+      updatedAt: new Date()
+    });
+  }
   /**
    * Sign up a new user with email
    */
@@ -67,7 +140,7 @@ export class UserService implements IUserService {
 
     return this.authService.login(userPayload, password, user.password);
   }
-  
+
   /**
    * Add subscription for a user
    */
@@ -88,9 +161,9 @@ export class UserService implements IUserService {
   /**
    * Login a user and generate tokens
    */
-  async login(data: LoginRequestDTO): Promise<{tokens: ITokenResponse, profiles: Partial<IProfile>[]}> {
+  async login(data: LoginRequestDTO): Promise<{ tokens: ITokenResponse, profiles: Partial<IProfile>[] }> {
 
-    const {email , password } = data
+    const { email, password } = data
 
     // Find user by email
     const user = await this.userRepository.findByEmail(email);
@@ -105,20 +178,16 @@ export class UserService implements IUserService {
     };
 
     // Use auth service to login and generate tokens
-    const tokens =  await this.authService.login(userPayload, password, user.password);
+    const tokens = await this.authService.login(userPayload, password, user.password);
 
     const profiles = await this.getProfiles(user.id);
 
     return {
-      tokens, 
+      tokens,
       profiles
     }
   }
 
-
-  //add getuser by token
-  //add getProfiles by token
-  //add get mylist by token
   /**
    * Refresh access token using refresh token
    */
@@ -170,7 +239,7 @@ export class UserService implements IUserService {
     const profiles = await this.userRepository.getProfiles(userId);
 
     if (!profiles) {
-      throw new Error ('User not found')
+      throw new Error('User not found')
     }
 
     const partialProfile = profiles?.map(profile => {
@@ -184,21 +253,50 @@ export class UserService implements IUserService {
     return partialProfile;
   }
 
-  async getDetailedProfile(userId: string ,profileId: string): Promise<IProfile> {
-    
+  async getDetailedProfile(userId: string, profileId: string): Promise<IProfile> {
+
     const profiles = await this.userRepository.getProfiles(userId);
 
-    if(!profiles) {
-      throw new Error ('User not found');
+    if (!profiles) {
+      throw new Error('User not found');
     }
 
     const detailedProfile = profiles.find(profile => profile.id === profileId);
 
     if (!detailedProfile) {
-      throw new Error ('Profile not found');
+      throw new Error('Profile not found');
     }
 
     return detailedProfile;
-    
+
+  }
+
+  async updateSubscription(userId: string, subscriptionData: {
+    subscriptionId: string;
+    // planId: string; 
+    updatedAt: Date;
+  }): Promise<IUser | null> {
+    const user = await this.userRepository.findUserById(userId);
+
+    if (!user) {
+      throw new Error(`User not found: ${userId}`);
+    }
+
+    const updatedUser = {
+      ...user,
+      subscriptionId: subscriptionData.subscriptionId,
+      // planId: subscriptionData.planId,
+      updatedAt: subscriptionData.updatedAt
+    };
+
+    const res = await this.userRepository.updateUser(userId, updatedUser);
+
+    if (!res) {
+      throw new Error("Error updating subscription for user");
+    }
+
+    return res;
   }
 }
+
+
