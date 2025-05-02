@@ -2,6 +2,7 @@ import axios from "axios";
 import { apiBaseUrl } from "../config/config";
 import { store } from "../store/store";
 import { logout } from "../store/slices/authSlice";
+import { IUser } from "../types/IUser";
 
 const api = axios.create({
   baseURL: apiBaseUrl,
@@ -16,6 +17,10 @@ export interface ApiResponse<T = any> {
   token?: string;
 }
 
+export interface UserResponse extends IUser {
+  message?: string;
+}
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -25,8 +30,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Try refreshing tokens via cookies
-        await api.post("/auth/refresh"); // backend reads refresh token cookie and issues new access cookie
+        await api.post("/api/v1/users/refresh");
 
         // Retry the original request
         return api(originalRequest);
