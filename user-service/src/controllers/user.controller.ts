@@ -191,23 +191,21 @@ export class UserController {
     }
   }
 
-  async checkEmailExist(req : Request, res: Response ) {
+  async checkEmailExist(req: Request, res: Response) {
     try {
       const email = req.header('email');
-
+  
       if (!email) {
         return res.status(400).json({ message: "User email not provided" });
       }
-
+  
       const user = await this.userService.findByEmail(email);
-
       return res.status(200).json({ 
         message: user ? "User exists" : "User does not exist", 
         exists: !!user 
       });
-
     } catch (error) {
       handleError(res, error);
     }
-  }
+  }  
 }

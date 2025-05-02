@@ -5,8 +5,8 @@ import errorHandlerFunc from "../src/utils/errorHandlerFunc";
 
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        if (req.path.endsWith('/login') || req.path.endsWith('/signup')) {
+    try{
+        if (req.path.endsWith('/login') || req.path.endsWith('/signup') || req.path.endsWith('/email')){
             console.log('Bypassing authentication for public route:', req.path);
             return next();
         }
@@ -25,7 +25,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         next();
     }
     catch (err) {
-
         console.log("access token isnt valid- start checking refresh token");
         try {
             const refreshToken: string | null = req.cookies.refreshToken;

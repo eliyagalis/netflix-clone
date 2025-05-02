@@ -9,13 +9,15 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { nextStep } from '../../store/slices/stepsSlice';
 import { setEmail } from '../../store/slices/signupSlice';
 import { signupRequest } from '../../api/authApi';
+import { login } from '../../store/slices/authSlice';
+import { IProfilePreview } from '../../types/IProfile';
+import { IUser, UserStatus } from '../../types/IUser';
 
 const Regform = () => {
   const dispatch = useAppDispatch();
   const signup = useAppSelector((state) => state.signup);
   const plan = useAppSelector((state) => state.plan);
   const step = useAppSelector((state) => state.step);
-  const auth = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
@@ -33,18 +35,24 @@ const Regform = () => {
     },
   });
 
-  const onSubmit = async(data: { email: string; password: string }) => {
-    const res = await(signupRequest(data));
-    console.log(res);
-    if (res) {
-      dispatch(setEmail(data.email));
-      dispatch(nextStep());
-      navigate('/signup/planform');
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      const res = await (signupRequest(data));
+
+      if (res) {
+        console.log(res);
+        dispatch(setEmail(data.email));
+        const user:IUser = {profiles: [], status: UserStatus.INITIAL};
+        dispatch(login({user}));
+        dispatch(nextStep());
+        navigate('/signup/planform');
+      }
+
+      if (plan.planName)
+        navigate('/signup/paymentPicker');
+    } catch (error) {
+      //toast
     }
-    
-    if(plan.planName) 
-      navigate('/signup/paymentPicker');
-  
   };
 
   return (

@@ -33,7 +33,7 @@ const Planform = () => {
         if (validPlans.includes(selectedPlan)) {
             dispatch(setPlan(selectedPlan));
             dispatch(nextStep());
-            if (auth.isSignedIn) {
+            if (auth.user) {
                 navigate('/signup/paymentPicker');
             }
             else

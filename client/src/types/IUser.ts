@@ -1,16 +1,8 @@
+import { IProfilePreview } from "./IProfile";
+
 export interface IUser {
-    id: string;
-    email: string;
-    password: string;
-    firstName?: string;
-    lastName?: string;
-    phoneNumber?: string;
-    subscriptionId?: string;
-    profiles: any[];
+    profiles: IProfilePreview[] | null;
     status: UserStatus;
-    lastLogin?: Date;
-    createdAt: Date;
-    updatedAt: Date;
   }
   
   export enum UserStatus {
