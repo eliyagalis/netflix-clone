@@ -10,7 +10,6 @@ interface AuthGateProps {
 }
 
 const AuthGate = ({ children, requireAuth }: AuthGateProps) => {
-  const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();

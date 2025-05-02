@@ -14,37 +14,8 @@ import PlanCard from "../components/landing-page/PlanCard";
 import ReasonsCard from "../components/landing-page/ReasonsCard";
 import { colors } from "../data/colors";
 import LandingCarouselFeature from "../feature/landing/LandingCarouselFeature";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { useEffect, useState } from "react";
-import { login, logout, stopUserLoading } from "../store/slices/authSlice";
-import { getUserRequest } from "../api/authApi";
-import ProfileFeature from "../feature/browse/ProfileFeature";
 
 const LandingPage = () => {
-    const dispatch = useAppDispatch();
-    const auth = useAppSelector((state) => state.auth);
-    const profiles = useAppSelector((state) => state.profiles);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const initAuth = async () => {
-            try {
-                const user = await getUserRequest();
-                dispatch(login({ user }));
-                dispatch(stopUserLoading())
-                navigate("/browse");
-            } catch (err) {
-                dispatch(logout());
-                dispatch(stopUserLoading());
-            }
-        };
-        initAuth();
-    }, []);
-
-    if (auth.user && !profiles.currentProfile) {
-        return <ProfileFeature />;
-    }
 
     return (
         <div className={`${colors.background.darkGray} text-white w-full min-h-screen`}>
