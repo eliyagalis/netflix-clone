@@ -1,7 +1,7 @@
 import { createClient, RedisClientType } from 'redis'
 import { handleError } from './handle-error-request';
 const redisClient:RedisClientType= createClient({
-    url:process.env.REDIS_URL||'redis://localhost:6379'  //for prod redis://redic:6379
+    url:process.env.REDIS_URL||'redis://redis:6379'  //for prod redis://redic:6379
     //for dev run docker run --name redis -p 6379:6379 -d redis:latest for redis container change to redis://localhost:6379 
 });
 
