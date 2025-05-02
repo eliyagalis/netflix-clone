@@ -15,13 +15,12 @@ const ProfileList: React.FC = () => {
   const [editingProfile, setEditingProfile] = useState<IProfilePreview | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false); // NEW
 
-  const handleAddProfile = () => {
+  const handleAddProfile = async () => {
     const newProfile: IProfilePreview = {
-      id: Math.random().toString(36).substring(2, 10),
+      id: new Date().getTime().toString(),
       avatar: 'https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha.jpg',
       name: 'New User',
     };
-    dispatch(addProfile(newProfile));
     setIsEditing(true);
     setEditingProfile(newProfile);
   };
@@ -37,11 +36,11 @@ const ProfileList: React.FC = () => {
   const handleDelete = (id: string) => {
     dispatch(removeProfile(id));
     setEditingProfile(null);
+    setIsEditing(false);
   };
 
-  const handleSave = (updatedProfile: IProfilePreview) => {
-    const updatedProfiles = profiles.map((p) => p.id === updatedProfile.id ? updatedProfile : p);
-    dispatch(setProfiles(updatedProfiles));
+  const handleSave = (newProfile: IProfilePreview) => {
+    dispatch(addProfile(newProfile));
     setEditingProfile(null);
     setIsEditing(false);
   };
