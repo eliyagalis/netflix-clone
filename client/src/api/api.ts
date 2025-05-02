@@ -1,8 +1,7 @@
 import axios from "axios";
 import { apiBaseUrl } from "../config/config";
 import { store } from "../store/store";
-import { setAccessToken, logout } from "../store/slices/authSlice";
-import { getNewAccessToken } from "./authApi";
+import { logout } from "../store/slices/authSlice";
 
 const api = axios.create({
   baseURL: apiBaseUrl,
@@ -14,18 +13,8 @@ export interface ApiResponse<T = any> {
   message: string;
   data?: T;
   exists?: boolean;
+  token?: string;
 }
-
-api.interceptors.request.use((config) => {
-  const token = store.getState().auth.accessToken;
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-let isRefreshing = false;
 
 api.interceptors.response.use(
   (response) => response,
@@ -35,22 +24,15 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      if (!isRefreshing) {
-        isRefreshing = true;
-        try {
-          const newToken = await getNewAccessToken();
+      try {
+        // Try refreshing tokens via cookies
+        await api.post("/auth/refresh"); // backend reads refresh token cookie and issues new access cookie
 
-          store.dispatch(setAccessToken(newToken));
-
-          isRefreshing = false;
-
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          return api(originalRequest);
-        } catch (refreshError) {
-          isRefreshing = false;
-          store.dispatch(logout());
-          return Promise.reject(refreshError);
-        }
+        // Retry the original request
+        return api(originalRequest);
+      } catch (refreshError) {
+        store.dispatch(logout());
+        return Promise.reject(refreshError);
       }
     }
 

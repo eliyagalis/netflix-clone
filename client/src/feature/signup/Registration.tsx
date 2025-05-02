@@ -14,7 +14,9 @@ const Registration = () => {
         e.preventDefault();
         
         if (auth.user?.status === UserStatus.INITIAL)
-            navigate('/signup/regform');
+            navigate('/signup/planform');
+        else
+            navigate('/signup/regform')
     }
 
     return (

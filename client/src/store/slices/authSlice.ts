@@ -4,30 +4,31 @@ import { IUser } from '../../types/IUser';
 
 interface AuthState {
   user: IUser | null;
-  accessToken: string | null;
+  isLoading: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
-  accessToken: null,
+  isLoading: true
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAccessToken(state, action: PayloadAction<string>) {
-      state.accessToken = action.payload;
-    },
-    setUser(state, action: PayloadAction<IUser>) {
-      state.user = action.payload;
+    login(state, action: PayloadAction<{user:IUser}>) {
+      state.user = action.payload.user;
+      state.isLoading = false;
     },
     logout(state) {
       state.user = null;
-      state.accessToken = null;
+      state.isLoading = true;
     },
+    stopUserLoading(state) {
+      state.isLoading = false;
+    }
   },
 });
 
-export const { setAccessToken, setUser, logout } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;

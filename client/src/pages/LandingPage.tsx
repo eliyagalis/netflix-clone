@@ -15,17 +15,33 @@ import ReasonsCard from "../components/landing-page/ReasonsCard";
 import { colors } from "../data/colors";
 import LandingCarouselFeature from "../feature/landing/LandingCarouselFeature";
 import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { useEffect, useState } from "react";
+import { login, logout } from "../store/slices/authSlice";
+import { getUserRequest } from "../api/authApi";
 
 const LandingPage = () => {
-
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const dispatch = useAppDispatch();
     const auth = useAppSelector((state) => state.auth);
 
-    if (auth.isSignedIn) {
-        return <Navigate to={"/browse"} replace />
-    }
+    useEffect(() => {
+        const initAuth = async () => {
+            try {
+                const user = await getUserRequest();
+                dispatch(login({ user }));
+                setIsLoading(false);
+                return <Navigate to={"/browse"} replace />
+            } catch (err) {
+                dispatch(logout());
+                setIsLoading(false);
+            }
+        };
+        initAuth();
+    }, []);
 
-    return (
+    return !isLoading && 
+    (
         <div className={`${colors.background.darkGray} text-white w-full min-h-screen`}>
             <HelmetHandler page={seo.landing} />
 
@@ -75,8 +91,7 @@ const LandingPage = () => {
                 <LandingForm />
             </div>
             <Footer className="w-9/10 mx-auto" />
-        </div>
-    )
+        </div>)
 }
 
 export default LandingPage

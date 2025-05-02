@@ -1,7 +1,7 @@
 import { IProfilePreview } from "./IProfile";
 
 export interface IUser {
-    profiles: IProfilePreview[];
+    profiles: IProfilePreview[] | null;
     status: UserStatus;
   }
   

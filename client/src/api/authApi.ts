@@ -31,7 +31,7 @@ export const checkEmailExist = async (formData: EmailFormData): Promise<ApiRespo
 
 
 export const getUserRequest = async (): Promise<IUser> => {
-  const { data } = await api.get<IUser>("/api/users/me");
+  const { data } = await api.get<IUser>("/api/v1/users/");
   return data;
 };
 
