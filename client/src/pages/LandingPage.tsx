@@ -24,7 +24,7 @@ import ProfileFeature from "../feature/browse/ProfileFeature";
 const LandingPage = () => {
     const dispatch = useAppDispatch();
     const auth = useAppSelector((state) => state.auth);
-    const profiles = useAppSelector((state)=> state.profiles);
+    const profiles = useAppSelector((state) => state.profiles);
     const navigate = useNavigate();
 
     useEffect(() => {
