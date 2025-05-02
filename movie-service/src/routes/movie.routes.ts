@@ -1,5 +1,4 @@
 import { Request, Response, Router } from "express";
-import movieIdRouter from "./movieId.routes";
 import container from "../config/inversify";
 import { TOKENS } from "../tokens";
 import MovieController from "../controllers/movie.controller";
@@ -7,15 +6,31 @@ import MovieController from "../controllers/movie.controller";
 const router: Router = Router();
 const movieController = container.get<MovieController>(TOKENS.MovieController);
 
-// Static routes
-//router.get('/popular', movieController.getPopularMovies.bind(movieController));
+// Static routes for collections
+router.get('/popular', (req: Request, res: Response) => {
+    movieController.getPopularMovies(req, res);
+});
 
-router.get('/popular', movieController.getPopularMovies.bind(movieController));
-router.get('/top-rated', movieController.getTopRatedMovies.bind(movieController));
-// router.get('/now-playing', movieController.getNowPlayingMovies.bind(movieController));
-router.get('/upcoming', movieController.getUpcomingMovies.bind(movieController));
-router.get('/search', movieController.searchMovies.bind(movieController));
-router.use('/:id', movieIdRouter);
+router.get('/top-rated', (req: Request, res: Response) => {
+    movieController.getTopRatedMovies(req, res);
+});
 
+router.get('/upcoming', (req: Request, res: Response) => {
+    movieController.getUpcomingMovies(req, res);
+});
+
+router.get('/search', (req: Request, res: Response) => {
+    movieController.searchMovies(req, res);
+});
+
+// Title route for individual movie details
+router.get('/title/:id(\\d+)', (req: Request, res: Response) => {
+    movieController.getMovieDetails(req, res);
+});
+
+// Similar movies route
+router.get('/title/:id(\\d+)/similar', (req: Request, res: Response) => {
+    movieController.getSimilarMovies(req, res);
+});
 
 export default router;

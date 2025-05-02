@@ -24,6 +24,8 @@ import IAuthService from '../interfaces/IAuthService';
 import ITokenService from '../interfaces/ITokenService';
 import IStatusService from '../interfaces/IStatusService';
 import { StatusService } from '../services/status.service';
+import { EventBus } from '../utils/eventBus';
+import { KafkaConsumer } from '../kafka/consumer';
 
 // Initialize container
 const container = new Container();
@@ -54,5 +56,11 @@ container.bind<UserController>(TOKENS.UserController).to(UserController);
 
 //Builders
 container.bind<UserBuilder>(TOKENS.IUserBuilder).to(UserBuilder);
+
+// Event bus (singleton to ensure all subscribers receive the same events)
+container.bind<EventBus>(TOKENS.EventBus).to(EventBus).inSingletonScope();
+
+// Kafka consumer (singleton)
+container.bind<KafkaConsumer>(TOKENS.KafkaConsumer).to(KafkaConsumer).inSingletonScope();
 
 export { container };

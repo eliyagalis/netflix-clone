@@ -65,13 +65,6 @@ export const microServiceMiddleware = (app: Application): void => {
         on: {
             proxyReq: (proxyReq, req) => {
                 console.log(req.path, req.originalUrl);
-                if (process.env.NODE_ENV === 'development') {
-                    proxyReq.setHeader("x-user-id", "550e8400-e29b-41d4-a716-446655440000");
-                    proxyReq.setHeader("x-user-email", "dev@gmail.com");
-                    // req.userId = "devUserId";
-                    // req.userEmail = "dev@gmail.com";
-                    // req.userName = "devUser";
-                }
             },
             proxyRes: async (proxyRes, req, res) => {
                 if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
@@ -84,11 +77,12 @@ export const microServiceMiddleware = (app: Application): void => {
                         throw new Error("something went wrong");
                     }
                 }
+                else {
+                    return res;
+                }
             },
-            error: (err, req) => { console.log(req) }
-        },
-
-    }));
+        }
+    }))
     //('/streaming')
     app.use(`${url}/playMovie`, authenticate, (req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to stream service...");
