@@ -19,6 +19,5 @@ export default class PlanAdapter implements IPlanAdapter{
         }
         return plan;//
     }
-   
 
 }

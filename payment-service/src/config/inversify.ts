@@ -12,7 +12,9 @@ import { IPaymentFacade } from "../interfaces/IPaymentFacade";
 import PaymentFacade from "../facade/paymentFacade";
 import { IPaymentController } from "../interfaces/IPaymentController";
 import PaymentController from "../controller/payment.controller";
-import StripeService from "../services/stripeService";
+import { EventBus } from "src/kafka/eventSub";
+import { IKafkaProducer, KafkaProducer } from "src/kafka/producer";
+import { IEventBus } from "src/interfaces/KafkasInterfaces";
 
 
 const container=new Container();
@@ -26,10 +28,10 @@ container.bind<ISubscriptionRepository>(Tokens.ISubscriptionRepository).to(Subsc
 container.bind<IUserRepository>(Tokens.IUserRepository).to(UserRepository);
 
 container.bind<IPaymentService>(Tokens.IPaymentService).to(PaypalService).whenNamed(Tokens.NamedPaymentServices.PayPal);
-container.bind<IPaymentService>(Tokens.IPaymentService).to(StripeService).whenNamed(Tokens.NamedPaymentServices.Stripe);
 container.bind<IPaymentFacade>(Tokens.IPaymentFacade).to(PaymentFacade);
 container.bind<IPaymentController>(Tokens.IPaymentController).to(PaymentController);
-
+container.bind<IEventBus>(Tokens.IEventBus).to(EventBus);
+container.bind<IKafkaProducer>(Tokens.IKafkaProducer).to(KafkaProducer);
 
 
 export default container;

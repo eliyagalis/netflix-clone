@@ -10,8 +10,15 @@ import { useNavigate } from 'react-router-dom'
 interface MovieResultsProps {
   searchTerm: string
 }
-
-
+type MoviesPageRes={
+  page: number;
+  totalPages: number;
+  data: IMediaList;
+}
+data: {
+  pages: IMediaList[];
+  pageParams: number[]; // לדוגמה: [1, 2, 3] אם כבר נטענו 3 עמודים
+}
 const MovieResults=({ searchTerm }: MovieResultsProps) =>{
   const [isError, setIsError] = useState(false);
   const [moviesRes, setMoviesRes] = useState<(IMovieCard|ISeriesCard)[]>([])
@@ -27,19 +34,26 @@ const MovieResults=({ searchTerm }: MovieResultsProps) =>{
       queryKey: ['movies', searchTerm], 
       queryFn: async({ pageParam = 1 }) => {
         try {
-          const moviesFromApi=await axios.get<IMediaList>(`http://localhost:3000/api/v1/movies/search?q=${encodeURIComponent(searchTerm)}&page=${pageParam}&pageSize=20`)
-          setMoviesRes(prev => [...prev, ...(moviesFromApi.data.movieAndSeries as (IMovieCard | ISeriesCard)[])]);
+          const moviesFromApi=await axios.get<MoviesPageRes>(`http://localhost:3000/api/v1/movies/search?q=${encodeURIComponent(searchTerm)}&page=${pageParam}&pageSize=20`)
+          // setMoviesRes(prev => [...prev, ...(moviesFromApi.data.movieAndSeries as (IMovieCard | ISeriesCard)[])]);
           return moviesFromApi.data;
         } catch (error) {
           console.log(error);
           setIsError(true);
         }
       },
-      // getNextPageParam: (last) => data.pages < last.totalPages ? last.page + 1 : undefined, // מחזירה את מספר העמוד הבא, או undefined אם נגמרו העמודים
+      getNextPageParam: (lastObj:MoviesPageRes) => lastObj.page < lastObj.totalPages ? lastObj.page + 1 : undefined, // מחזירה את מספר העמוד הבא, או undefined אם נגמרו העמודים
        
   })
-  // const allMovies = data?.pages.flatMap(p => p.movieAndSeries) ?? []
-
+  const allMovies:(IMovieCard | ISeriesCard)[] =data?.pages.flatMap((lastPage) => lastPage.) ?? [];
+  // 🧠 סיכום
+  
+  // שדה ב־data	תיאור
+  // pages	מערך של כל הדפים שהוחזרו מהשרת (IMediaList[])
+  // pages[i].movieAndSeries	תוצאות הסרטים והסדרות בעמוד i
+  // pages[i].page	מספר העמוד
+  // pages[i].totalPages	מספר העמודים הכולל
+  // pageParams	הפרמטרים ששימשו לטעינה (בד"כ מספרי עמודים)
 
   const sentinelRef = useRef<HTMLDivElement>(null)
   useEffect(() => {

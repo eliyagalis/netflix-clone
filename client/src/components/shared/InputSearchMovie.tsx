@@ -2,14 +2,12 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { searchMoviesFormData, searchMoviesSchema } from '../../schemas/searchMoviesInput';
-import { IMediaList, IMovieList, ISeriesList } from '../../types/IMovieList';
-import { data, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import MovieResults from '../../feature/searchMovies/MovieRes';
 
 const SearchMovie = () => {
   const [searchIsClicked, setSearchIsClicked] = useState({beforeInputOpened:false,afterInputFilled:false});
   const [closeInputIsClicked, setCloseInputIsClicked] = useState(false);
-  const [moviesArray, setMoviesArray] = useState<(IMovieList | ISeriesList)[]>([]);
   const navigate=useNavigate()
   const {
       register,
@@ -31,7 +29,7 @@ const SearchMovie = () => {
     const onSubmit = async(data:searchMoviesFormData ) => {
       console.log("submit")
       setSearchIsClicked(prev=>({...prev,afterInputFilled:true}));
-      return (<MovieResults searchTerm={data.textInput}/>)
+      // return (<MovieResults searchTerm={data.textInput}/>)
       // try {
 
       //   const moviesByQuery=await axios.get<IMediaList>(`http://localhost:3000/movies/search?q=${data.textInput}`);

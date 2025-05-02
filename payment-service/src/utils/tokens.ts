@@ -25,7 +25,9 @@ export const Tokens={
     NamedPaymentServices: {
         PayPal: "PayPal",
         Stripe: "Stripe",
-      }
+    },
+    IEventBus:"IEventBus",
+    IKafkaProducer:"IKafkaProducer"
     // IPlan:"IPlan",
     // IFullPlan:"IFullPlan",
 }

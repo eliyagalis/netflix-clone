@@ -15,7 +15,9 @@ const consumer = kafka.consumer({ groupId: 'user-group' });
 
 async function updateUserSubscription(userId:string, subscriptionId:string) {
     console.log(`Updated subscription for user ${userId} to ${subscriptionId}`);
+    
 }
+
 export const startConsumer = async () => {
   await consumer.connect();
   await consumer.subscribe({ topic: 'payment-events', fromBeginning: true });
