@@ -1,23 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MainCarousel from '../../feature/browse/MainCarousel'
 import { movies } from '../../data/mock'
 import LatestTrailerContainer from '../../feature/browse/LatestTrailerContainer'
 import { useAppSelector } from '../../store/store'
 import ProfileFeature from '../../feature/browse/ProfileFeature'
-// import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { getUserRequest } from '../../api/authApi'
+import { useDispatch } from 'react-redux'
+import { login, logout, stopUserLoading } from '../../store/slices/authSlice'
 
 const Browse = () => {
-
-  const auth = useAppSelector((state) => state.auth);
-  const profiles = useAppSelector((state)=> state.profiles);
-
-  // if (auth.user?.status?.toString() !== 'ACTIVE') {
-  //   // return <Navigate to={"/"} replace />
-  // }
-
-  if (!profiles.currentProfile) {
-    return <ProfileFeature/>
-  }
+  
 
   return (
     <div>

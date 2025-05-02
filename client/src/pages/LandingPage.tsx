@@ -14,34 +14,39 @@ import PlanCard from "../components/landing-page/PlanCard";
 import ReasonsCard from "../components/landing-page/ReasonsCard";
 import { colors } from "../data/colors";
 import LandingCarouselFeature from "../feature/landing/LandingCarouselFeature";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect, useState } from "react";
-import { login, logout } from "../store/slices/authSlice";
+import { login, logout, stopUserLoading } from "../store/slices/authSlice";
 import { getUserRequest } from "../api/authApi";
+import ProfileFeature from "../feature/browse/ProfileFeature";
 
 const LandingPage = () => {
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const dispatch = useAppDispatch();
     const auth = useAppSelector((state) => state.auth);
+    const profiles = useAppSelector((state)=> state.profiles);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const initAuth = async () => {
             try {
                 const user = await getUserRequest();
                 dispatch(login({ user }));
-                setIsLoading(false);
-                return <Navigate to={"/browse"} replace />
+                dispatch(stopUserLoading())
+                navigate("/browse");
             } catch (err) {
                 dispatch(logout());
-                setIsLoading(false);
+                dispatch(stopUserLoading());
             }
         };
         initAuth();
     }, []);
 
-    return !isLoading && 
-    (
+    if (auth.user && !profiles.currentProfile) {
+        return <ProfileFeature />;
+    }
+
+    return (
         <div className={`${colors.background.darkGray} text-white w-full min-h-screen`}>
             <HelmetHandler page={seo.landing} />
 
