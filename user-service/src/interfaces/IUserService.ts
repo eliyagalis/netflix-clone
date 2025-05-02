@@ -1,4 +1,4 @@
-import IUser from './IUser';
+import IUser, { UserStatus } from './IUser';
 import IProfile from './IProfile';
 import UpdateUserDTO from '../DTOs/update.dto';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
@@ -20,7 +20,7 @@ export default interface IUserService {
   /**
    * Login a user and generate tokens
    */
-  login(data: LoginRequestDTO): Promise<{tokens: ITokenResponse, profiles: Partial<IProfile>[]}>;
+  login(data: LoginRequestDTO): Promise<{tokens: ITokenResponse, profiles: Partial<IProfile>[], status: UserStatus}>;
   
   /**
    * Refresh access token using refresh token
