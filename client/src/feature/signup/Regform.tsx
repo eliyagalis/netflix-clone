@@ -41,15 +41,15 @@ const Regform = () => {
 
       if (res) {
         console.log(res);
-        dispatch(setEmail(data.email));
         const user:IUser = {profiles: [], status: UserStatus.INITIAL};
         dispatch(login({user}));
         dispatch(nextStep());
-        navigate('/signup/planform');
+        
+        if (plan.planName)
+          navigate('/signup/choosePaymentMethod');
+        else
+          navigate('/signup/planform');
       }
-
-      if (plan.planName)
-        navigate('/signup/paymentPicker');
     } catch (error) {
       //toast
     }

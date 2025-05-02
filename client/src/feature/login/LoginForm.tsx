@@ -7,7 +7,7 @@ import { typography } from '../../data/typography';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
-import { loginRequest, getUserRequest } from '../../api/authApi';
+import { loginRequest } from '../../api/authApi';
 import { useState } from 'react';
 import Toast from '../../components/shared/Toast';
 import { login } from '../../store/slices/authSlice';
@@ -32,9 +32,8 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setToast(null);
-      const res = await loginRequest(data);
-      const user = await getUserRequest();
-      dispatch(login({user}));
+      const user = await loginRequest(data);
+      dispatch(login({ user }));
 
       if (user.status?.toString() === 'ACTIVE') {
         navigate('/browse');

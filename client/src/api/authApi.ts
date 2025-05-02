@@ -1,12 +1,12 @@
-import api, { ApiResponse } from "./api";
+import api, { ApiResponse, UserResponse } from "./api";
 import { EmailFormData, LoginFormData, SignupFormData } from "../schemas/authSchemas";
 import { IUser } from "../types/IUser";
 
 
 export const loginRequest = async (
   formData: LoginFormData
-): Promise<ApiResponse> => {
-  const { data } = await api.post<ApiResponse>("/api/v1/users/login", formData);
+): Promise<UserResponse> => {
+  const { data } = await api.post<UserResponse>("/api/v1/users/login", formData);
   return data;
 };
 
@@ -29,14 +29,13 @@ export const checkEmailExist = async (formData: EmailFormData): Promise<ApiRespo
   return data;
 };
 
-
 export const getUserRequest = async (): Promise<IUser> => {
   const { data } = await api.get<IUser>("/api/v1/users/");
   return data;
 };
 
 export const logoutRequest = async (): Promise<void> => {
-  await api.post("/api/users/logout");
+  await api.post("/api/v1/users/logout");
 };
 
 export const getNewAccessToken = async (): Promise<string> => {
