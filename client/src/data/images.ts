@@ -19,7 +19,7 @@ export const images = {
     },
     login: {
         background: {
-            src: "https://assets.nflxext.com/ffe/siteui/vlv3/69bec183-9cc8-49d4-8fc2-08228d3c91b4/web/IL-he-20250414-TRIFECTA-perspective_5f960e48-00b0-4c69-831b-5940659bd69d_large.jpg",
+            src: "https://assets.nflxext.com/ffe/siteui/vlv3/fa7be975-efc3-48c6-8188-f07fdd1aa476/web/IL-he-20250428-TRIFECTA-perspective_40e43d46-59b3-42b6-872f-19003bf12022_medium.jpg",
             alt: "Netflix Background"
         },
     },
