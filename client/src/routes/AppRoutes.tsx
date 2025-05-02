@@ -1,66 +1,38 @@
-import React, { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
-import { useAppSelector } from "../store/store";
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { useAppSelector } from '../store/store';
 
-import LandingPage from "../pages/LandingPage";
-import LoginPage from "../pages/LoginPage";
-import Logout from "../pages/Logout";
-import MainMoviesPage from "../pages/MainMoviesPage";
-import PaypalLogic from "../feature/paypal/paypalLogic";
+import LandingPage from '../pages/LandingPage';
+import LoginPage from '../pages/LoginPage';
+import Logout from '../pages/Logout';
+import MainMoviesPage from '../pages/MainMoviesPage';
+import PaypalLogic from '../feature/paypal/paypalLogic';
 
-import SignupLayout from "../pages/layouts/SignupLayout";
-import BrowseLayout from "../pages/layouts/BrowseLayout";
-import Browse from "../pages/browse/Browse";
+import SignupLayout from '../pages/layouts/SignupLayout';
+import BrowseLayout from '../pages/layouts/BrowseLayout';
+import Browse from '../pages/browse/Browse';
 
-import Signup from "../feature/signup/Signup";
-import Registration from "../feature/signup/Registration";
-import Regform from "../feature/signup/Regform";
-import Planform from "../feature/signup/Planform";
-import Password from "../feature/signup/Password";
+import Signup from '../feature/signup/Signup';
+import Registration from '../feature/signup/Registration';
+import Regform from '../feature/signup/Regform';
+import Planform from '../feature/signup/Planform';
+import Password from '../feature/signup/Password';
 
-import AuthGate from "../components/AuthGate";
+import ProtectedRoute from './ProtectedRoute'; // ✅ Import it
 
-const PaymentPickerPage = lazy(() => import("../pages/PaymentPickerPage"));
-const PaypalOptionPage = lazy(() => import("../pages/PaypalOptionPage"));
+const PaymentPickerPage = lazy(() => import('../pages/PaymentPickerPage'));
+const PaypalOptionPage = lazy(() => import('../pages/PaypalOptionPage'));
 
 const AppRoutes: React.FC = () => {
   const { currentProfile } = useAppSelector((state) => state.profiles);
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <AuthGate requireAuth={false}>
-            <LandingPage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/login"
-        element={
-          <AuthGate requireAuth={false}>
-            <LoginPage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/logout"
-        element={
-          <AuthGate requireAuth={false}>
-            <Logout />
-          </AuthGate>
-        }
-      />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/logout" element={<Logout />} />
 
-      <Route
-        path="/signup"
-        element={
-          <AuthGate requireAuth={false}>
-            <SignupLayout />
-          </AuthGate>
-        }
-      >
+      <Route path="/signup" element={<SignupLayout />}>
         <Route index element={<Signup />} />
         <Route path="registration" element={<Registration />} />
         <Route path="regform" element={<Regform />} />
@@ -84,25 +56,16 @@ const AppRoutes: React.FC = () => {
         />
       </Route>
 
-      <Route
-        path="/browse"
-        element={
-          <AuthGate requireAuth={true}>
+      <Route path="/browse" element={
+          <ProtectedRoute>
             <BrowseLayout />
-          </AuthGate>
+          </ProtectedRoute>
         }
       >
         <Route index element={<Browse key={currentProfile?.id} />} />
       </Route>
 
-      <Route
-        path="/payment"
-        element={
-          <AuthGate requireAuth={true}>
-            <PaypalLogic isClicked={false} paymentMethod="paypal" />
-          </AuthGate>
-        }
-      />
+      <Route path="/payment" element={<PaypalLogic isClicked={false} paymentMethod="paypal" />} />
     </Routes>
   );
 };
