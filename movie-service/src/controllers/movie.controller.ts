@@ -1,3 +1,4 @@
+// src/controllers/movie.controller.ts (updated)
 import { Request, Response } from 'express';
 import { handleError } from '../utils/handle-error-request';
 import { inject, injectable } from "inversify";
@@ -6,8 +7,9 @@ import { TOKENS } from '../tokens';
 
 @injectable()
 export default class MovieController {
-  constructor(@inject(TOKENS.ITmdbService) private tmdbService:ITmdbService){}
-  // Get popular movies
+  constructor(@inject(TOKENS.ITmdbService) private tmdbService: ITmdbService) {}
+
+  // Movie collection endpoints
   async getPopularMovies(req: Request, res: Response): Promise<void> {
     try {
       const page = Number(req.query.page) || 1;
@@ -26,11 +28,10 @@ export default class MovieController {
         total_results: data.total_results
       });
     } catch (error) {
-      handleError(res,error);
+      handleError(res, error);
     }
   }
 
-  // Get top rated movies
   async getTopRatedMovies(req: Request, res: Response): Promise<void> {
     try {
       const page = Number(req.query.page) || 1;
@@ -49,34 +50,10 @@ export default class MovieController {
         total_results: data.total_results
       });
     } catch (error) {
-      handleError(res,error);
+      handleError(res, error);
     }
   }
 
-  // Get now playing movies
-  // async getNowPlayingMovies(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const page = Number(req.query.page) || 1;
-  //     const data = await this.tmdbService.getNowPlayingMovies(page);
-      
-  //     const movies = data.results.map(movie => ({
-  //       ...movie,
-  //       poster_url: this.tmdbService.getImageUrl(movie.poster_path),
-  //       backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
-  //     }));
-
-  //     res.json({
-  //       page: data.page,
-  //       results: movies,
-  //       total_pages: data.total_pages,
-  //       total_results: data.total_results
-  //     });
-  //   } catch (error) {
-  //     handleError(res,error);
-  //   }
-  // }
-
-  // Get upcoming movies
   async getUpcomingMovies(req: Request, res: Response): Promise<void> {
     try {
       const page = Number(req.query.page) || 1;
@@ -95,11 +72,11 @@ export default class MovieController {
         total_results: data.total_results
       });
     } catch (error) {
-      handleError(res,error);
+      handleError(res, error);
     }
   }
 
-  // Get movie details by ID
+  // Movie detail endpoints
   async getMovieDetails(req: Request, res: Response): Promise<void> {
     try {
       const movieId = Number(req.params.id);
@@ -116,69 +93,10 @@ export default class MovieController {
         backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
       });
     } catch (error) {
-      handleError(res,error);
+      handleError(res, error);
     }
   }
 
-  // Search movies
-  async searchMovies(req: Request, res: Response): Promise<void> {
-    try {
-      const query = req.query.query as string;
-      if (!query) {
-        res.status(400).json({ error: 'Search query is required' });
-        return;
-      }
-
-      const page = Number(req.query.page) || 1;
-      const data = await this.tmdbService.searchMovies(query, page);
-      
-      const movies = data.results.map(movie => ({
-        ...movie,
-        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
-      }));
-
-      res.json({
-        page: data.page,
-        results: movies,
-        total_pages: data.total_pages,
-        total_results: data.total_results
-      });
-    } catch (error) {
-      handleError(res,error);
-    }
-  }
-
-  // Get movies by genre
-  async getMoviesByGenre(req: Request, res: Response): Promise<void> {
-    try {
-      const genreId = Number(req.params.genreId);
-      if (isNaN(genreId)) {
-        res.status(400).json({ error: 'Invalid genre ID' });
-        return;
-      }
-
-      const page = Number(req.query.page) || 1;
-      const data = await this.tmdbService.getMoviesByGenre(genreId, page);
-      
-      const movies = data.results.map(movie => ({
-        ...movie,
-        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
-        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
-      }));
-
-      res.json({
-        page: data.page,
-        results: movies,
-        total_pages: data.total_pages,
-        total_results: data.total_results
-      });
-    } catch (error) {
-      handleError(res,error);
-    }
-  }
-
-  // Get similar movies
   async getSimilarMovies(req: Request, res: Response): Promise<void> {
     try {
       const movieId = Number(req.params.id);
@@ -203,8 +121,77 @@ export default class MovieController {
         total_results: data.total_results
       });
     } catch (error) {
-      handleError(res,error);
+      handleError(res, error);
+    }
+  }
+
+  // Search endpoint
+  async searchMovies(req: Request, res: Response): Promise<void> {
+    try {
+      const query = req.query.query as string;
+      if (!query) {
+        res.status(400).json({ error: 'Search query is required' });
+        return;
+      }
+
+      const page = Number(req.query.page) || 1;
+      const data = await this.tmdbService.searchMovies(query, page);
+      
+      const movies = data.results.map(movie => ({
+        ...movie,
+        poster_url: this.tmdbService.getImageUrl(movie.poster_path),
+        backdrop_url: this.tmdbService.getImageUrl(movie.backdrop_path)
+      }));
+
+      res.json({
+        page: data.page,
+        results: movies,
+        total_pages: data.total_pages,
+        total_results: data.total_results
+      });
+    } catch (error) {
+      handleError(res, error);
+    }
+  }
+
+  // Multi-search endpoint
+  async multiSearch(req: Request, res: Response): Promise<void> {
+    try {
+      const query = req.query.query as string;
+      if (!query) {
+        res.status(400).json({ error: 'Search query is required' });
+        return;
+      }
+
+      const page = Number(req.query.page) || 1;
+      const data = await this.tmdbService.multiSearch(query, page);
+      
+      // Process results based on their media_type
+      const processedResults = data.results.map((item: any) => {
+        let processedItem = { ...item };
+        
+        // Add image URLs
+        if (item.poster_path) {
+          processedItem.poster_url = this.tmdbService.getImageUrl(item.poster_path);
+        }
+        if (item.backdrop_path) {
+          processedItem.backdrop_url = this.tmdbService.getImageUrl(item.backdrop_path);
+        }
+        if (item.profile_path) {
+          processedItem.profile_url = this.tmdbService.getImageUrl(item.profile_path);
+        }
+        
+        return processedItem;
+      });
+
+      res.json({
+        page: data.page,
+        results: processedResults,
+        total_pages: data.total_pages,
+        total_results: data.total_results
+      });
+    } catch (error) {
+      handleError(res, error);
     }
   }
 }
-

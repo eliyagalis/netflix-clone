@@ -9,6 +9,7 @@ import LoginRequestDTO from '../DTOs/login.dto';
 import IUser from '../interfaces/IUser';
 import { date } from 'joi';
 import { UpdateRequestDTO , AddProfileDTO, AddMyListItemDTO }from '../DTOs/update.dto';
+import { profile } from 'node:console';
 
 
 @injectable()
@@ -121,7 +122,7 @@ export class UserController {
    */
   async getUser(req: Request, res: Response) {
     try {
-      const userId = req.header('id');
+      const userId = req.header('user_id');
 
       if (!userId) {
         return res.status(401).json({ message: "User ID not provided" });
@@ -186,11 +187,64 @@ export class UserController {
       if (!user) {
         return res.status(401).json({ message: "User not found" });
       }
+
+      const profiles = await this.userService.getProfiles(userId); ///maybe move that to user service
+
+      return res.status(200).json({
+        message: "Profile added",
+        profiles: profiles
+      });
+
     } catch (error) {
       handleError(res, error)
     }
   }
 
+  async getProfile(req: Request, res: Response) {
+    try {
+      const userId = req.header('user_id');
+      const profileId = req.header('profile_id');
+
+      if (!userId || !profileId) {
+        return res.status(400).json({ message: "User ID or Profile ID not provided" });
+      }
+
+      const profile = await this.userService.getDetailedProfile(userId, profileId);
+
+      if (!profile){
+        return res.status(404).json({message: "Profile not founded"});
+      }
+
+      return res.status(200).json({
+        message: "Profile retrived succesfully",
+        profile: profile
+      });
+
+    } catch (error) {
+      handleError(res, error);
+    }
+  }
+
+  async getProfilePreview(req: Request, res: Response) {
+    try {
+      const userId = req.header('user_id');
+
+      if (!userId) {
+        return res.status(400).json({ message: "User ID not provided" });
+      }
+
+      const profilesPreview = await this.userService.getProfiles(userId);
+      
+      if (!profilesPreview) {
+        return res.status(404).json({message: "Profiles not found"});
+      }
+
+      res.status(200).json({message: "Profile Preview", profiles: profilesPreview});
+      
+    } catch (error) {
+      
+    }
+  }
   async checkEmailExist(req: Request, res: Response) {
     try {
       const email = req.header('email');
