@@ -48,7 +48,7 @@ export class UserController {
       const data: LoginRequestDTO = req.body;
 
       // UserService handles all authentication logic internally
-      const {tokens, profiles} = await this.userService.login(data);
+      const {tokens, profiles, status} = await this.userService.login(data);
 
 
       // Set refresh token in HTTP-only cookie
@@ -60,7 +60,7 @@ export class UserController {
         httpOnly: true
       })
 
-      res.status(200).json({ message: 'Login succesful', profiles: profiles});
+      res.status(200).json({ message: 'Login succesful', profiles: profiles, status: status});
     } catch (error) {
       if (error instanceof Error) { //???
         handleError(res, error.message);

@@ -161,7 +161,7 @@ export class UserService implements IUserService {
   /**
    * Login a user and generate tokens
    */
-  async login(data: LoginRequestDTO): Promise<{ tokens: ITokenResponse, profiles: Partial<IProfile>[] }> {
+  async login(data: LoginRequestDTO): Promise<{ tokens: ITokenResponse, profiles: Partial<IProfile>[], status:UserStatus }> {
 
     const { email, password } = data
 
@@ -184,7 +184,8 @@ export class UserService implements IUserService {
 
     return {
       tokens,
-      profiles
+      profiles,
+      status: user.status
     }
   }
 
