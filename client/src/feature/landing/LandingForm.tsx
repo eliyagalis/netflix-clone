@@ -18,15 +18,15 @@ const LandingForm = () => {
 
   const onSubmit = async (data: EmailFormData) => {
     try {
-      const res = await checkEmailExist(data);
       dispatch(setEmail(data.email));
+      const res = await checkEmailExist(data);
       if (res.exists)
         navigate("/signup/password");
       else
         navigate("/signup/registration");
 
     } catch (error) {
-      
+
     }
   };
 
