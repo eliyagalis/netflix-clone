@@ -8,9 +8,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { loginRequest, getUserRequest } from '../../api/authApi';
-import { setAccessToken, setUser } from '../../store/slices/authSlice';
 import { useState } from 'react';
 import Toast from '../../components/shared/Toast';
+import { login } from '../../store/slices/authSlice';
 
 const LoginForm = () => {
   const [toast, setToast] = useState<string | null>(null);
@@ -33,9 +33,8 @@ const LoginForm = () => {
     try {
       setToast(null);
       const res = await loginRequest(data);
-      dispatch(setAccessToken(res.token));
       const user = await getUserRequest();
-      dispatch(setUser(user));
+      dispatch(login({user}));
 
       if (user.status?.toString() === 'ACTIVE') {
         navigate('/browse');
