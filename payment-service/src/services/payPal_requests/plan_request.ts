@@ -56,7 +56,6 @@ import { apiPostRequest } from "../../utils/tempFunc";
     }
   }
 
-
   export const getPlan=async(planId: string): Promise<IPayPalPlanResponse>=> {
     try {
       const response = await axios.get(`https://api-m.sandbox.paypal.com/v1/billing/plans/${planId}`, {
@@ -74,5 +73,68 @@ import { apiPostRequest } from "../../utils/tempFunc";
       throw error;
     }
   }
-
-//}
+  
+  export const deletePlan=async(planId:string,accessToken:string):Promise<IPayPalPlanResponse>=>{
+    try{
+      const response = await axios.patch( `https://api-m.paypal.com/v1/billing/plans/${planId}`,
+        {headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        data: [
+          {
+            op: 'replace',
+            path: '/status',
+            value: 'INACTIVE'
+          }
+        ]
+    });
+      console.log(`Plan ${planId} deactivated successfully.`);
+      return response.data;
+    }
+    catch(err){
+      console.error('Failed to deactivate plan:',(err as any).response?.data || (err as Error).message);
+      throw new Error((err as Error).message);
+    }
+  }
+  export const updatePlan=async(planId:string,accessToken:string,propertyToUpdate:string,updateValue:string)=>{
+    if(!planId || !accessToken){
+      throw new Error("subscription Id or  access token are required!")
+    }
+    if(!propertyToUpdate || !updateValue){
+      throw new Error("property to update or update value are required!")
+    }
+    // if(subscription?.subscriber.email_address!==updateValue)
+    const patchData=[];
+    if(propertyToUpdate==="name"&& updateValue && typeof updateValue==="string"){
+        patchData.push({
+            "op":"replace",
+            "path":`/name`,
+            "value":updateValue
+        })
+    }
+    if(propertyToUpdate==="description"&& updateValue && typeof updateValue==="string"){
+        patchData.push({
+            "op":"replace",
+            "path":`/description`,
+            "value":updateValue
+        })
+    }
+    try{
+        if(!patchData.length){
+            throw new Error("no data to update")
+        }
+        await axios.post(`${process.env.PAYPAL_BASEURL}/v1/billing/plans/${planId}/update`,
+            patchData,{
+            headers:{
+                "Authorization":`Bearer ${accessToken}`,
+                "Content-Type":"application/json"
+            }
+        })
+        return "plan updated successfully!";
+    }catch(err){
+        console.log("Error updating subscription in paypal");
+        throw new Error((err as Error).message);
+    }
+  }
+  

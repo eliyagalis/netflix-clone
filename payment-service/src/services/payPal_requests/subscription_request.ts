@@ -1,37 +1,6 @@
 import axios from "axios";
 import { IPayPalSubscriptionCancellationResponse, IPayPalSubscriptionResponse } from "../../interfaces/IPaypalResponses";
 
-//    export const createPaypalSubscription=async(planId:string,user:IUser,accessToken:string):Promise<IPayPalSubscriptionResponse>=>{
-//         try {
-//             const subscriptionData={
-//                 "plan_id":planId,
-//                 //האם להפעיל את המנוי מיד או לא
-//                 "start_time":new Date().toISOString(),
-//                 "subscriber":{
-//                     "name":{
-//                         "given_name":user.name
-//                     },
-//                     "email_address":user.email,
-//                 },
-//                 "application_context":{
-//                         return_url:"https://{localHost:5174---site.com}/success", //במקרה של הצלחה- דף הצלחה
-//                         cancel_url:"https://{localHost:5174---site.com}/cancel"//במקרה של ביטול תשלום- דף ביטול
-//                 }
-//             }
-//             const response= await axios.post(`${process.env.PAYPAL_BASEURL}/v1/billing/subscriptions`,{
-//                 data:subscriptionData,
-//                 headers:{
-//                     "Authorization":`Bearer ${accessToken}`,
-//                     "Content-Type":"application/json"
-//                 }
-//             })
-//             return response.data as IPayPalSubscriptionResponse; //החזרת התגובה של Paypal
-        
-//         } catch (error) {
-//             throw (error as Error).message;
-//         }    
-//     }
-
     export const getSubscriptionById=async(subscriptionId:string,accessToken:string):Promise<IPayPalSubscriptionResponse|null>=>{
         try{
             const response= await axios.get(`${process.env.PAYPAL_BASEURL}/v1/billing/subscriptions/${subscriptionId}`,{
@@ -102,4 +71,36 @@ import { IPayPalSubscriptionCancellationResponse, IPayPalSubscriptionResponse } 
             throw new Error((err as Error).message);
         }
     }
+
+    
+    //    export const createPaypalSubscription=async(planId:string,user:IUser,accessToken:string):Promise<IPayPalSubscriptionResponse>=>{
+//         try {
+//             const subscriptionData={
+//                 "plan_id":planId,
+//                 //האם להפעיל את המנוי מיד או לא
+//                 "start_time":new Date().toISOString(),
+//                 "subscriber":{
+//                     "name":{
+//                         "given_name":user.name
+//                     },
+//                     "email_address":user.email,
+//                 },
+//                 "application_context":{
+//                         return_url:"https://{localHost:5174---site.com}/success", //במקרה של הצלחה- דף הצלחה
+//                         cancel_url:"https://{localHost:5174---site.com}/cancel"//במקרה של ביטול תשלום- דף ביטול
+//                 }
+//             }
+//             const response= await axios.post(`${process.env.PAYPAL_BASEURL}/v1/billing/subscriptions`,{
+//                 data:subscriptionData,
+//                 headers:{
+//                     "Authorization":`Bearer ${accessToken}`,
+//                     "Content-Type":"application/json"
+//                 }
+//             })
+//             return response.data as IPayPalSubscriptionResponse; //החזרת התגובה של Paypal
+        
+//         } catch (error) {
+//             throw (error as Error).message;
+//         }    
+//     }
 //}

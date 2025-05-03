@@ -1,3 +1,4 @@
+
 import { Kafka, Consumer, EachMessagePayload } from 'kafkajs';
 import { inject, injectable } from 'inversify';
 import { TOKENS } from '../tokens';

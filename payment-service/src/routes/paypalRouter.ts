@@ -10,27 +10,30 @@ config()
 export const paypalRouter:Router=Router();
 const paymentController=container.get<IPaymentController>(Tokens.IPaymentController);
 
-paypalRouter.post('/initP',[
+paypalRouter.get('/initP',
+[
     validatePaymentMethodFieldReq,
     // autenticateRule,
     errorValidator
-],(req:Request,res:Response,next:NextFunction)=>{
+],
+(req:Request,res:Response,next:NextFunction)=>{
     paymentController.saveAllPlansInit(req,res,next);
 });
-paypalRouter.post('/deleteUser', (req:Request,res:Response,next:NextFunction)=>{
+paypalRouter.delete('/deleteUser', (req:Request,res:Response,next:NextFunction)=>{
         console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next()
     },
     [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
     ,(req:Request,res:Response,next:NextFunction)=>{
     paymentController.deleteUser(req,res,next);
 });
+
 paypalRouter.post('/cancel', (req:Request,res:Response,next:NextFunction)=>{
         console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next()
     },
     [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
@@ -40,8 +43,8 @@ paypalRouter.post('/cancel', (req:Request,res:Response,next:NextFunction)=>{
 paypalRouter.post('/plansCheck',
     (req:Request,res:Response,next:NextFunction)=>{
         console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next()
     }
     ,[
@@ -58,8 +61,8 @@ paypalRouter.post('/plansCheck',
         paymentController.validatePlanAndUser(req,res,next);}
 )
 paypalRouter.post('/paymentCompleted',(req:Request,res:Response,next:NextFunction)=>{
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next();
     }, 
     [
@@ -73,7 +76,7 @@ paypalRouter.post('/paymentCompleted',(req:Request,res:Response,next:NextFunctio
         paymentController.approvePaymentProcess(req,res,next) }
 );
 paypalRouter.get('/getSubscription',(req:Request,res:Response,next:NextFunction)=>{
-        req.userId = req.headers['x-user-id'] as string;
+        req.userId = req.header('user_id') as string;
     }, 
      //אולי למחוק ולהשאיר רק בפונקציה
     [ validateUserIdField,validatePaymentMethodFieldReq,errorValidator ],
@@ -82,7 +85,7 @@ paypalRouter.get('/getSubscription',(req:Request,res:Response,next:NextFunction)
     }
 );
 paypalRouter.patch('/update',(req:Request,res:Response,next:NextFunction)=>{
-        req.userId = req.headers['x-user-id'] as string;
+        req.userId = req.headers['user_id'] as string;
     }, 
     [
         validateUserIdField,
@@ -93,8 +96,8 @@ paypalRouter.patch('/update',(req:Request,res:Response,next:NextFunction)=>{
     ],
     (req:Request,res:Response,next:NextFunction)=>{ paymentController.updateSubscription(req,res,next) }
 );
-paypalRouter.get('/getAll',
-    autenticateRule,
+paypalRouter.get('/getAllSub',(req:Request,res:Response,next:NextFunction)=>{
+    autenticateRule(req,res,next)},
     [validatePaymentMethodFieldReq,errorValidator],
     (req:Request,res:Response,next:NextFunction)=>{ paymentController.getAllSubscriptions(req,res,next) }
 );

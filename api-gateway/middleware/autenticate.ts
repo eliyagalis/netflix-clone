@@ -36,7 +36,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
             req.headers['authorization'] = `Bearer ${accessToken_res}`;
             next();
-
         } catch (err) {
             errorHandlerFunc(Object.assign(new Error("user unAuthorized"), { status: 401 }), res);
             //העתקת תכונות הERR לאובייקט חדש שבתוכו יש גם תכונת סטטוס

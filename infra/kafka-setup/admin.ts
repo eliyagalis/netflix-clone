@@ -14,7 +14,7 @@ import { Kafka } from 'kafkajs';
 
 const kafka = new Kafka({
   clientId: 'admin-client',
-  brokers: ['localhost:9092'],
+  brokers: ['kafka:9092'],
 });
 
 const kafkaAdmin = async () => {
@@ -30,9 +30,9 @@ const kafkaAdmin = async () => {
         },
       ],
     });
-    console.log('✅ Topic created successfully');
+    console.log('Topic created successfully');
   } catch (err) {
-    console.error('❌ Failed to create topic:', err);
+    console.error('Failed to create topic:', err);
   } finally {
     await admin.disconnect();
   }
