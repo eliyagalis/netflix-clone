@@ -19,6 +19,10 @@ router.post("/logout", (req: Request, res: Response) => {
     userController.logout(req, res);
 });
 
+router.post("/refresh", (req: Request, res: Response) => {
+    userController.refreshToken(req, res);
+});
+
 // User information routes
 router.get("/", (req: Request, res: Response) => {
     userController.getUser(req, res);

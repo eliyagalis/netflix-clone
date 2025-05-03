@@ -8,6 +8,8 @@ import { NextFunction, Request, Response } from "express";
 import { authenticate } from "./autenticate";
 import { errorHandler } from "./errorHandler";
 
+
+
 config();
 const router = Router();
 const payment_service_url = process.env.PAYMENTS_SERVICE_URL;
@@ -41,7 +43,8 @@ export const microServiceMiddleware = (app: Application): void => {
             const queryString = new URLSearchParams(req.query as any).toString();
             
             return queryString ? `${newPath}?${queryString}` : newPath;
-        }
+        },
+        
     }))
 
     app.use(`${url}/movies`, (req: Request, res: Response, next: NextFunction) => {

@@ -192,7 +192,7 @@ export class UserService implements IUserService {
   /**
    * Refresh access token using refresh token
    */
-  async refreshToken(refreshToken: string): Promise<string | null> {
+  async refreshToken(refreshToken: string): Promise<ITokenResponse> {
     return this.authService.refreshAccessToken(refreshToken);
   }
 

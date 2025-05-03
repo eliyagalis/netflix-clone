@@ -88,15 +88,20 @@ export class UserController {
   async refreshToken(req: Request, res: Response) {
     try {
       const refreshToken = req.cookies.refreshToken;
-
+      console.log(refreshToken);
       if (!refreshToken) {
         res.status(401).json({ message: "Refresh token is required" });
         return;
       }
 
-      const accessToken = await this.userService.refreshToken(refreshToken);
+      const tokens = await this.userService.refreshToken(refreshToken);
+      console.log(tokens);
+      // Set refresh token in HTTP-only cookie
+      res.cookie('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+      });
 
-      res.cookie('accessToken', accessToken, {
+      res.cookie('accessToken', tokens.accessToken, {
         httpOnly: true
       })
 
@@ -228,6 +233,7 @@ export class UserController {
   async getProfilePreview(req: Request, res: Response) {
     try {
       const userId = req.header('user_id');
+      console.log("user id from headers: " + userId);
 
       if (!userId) {
         return res.status(400).json({ message: "User ID not provided" });
