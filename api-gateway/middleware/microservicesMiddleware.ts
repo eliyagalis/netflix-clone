@@ -17,12 +17,12 @@ const streaming_service_url = process.env.STREAMING_SERVICE_URL;
 const url = "/api/v1"
 
 export const microServiceMiddleware = (app: Application): void => {
-    const limiter = rateLimit({
-        windowMs: 15 * 60 * 1000,
-        max: 200,
-        message: "Too many requests from this IP, please try again"
-    })
-    app.use(limiter);
+    // const limiter = rateLimit({
+    //     windowMs: 15 * 60 * 1000,
+    //     max: 200,
+    //     message: "Too many requests from this IP, please try again"
+    // })
+    // app.use(limiter);
 
     if (!payment_service_url || !users_service_url || !movies_service_url || !streaming_service_url) {
         throw new Error("One or more environment variables are missing");
@@ -37,7 +37,7 @@ export const microServiceMiddleware = (app: Application): void => {
         changeOrigin: true,
         secure: false,
         pathRewrite: (path, req) => { 
-            const newPath = `/api/v1/movies${req.path}`;
+            const newPath = `/api/v1/users${req.path}`;
             const queryString = new URLSearchParams(req.query as any).toString();
             
             return queryString ? `${newPath}?${queryString}` : newPath;
