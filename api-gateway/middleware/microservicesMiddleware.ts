@@ -8,6 +8,8 @@ import { NextFunction, Request, Response } from "express";
 import { authenticate } from "./autenticate";
 import { errorHandler } from "./errorHandler";
 
+
+
 config();
 const router = Router();
 const payment_service_url = process.env.PAYMENTS_SERVICE_URL;
@@ -17,12 +19,12 @@ const streaming_service_url = process.env.STREAMING_SERVICE_URL;
 const url = "/api/v1"
 
 export const microServiceMiddleware = (app: Application): void => {
-    const limiter = rateLimit({
-        windowMs: 15 * 60 * 1000,
-        max: 200,
-        message: "Too many requests from this IP, please try again"
-    })
-    app.use(limiter);
+    // const limiter = rateLimit({
+    //     windowMs: 15 * 60 * 1000,
+    //     max: 200,
+    //     message: "Too many requests from this IP, please try again"
+    // })
+    // app.use(limiter);
 
     if (!payment_service_url || !users_service_url || !movies_service_url || !streaming_service_url) {
         throw new Error("One or more environment variables are missing");
@@ -30,22 +32,33 @@ export const microServiceMiddleware = (app: Application): void => {
 
     app.use(`${url}/users`,authenticate,async (req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to users service...");
-        next(); 
-    },createProxyMiddleware({
-        target:users_service_url,
-        changeOrigin:true,
-        secure:false,
-        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}        
+        next();
+    }, authenticate, createProxyMiddleware({
+        target: users_service_url,
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: (path, req) => { 
+            const newPath = `/api/v1/users${req.path}`;
+            const queryString = new URLSearchParams(req.query as any).toString();
+            
+            return queryString ? `${newPath}?${queryString}` : newPath;
+        },
+        
     }))
 
     app.use(`${url}/movies`, (req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to movies service...", req.originalUrl);
-        console.log(req.path);
         next();
     }, createProxyMiddleware({
         target: movies_service_url,
         changeOrigin: true,
-        pathRewrite: (path, req) => { return `/api/v1/movies${req.path}` }
+        pathRewrite: (path, req) => { 
+            const newPath = `/api/v1/movies${req.path}`;
+            const queryString = new URLSearchParams(req.query as any).toString();
+            
+            return queryString ? `${newPath}?${queryString}` : newPath;
+        },
+        followRedirects: true
     }));
 
 

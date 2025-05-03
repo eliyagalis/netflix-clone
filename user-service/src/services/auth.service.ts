@@ -27,18 +27,23 @@ export class AuthService implements IAuthSrvice {
       throw new Error('Invalid Email or password'); //Error need to be identical to email error for security concerns.
     }
     // Generate access token and refresh tokens
-    return this.tokenService.generateTokens(userPayload)
+    return  this.tokenService.generateTokens(userPayload)
   }
 
   /**
    * Refresh access token using a refresh token
    */
-  refreshAccessToken(refreshToken: string): string {
+  async refreshAccessToken(refreshToken: string): Promise<ITokenResponse> {
 
     try {
       const userPayload = this.tokenService.verifyRefreshToken(refreshToken);
+      const payload = {
+        userId: userPayload.userId,
+        email: userPayload.email
+      };
       //can add additional logic
-      return this.tokenService.generateAccessToken(userPayload);
+      return  this.tokenService.generateTokens(payload);
+     
     } catch (error) {
       throw new Error('Token refresh failed')
     }
