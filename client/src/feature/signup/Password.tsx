@@ -7,16 +7,19 @@ import { useForm } from 'react-hook-form';
 import { PasswordFormData, passwordValidationSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { nextStep } from '../../store/slices/stepsSlice';
+import { loginRequest } from '../../api/authApi';
+import { login } from '../../store/slices/authSlice';
 
 const Password = () => {
     const dispatch = useAppDispatch();
     const signup = useAppSelector((state) => state.signup);
+    const auth = useAppSelector((state) => state.auth);
     const step = useAppSelector((state) => state.step);
     const navigate = useNavigate();
 
-        if (!signup.email) {
-            return <Navigate to={"/browse"} replace />
-        }
+    if (!signup.email) {
+        return <Navigate to={"/login"} replace />
+    }
 
     const {
         register,
@@ -28,13 +31,24 @@ const Password = () => {
         mode: 'onChange',
     });
 
-    const onSubmit = (data: { password: string }) => {
-        dispatch(nextStep());
-        navigate('/browse');
+    const onSubmit = async (data: { password: string }) => {
+        try {
+            const user = await loginRequest({email: signup.email, password: data.password});
+            dispatch(login({ user }));
+            dispatch(nextStep());
+
+            if (user.status?.toString() === 'ACTIVE') {
+                navigate('/browse');
+            } else {
+                navigate('/signup');
+            }
+        } catch (error) {
+            
+        }
     };
 
     return (
-        
+
         <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-100">
             <h3 className={`${typography.xxsmall} font-medium mt-10`}>STEP {step.currentStep} OF 3</h3>
             <h1 className={`${typography.large} font-semibold mb-3`}>

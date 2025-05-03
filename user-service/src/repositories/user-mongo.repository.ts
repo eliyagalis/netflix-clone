@@ -12,7 +12,6 @@ import { Types } from "mongoose";
 import SignupRequestDTO from "../DTOs/signup.dto";
 import IStatusService from "../interfaces/IStatusService";
 import IProfile from "../interfaces/IProfile";
-import { profile } from "console";
 
 @injectable()
 export class UserMongoRepository implements IUserRepository {
@@ -102,11 +101,6 @@ export class UserMongoRepository implements IUserRepository {
 
   async updateUser(id: string, data: UpdateRequestDTO): Promise<IUser | null> {
     const updateData = { ...data, updatedAt: new Date() };
-
-    // If password is being updated, hash it
-    if (data.password) {
-      updateData.password = await hash(data.password);
-    }
 
     const user = await User.findByIdAndUpdate(
       id,

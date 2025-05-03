@@ -21,5 +21,8 @@ export const TOKENS = {
   token: "Token",
 
   //Builders
-  IUserBuilder: "IUserBuilder"
+  IUserBuilder: "IUserBuilder",
+
+  EventBus: "EventBus",
+  KafkaConsumer: "KafkaConsumer"
 };

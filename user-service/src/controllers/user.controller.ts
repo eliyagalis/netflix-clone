@@ -9,7 +9,8 @@ import LoginRequestDTO from '../DTOs/login.dto';
 import IUser from '../interfaces/IUser';
 import { date } from 'joi';
 import { UpdateRequestDTO , AddProfileDTO, AddMyListItemDTO }from '../DTOs/update.dto';
-import { profile } from 'console';
+import { profile } from 'node:console';
+
 
 @injectable()
 export class UserController {
@@ -48,7 +49,7 @@ export class UserController {
       const data: LoginRequestDTO = req.body;
 
       // UserService handles all authentication logic internally
-      const {tokens, profiles} = await this.userService.login(data);
+      const {tokens, profiles, status} = await this.userService.login(data);
 
 
       // Set refresh token in HTTP-only cookie
@@ -60,13 +61,24 @@ export class UserController {
         httpOnly: true
       })
 
-      res.status(200).json({ message: 'Login succesful', profiles: profiles});
+      res.status(200).json({ message: 'Login succesful', profiles: profiles, status: status});
     } catch (error) {
       if (error instanceof Error) { //???
         handleError(res, error.message);
       } else {
         handleError(res, error);
       }
+    }
+
+    // user status 
+    // profilePreview  
+  }
+
+  async loginAfterPayment(req: Request, res: Response) {
+    try {
+      
+    } catch (error) {
+      handleError(res, error);
     }
   }
 
@@ -110,7 +122,7 @@ export class UserController {
    */
   async getUser(req: Request, res: Response) {
     try {
-      const userId = req.header('id');
+      const userId = req.header('user_id');
 
       if (!userId) {
         return res.status(401).json({ message: "User ID not provided" });
@@ -137,7 +149,7 @@ export class UserController {
    */
   async updateUser(req: Request, res: Response) {
     try {
-      const userId = req.header('id');
+      const userId = req.header('user_id');
 
       if (!userId) {
         return res.status(401).json({ message: "User ID not provided" });
@@ -162,7 +174,7 @@ export class UserController {
 
   async addProfile(req: Request, res: Response) {
     try {
-      const userId = req.header('id');
+      const userId = req.header('user_id');
 
       if (!userId) {
         return res.status(401).json({ message: "User ID not provided" });
@@ -170,13 +182,84 @@ export class UserController {
 
       const data: AddProfileDTO = req.body;
 
-      const user = this.userService.addProfile(userId, data);
+      const user = await this.userService.addProfile(userId, data);
 
       if (!user) {
-        res
+        return res.status(401).json({ message: "User not found" });
       }
+
+      const profiles = await this.userService.getProfiles(userId); ///maybe move that to user service
+
+      return res.status(200).json({
+        message: "Profile added",
+        profiles: profiles
+      });
+
     } catch (error) {
       handleError(res, error)
     }
   }
+
+  async getProfile(req: Request, res: Response) {
+    try {
+      const userId = req.header('user_id');
+      const profileId = req.header('profile_id');
+
+      if (!userId || !profileId) {
+        return res.status(400).json({ message: "User ID or Profile ID not provided" });
+      }
+
+      const profile = await this.userService.getDetailedProfile(userId, profileId);
+
+      if (!profile){
+        return res.status(404).json({message: "Profile not founded"});
+      }
+
+      return res.status(200).json({
+        message: "Profile retrived succesfully",
+        profile: profile
+      });
+
+    } catch (error) {
+      handleError(res, error);
+    }
+  }
+
+  async getProfilePreview(req: Request, res: Response) {
+    try {
+      const userId = req.header('user_id');
+
+      if (!userId) {
+        return res.status(400).json({ message: "User ID not provided" });
+      }
+
+      const profilesPreview = await this.userService.getProfiles(userId);
+      
+      if (!profilesPreview) {
+        return res.status(404).json({message: "Profiles not found"});
+      }
+
+      res.status(200).json({message: "Profile Preview", profiles: profilesPreview});
+      
+    } catch (error) {
+      
+    }
+  }
+  async checkEmailExist(req: Request, res: Response) {
+    try {
+      const email = req.header('email');
+  
+      if (!email) {
+        return res.status(400).json({ message: "User email not provided" });
+      }
+  
+      const user = await this.userService.findByEmail(email);
+      return res.status(200).json({ 
+        message: user ? "User exists" : "User does not exist", 
+        exists: !!user 
+      });
+    } catch (error) {
+      handleError(res, error);
+    }
+  }  
 }

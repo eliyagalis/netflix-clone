@@ -1,44 +1,47 @@
+import axios from "axios";
 import { apiBaseUrl } from "../config/config";
-import { LoginFormData, SignupFormData } from "../schemas/authSchemas";
+import { store } from "../store/store";
+import { logout } from "../store/slices/authSlice";
 import { IUser } from "../types/IUser";
 
 const api = axios.create({
-    baseURL: apiBaseUrl,
-    timeout: 1000 * 60,
-    withCredentials: true,
-})
+  baseURL: apiBaseUrl,
+  timeout: 1000 * 60,
+  withCredentials: true,
+});
 
-export interface BaseApiResponse {
-    message: string;
+export interface ApiResponse<T = any> {
+  message: string;
+  data?: T;
+  exists?: boolean;
+  token?: string;
 }
 
-export interface AuthResponse extends BaseApiResponse {
-    token: string;
+export interface UserResponse extends IUser {
+  message?: string;
 }
 
-export const loginRequest = async (
-    formData: LoginFormData
-): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>("/api/users/login", formData);
-    return data;
-};
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-export const signupRequest = async (
-    formData: SignupFormData
-): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>("/api/users/signup", {
-        email: formData.email,
-        password: formData.password,
-    });
-    return data;
-};
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-export const getUserRequest = async (): Promise<IUser> => {
-    const { data } = await api.get<IUser>("/api/users/me");
-    return data;
-};
+      try {
+        await api.post("/api/v1/users/refresh");
 
+        // Retry the original request
+        return api(originalRequest);
+      } catch (refreshError) {
+        store.dispatch(logout());
+        return Promise.reject(refreshError);
+      }
+    }
 
-export const logoutRequest = async (): Promise<void> => {
-    await api.post("/api/users/logout");
-};
+    return Promise.reject(error);
+  }
+);
+
+export default api;

@@ -23,7 +23,7 @@ const Logout = () => {
             </Header>
 
             <main className="flex-1 max-w-270 w-11/12 mx-auto flex flex-col">
-                <div className='h-auto w-100 mx-auto p-5 my-20 bg-white'>
+                <div className='h-auto w-100 mx-auto p-8 mt-20 bg-white'>
                     <h1 className={`${typography.large} my-2`}>Leaving So Soon?</h1>
                     <p>Just so you know, you don’t always need to sign out of Netflix. It’s only necessary if you’re on a shared or public computer.
                     </p>

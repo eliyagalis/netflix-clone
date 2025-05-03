@@ -11,7 +11,22 @@ const port=process.env.PORT || 3000;
 
 // app.use(express.json());
 // app.use(express.urlencoded({extended:true}));
-app.use(cors({origin:"*",credentials:true}));
+
+
+const serviceUrls = [
+    "http://localhost:5174",
+    "http://user-service:3002",
+    "https://payment-service:3003",
+    "http://movie-service:3001",
+    "http://streaming-service:3004"
+  ];
+  
+  app.use(cors({
+    origin: serviceUrls,
+    credentials: true
+  }));
+
+// app.use(cors({origin:"*",credentials:true}));
 microServiceMiddleware(app);
 app.use(errorHandler);
 
