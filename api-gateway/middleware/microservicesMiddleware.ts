@@ -36,17 +36,27 @@ export const microServiceMiddleware = (app: Application): void => {
         target: users_service_url,
         changeOrigin: true,
         secure: false,
-        pathRewrite: (path, req) => { return `/api/v1/users${req.path}` }
+        pathRewrite: (path, req) => { 
+            const newPath = `/api/v1/movies${req.path}`;
+            const queryString = new URLSearchParams(req.query as any).toString();
+            
+            return queryString ? `${newPath}?${queryString}` : newPath;
+        }
     }))
 
     app.use(`${url}/movies`, (req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to movies service...", req.originalUrl);
-        console.log(req.path);
         next();
     }, createProxyMiddleware({
         target: movies_service_url,
         changeOrigin: true,
-        pathRewrite: (path, req) => { return `/api/v1/movies${req.path}` }
+        pathRewrite: (path, req) => { 
+            const newPath = `/api/v1/movies${req.path}`;
+            const queryString = new URLSearchParams(req.query as any).toString();
+            
+            return queryString ? `${newPath}?${queryString}` : newPath;
+        },
+        followRedirects: true
     }));
 
 
@@ -84,16 +94,16 @@ export const microServiceMiddleware = (app: Application): void => {
         }
     }))
     //('/streaming')
-    app.use(`${url}/playMovie`, authenticate, (req: Request, res: Response, next: NextFunction) => {
-        console.log("Moving to stream service...");
-        console.log(req.path);
-        next();
-    },
-        createProxyMiddleware({
-            target: streaming_service_url,
-            changeOrigin: true,
-            pathRewrite: (path, req) => { return `/api/v1/movies${req.path}` }
-        }))
+    // app.use(`${url}/playMovie`, authenticate, (req: Request, res: Response, next: NextFunction) => {
+    //     console.log("Moving to stream service...");
+    //     console.log(req.path);
+    //     next();
+    // },
+    //     createProxyMiddleware({
+    //         target: streaming_service_url,
+    //         changeOrigin: true,
+    //         pathRewrite: (path, req) => { return `/api/v1/movies${req.path}` }
+    //     }))
     // app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
     //     console.log("somethimg went wrong, Moving to error handler...");
     //     next(errorHandler)
