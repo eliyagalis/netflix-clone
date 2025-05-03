@@ -37,7 +37,16 @@ export const microServiceMiddleware=(app:Application):void=>
         target:users_service_url,
         changeOrigin:true,
         secure:false,
-        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`}        
+        pathRewrite: (path,req)=>{return `/api/v1/users${req.path}`},
+        on:{
+            proxyReq:(proxyReq,req)=>{
+                console.log(req.path,req.originalUrl);
+                proxyReq.setHeader("user_id", req.userId);
+                proxyReq.setHeader("email",req.userEmail!);
+            
+            }
+        }
+
     }))
     //, authenticate
     app.use(`${url}/movies`,(req: Request, res: Response, next: NextFunction) => {
@@ -47,7 +56,13 @@ export const microServiceMiddleware=(app:Application):void=>
     }, createProxyMiddleware({
         target: movies_service_url,
         changeOrigin: true,
-        pathRewrite: (path,req)=>{return `/api/v1/movies${req.path}`}        
+        pathRewrite: (path,req)=>{return `/api/v1/movies${req.path}`},
+        on:{
+            proxyReq:(proxyReq,req)=>{
+                proxyReq.setHeader("user_id", req.userId);
+                
+            }
+        }
     }));
      
     
@@ -56,7 +71,7 @@ export const microServiceMiddleware=(app:Application):void=>
         console.log("Moving to payment service...");
               // בדיקה לדו-סביבתי (פיתוח בלבד)
         next(); 
-    },createProxyMiddleware({
+    },authenticate,createProxyMiddleware({
         target:payment_service_url,
         changeOrigin:true,
         secure:false,
@@ -67,15 +82,15 @@ export const microServiceMiddleware=(app:Application):void=>
         on:{
             proxyReq:(proxyReq,req)=>{
                 console.log(req.path,req.originalUrl);
-                // if (process.env.NODE_ENV === 'development') {
-                //     proxyReq.setHeader("x-user-id","550e8400-e29b-41d4-a716-446655440000");
-                //     proxyReq.setHeader("x-user-email","dev@gmail.com");
-                // }
+                proxyReq.setHeader("user_id", req.userId);
+                if(req.userEmail && req.path.includes("/paymentCompleted")){
+                    proxyReq.setHeader("email",req.userEmail!);
+                }
             },
             proxyRes:async(proxyRes,req,res)=>{
                 if(req.path.includes("/paymentCompleted")&& proxyRes.statusCode===200){
                     try {
-                        const userId = req.headers['x-user-id'];
+                        const userId = req.headers['user_id'];
                         const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
                         return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
                     } catch (error) {
@@ -91,18 +106,12 @@ export const microServiceMiddleware=(app:Application):void=>
         }
 
     }))
-    //('/streaming')
-    app.use(`${url}/playMovie`,authenticate,(req:Request,res:Response,next:NextFunction)=>{
-        console.log("Moving to stream service...");
-        console.log(req.path);
-        next(); 
-    },
-        createProxyMiddleware({
-        target:streaming_service_url,
-        changeOrigin:true,
-        pathRewrite:(path,req)=>{return `/api/v1/movies${req.path}`}
-    }))
-    app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
+          // if (process.env.NODE_ENV === 'development') {
+                //     proxyReq.setHeader("x-user-id","550e8400-e29b-41d4-a716-446655440000");
+                //     proxyReq.setHeader("x-user-email","dev@gmail.com");
+                // }
+
+    app.use('*',(req:Request,res:Response,next:NextFunction)=>{
         console.log("somethimg went wrong, Moving to error handler...");
         next(errorHandler)
     })

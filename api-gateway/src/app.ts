@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import { Request, Response } from 'express';
 import {config} from 'dotenv';
 import cors from 'cors';
-import axios from 'axios';
+import cookieParser from 'cookie-parser';
 import { microServiceMiddleware } from '../middleware/microservicesMiddleware';
 import { errorHandler } from '../middleware/errorHandler';
 config();
@@ -12,6 +12,7 @@ const port=process.env.PORT || 3000;
 // app.use(express.json());
 // app.use(express.urlencoded({extended:true}));
 app.use(cors({origin:"*",credentials:true}));
+app.use(cookieParser());
 microServiceMiddleware(app);
 app.use(errorHandler);
 

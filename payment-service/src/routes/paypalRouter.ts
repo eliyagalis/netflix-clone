@@ -31,7 +31,7 @@ paypalRouter.delete('/deleteUser', (req:Request,res:Response,next:NextFunction)=
 });
 
 paypalRouter.post('/cancel', (req:Request,res:Response,next:NextFunction)=>{
-        console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
+        console.log(`request headers: userId:${req.headers['user_id']}, email:${req.headers['email']}`);
         req.userId = req.headers['user_id'] as string;
         req.userEmail = req.headers['email'] as string;
         next()
@@ -42,7 +42,7 @@ paypalRouter.post('/cancel', (req:Request,res:Response,next:NextFunction)=>{
 });
 paypalRouter.post('/plansCheck',
     (req:Request,res:Response,next:NextFunction)=>{
-        console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
+        console.log(`request headers: userId:${req.headers['user_id']}, email:${req.headers['email']}`);
         req.userId = req.headers['user_id'] as string;
         req.userEmail = req.headers['email'] as string;
         next()
