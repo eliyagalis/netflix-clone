@@ -36,10 +36,13 @@ export class AuthService implements IAuthSrvice {
   async refreshAccessToken(refreshToken: string): Promise<ITokenResponse> {
 
     try {
-      const userPayload = this.tokenService.verifyRefreshToken(refreshToken) as IUserPayload;
-      console.log(userPayload);
+      const userPayload = this.tokenService.verifyRefreshToken(refreshToken);
+      const payload = {
+        userId: userPayload.userId,
+        email: userPayload.email
+      };
       //can add additional logic
-      return  this.tokenService.generateTokens(userPayload);
+      return  this.tokenService.generateTokens(payload);
      
     } catch (error) {
       throw new Error('Token refresh failed')

@@ -105,6 +105,8 @@ export class UserController {
         httpOnly: true
       })
 
+      res.status(200).json({message: "Tokens Refreshed"});
+
     } catch (error) {
       res.clearCookie('refreshToken');
       handleError(res, error);
