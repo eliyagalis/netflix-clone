@@ -25,7 +25,7 @@ export default interface IUserService {
   /**
    * Refresh access token using refresh token
    */
-  refreshToken(refreshToken: string): Promise<string | null>;
+  refreshToken(refreshToken: string): Promise<ITokenResponse>;
   
   /**
    * Find user by ID

@@ -2,6 +2,10 @@ import express, { Application } from 'express';
 import { Request, Response } from 'express';
 import {config} from 'dotenv';
 import cors from 'cors';
+<<<<<<< HEAD
+=======
+import axios from 'axios';
+>>>>>>> 3f0e7d8189253128d341ada1cdacefd62e384109
 import cookieParser from 'cookie-parser';
 import { microServiceMiddleware } from '../middleware/microservicesMiddleware';
 import { errorHandler } from '../middleware/errorHandler';
@@ -29,6 +33,8 @@ const serviceUrls = [
     origin: serviceUrls,
     credentials: true
   }));
+
+  app.use(cookieParser());
 
 // app.use(cors({origin:"*",credentials:true}));
 >>>>>>> 7ba5020b90e3ec4a90f5a5356c494f40df8466af
