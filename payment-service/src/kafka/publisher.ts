@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
-import { Tokens } from "src/utils/tokens";
+import { Tokens } from "../utils/tokens";
 import { IKafkaMsg, IKafkaProducer, KafkaProducer } from "./producer";
-import { EventTypes } from "src/utils/eventTypes-enum";
-import { IEventBus, IPaymentSuccessEvent, ISubscriptionCanceledEvent } from "src/interfaces/KafkasInterfaces";
+import { EventTypes } from "../utils/eventTypes-enum";
+import { IEventBus, IPaymentSuccessEvent, ISubscriptionCanceledEvent } from "../interfaces/KafkasInterfaces";
 
 @injectable()
 export class KafkaPublisher {

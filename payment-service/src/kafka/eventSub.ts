@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { injectable } from 'inversify';
-import { IEventBus } from 'src/interfaces/KafkasInterfaces';
-import { EventTypes } from 'src/utils/eventTypes-enum';
+import { IEventBus } from "../interfaces/KafkasInterfaces";
+import { EventTypes } from '../utils/eventTypes-enum';
 
 
 @injectable()

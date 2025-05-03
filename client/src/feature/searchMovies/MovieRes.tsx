@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { useInfiniteQuery,useQueryClient }        from '@tanstack/react-query'
-import axios                        from 'axios'
-import { IMediaList, IMovieList, ISeriesList } from '../../types/IMovieList'
+import { useInfiniteQuery,useQueryClient } from '@tanstack/react-query'
+import axios  from 'axios'
+import { IMediaList } from '../../types/IMovieList'
 import MainCarousel from '../browse/MainCarousel'
 import { IMovieCard } from '../../types/IMovieCard'
 import { ISeriesCard } from '../../types/ISeriesCard'
@@ -15,10 +15,10 @@ type MoviesPageRes={
   totalPages: number;
   data: IMediaList;
 }
-data: {
-  pages: IMediaList[];
-  pageParams: number[]; // לדוגמה: [1, 2, 3] אם כבר נטענו 3 עמודים
-}
+// type TypeData= {
+//   pages: IMediaList[];
+//   pageParams: Number[]; // לדוגמה: [1, 2, 3] אם כבר נטענו 3 עמודים
+// }
 const MovieResults=({ searchTerm }: MovieResultsProps) =>{
   const [isError, setIsError] = useState(false);
   const [moviesRes, setMoviesRes] = useState<(IMovieCard|ISeriesCard)[]>([])
@@ -43,10 +43,11 @@ const MovieResults=({ searchTerm }: MovieResultsProps) =>{
         }
       },
       getNextPageParam: (lastObj:MoviesPageRes) => lastObj.page < lastObj.totalPages ? lastObj.page + 1 : undefined, // מחזירה את מספר העמוד הבא, או undefined אם נגמרו העמודים
-       
+
   })
-  const allMovies:(IMovieCard | ISeriesCard)[] =data?.pages.flatMap((lastPage) => lastPage.) ?? [];
-  // 🧠 סיכום
+  //  const allMovies:(IMovieCard | ISeriesCard)[] =data?.pages.flatMap((lastPage) => lastPage.movieAndSeries) ?? [];
+
+  //  סיכום
   
   // שדה ב־data	תיאור
   // pages	מערך של כל הדפים שהוחזרו מהשרת (IMediaList[])

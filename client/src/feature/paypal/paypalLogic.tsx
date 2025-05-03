@@ -30,23 +30,23 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
   const navigate=useNavigate()
   const [successPayment, setSuccessPayment] = useState({status:false,msg:""});
   const planName=useAppSelector((state)=>state.plan.planName)
-  useEffect(() => { //למחוק אחר כך כשיהיה יוזר--
-    const handelDeleteUserSubscription=async()=>{
-      if(successPayment.status){
-        return;
-      }
-      //cancelSubscription
-      const res=await axios.post<CompletedPayRes>('http://localhost:3000/api/v1/payment/paypal/deleteUser',{
-        paymentMethod:paymentMethod
-      },{
-          headers:{
-            'Content-Type':'application/json'
-          }
-      })
-      console.log(`${res.data.message}`)
-    }
-    handelDeleteUserSubscription();
-  },[])
+  // useEffect(() => { //למחוק אחר כך כשיהיה יוזר--
+  //   const handelDeleteUserSubscription=async()=>{
+  //     if(successPayment.status){
+  //       return;
+  //     }
+  //     //cancelSubscription
+  //     const res=await axios.post<CompletedPayRes>('http://localhost:3000/api/v1/payment/paypal/deleteUser',{
+  //       paymentMethod:paymentMethod
+  //     },{
+  //         headers:{
+  //           'Content-Type':'application/json'
+  //         }
+  //     })
+  //     console.log(`${res.data.message}`)
+  //   }
+  //   handelDeleteUserSubscription();
+  // },[])
   
   const handleSuccessPayment =useCallback( 
     async(subscriptionId:string) => {

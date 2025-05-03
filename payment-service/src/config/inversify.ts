@@ -12,9 +12,9 @@ import { IPaymentFacade } from "../interfaces/IPaymentFacade";
 import PaymentFacade from "../facade/paymentFacade";
 import { IPaymentController } from "../interfaces/IPaymentController";
 import PaymentController from "../controller/payment.controller";
-import { EventBus } from "src/kafka/eventSub";
-import { IKafkaProducer, KafkaProducer } from "src/kafka/producer";
-import { IEventBus } from "src/interfaces/KafkasInterfaces";
+import { EventBus } from "../kafka/eventSub";
+import { IKafkaProducer, KafkaProducer } from "../kafka/producer";
+import { IEventBus } from "../interfaces/KafkasInterfaces";
 
 
 const container=new Container();

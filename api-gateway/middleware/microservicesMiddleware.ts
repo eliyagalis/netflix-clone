@@ -67,10 +67,10 @@ export const microServiceMiddleware=(app:Application):void=>
         on:{
             proxyReq:(proxyReq,req)=>{
                 console.log(req.path,req.originalUrl);
-                if (process.env.NODE_ENV === 'development') {
-                    proxyReq.setHeader("x-user-id","550e8400-e29b-41d4-a716-446655440000");
-                    proxyReq.setHeader("x-user-email","dev@gmail.com");
-                }
+                // if (process.env.NODE_ENV === 'development') {
+                //     proxyReq.setHeader("x-user-id","550e8400-e29b-41d4-a716-446655440000");
+                //     proxyReq.setHeader("x-user-email","dev@gmail.com");
+                // }
             },
             proxyRes:async(proxyRes,req,res)=>{
                 if(req.path.includes("/paymentCompleted")&& proxyRes.statusCode===200){

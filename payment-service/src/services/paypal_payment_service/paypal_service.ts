@@ -1,7 +1,7 @@
 import { inject } from "inversify";
 import { getAccessTokenPayPal } from "../../config/paypal_accessToken";
 import { Tokens } from "../../utils/tokens";
-import { createProduct } from "../payPal_requests/product_request";
+// import { createProduct } from "../payPal_requests/product_request";
 import { IFullPlan, IPlan } from "../../interfaces/IPlan";
 import { IPayPalPlanResponse, IPayPalSubscriptionResponse} from "../../interfaces/IPaypalResponses";
 import { createPaypalPlan, deletePlan } from "../payPal_requests/plan_request";
@@ -13,10 +13,10 @@ import { IUserRepository } from "../../repositories/user.repository";
 import { CreatePaymentPlanDTO, PaymentProcessDTO, ProducePayEventDTO } from "../../DTO'S/paypal.service.dto";
 import { IPaymentService } from "../../interfaces/IPaymentService";
 import IPlanRepository from "../../interfaces/IPlanRepository";
-import { IUser } from "src/interfaces/IUser";
-import { EventBus} from "src/kafka/eventSub";
-import { EventTypes } from "src/utils/eventTypes-enum";
-import { IEventBus, ISubscriptionCanceledEvent } from "src/interfaces/KafkasInterfaces";
+import { IUser } from "../../interfaces/IUser";
+import { EventBus} from "../../kafka/eventSub";
+import { EventTypes } from "../../utils/eventTypes-enum";
+import { IEventBus, IPaymentSuccessEvent, ISubscriptionCanceledEvent } from "../../interfaces/KafkasInterfaces";
 // import { producePaymentEvent } from "src/kafka/producer";
 
 
@@ -141,9 +141,6 @@ export default class PayPalService implements IPaymentService{
                 },
                 end_date: undefined,
             };
-            console.log(`user: ${user} plan: ${plan} paypalData.id${subscriptionData.paypalData.id} paypalData.status:${subscriptionData.paypalData.status}
-                paypalData.planId: ${subscriptionData.paypalData.plan_id} startTime: ${subscriptionData.paypalData.start_time} 
-                created Time: ${subscriptionData.paypalData.create_time}`);
             const created_subscription_postgreSql:ISubscription=await this.subscriptionRepository.createSubscription(subscriptionData);
             return created_subscription_postgreSql;
 
@@ -169,6 +166,13 @@ export default class PayPalService implements IPaymentService{
             const user:IUser=await this.createUser(userId,userEmail!);
             console.log("user created successfully");
             const subscription=await this.saveSubscription(planName,user,paypalSubscription);
+            await this.sendPaymentStatusEvent<IPaymentSuccessEvent>({
+                event: EventTypes.PAYMENT_SUCCESS,
+                data: { 
+                    userId:userId,
+                    subscriptionId:subscription.subscription_id
+                }
+            });
             return subscription as ISubscription;
        } catch (error) {
             throw new Error((error as Error).message);
@@ -181,9 +185,6 @@ export default class PayPalService implements IPaymentService{
         }
         try{
             const param= userId? userId:subscriptionId;
-            // if(param===userId&& !await this.userRepository.getUserById(param!)){
-            //     throw new Error("user not found");
-            // }
             const subscription=await this.subscriptionRepository.getSubscriptionWithDetails(param);
             return subscription? subscription as ISubscription:null;
         }catch(err){
