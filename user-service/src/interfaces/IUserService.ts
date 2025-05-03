@@ -1,6 +1,6 @@
-import IUser from './IUser';
+import IUser, { UserStatus } from './IUser';
 import IProfile from './IProfile';
-import UpdateUserDTO from '../DTOs/update.dto';
+import { UpdateRequestDTO } from '../DTOs/update.dto';
 import { SetPasswordDTO, SetSubscriptionDTO } from '../DTOs/set.dto';
 import SignupRequestDTO from '../DTOs/signup.dto';
 import ITokenResponse from './ITokenResponse';
@@ -20,7 +20,7 @@ export default interface IUserService {
   /**
    * Login a user and generate tokens
    */
-  login(data: LoginRequestDTO): Promise<{tokens: ITokenResponse, profiles: Partial<IProfile>[]}>;
+  login(data: LoginRequestDTO): Promise<{tokens: ITokenResponse, profiles: Partial<IProfile>[], status: UserStatus}>;
   
   /**
    * Refresh access token using refresh token
@@ -40,7 +40,7 @@ export default interface IUserService {
   /**
    * Update user information
    */
-  updateUser(id: string, data: UpdateUserDTO): Promise<IUser | null>;
+  updateUser(id: string, data: UpdateRequestDTO): Promise<IUser | null>;
   
   /**
    * Add a profile to a user account
@@ -53,4 +53,6 @@ export default interface IUserService {
   addToMyList(userId: string, profileId: string, itemData: { contentId: string, type: string }): Promise<boolean>;
 
   getProfiles(userId: string) : Promise<Partial<IProfile>[] | null>
+
+  getDetailedProfile(userId: string, profileId: string): Promise<IProfile>
 }

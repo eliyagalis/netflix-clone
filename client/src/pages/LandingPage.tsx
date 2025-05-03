@@ -14,16 +14,8 @@ import PlanCard from "../components/landing-page/PlanCard";
 import ReasonsCard from "../components/landing-page/ReasonsCard";
 import { colors } from "../data/colors";
 import LandingCarouselFeature from "../feature/landing/LandingCarouselFeature";
-import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../store/store";
 
 const LandingPage = () => {
-
-    const auth = useAppSelector((state) => state.auth);
-
-    if (auth.isSignedIn) {
-        return <Navigate to={"/browse"} replace />
-    }
 
     return (
         <div className={`${colors.background.darkGray} text-white w-full min-h-screen`}>
@@ -75,8 +67,7 @@ const LandingPage = () => {
                 <LandingForm />
             </div>
             <Footer className="w-9/10 mx-auto" />
-        </div>
-    )
+        </div>)
 }
 
 export default LandingPage

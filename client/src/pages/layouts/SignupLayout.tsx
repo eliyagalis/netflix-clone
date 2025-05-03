@@ -16,9 +16,9 @@ const SignupLayout: React.FC<SignUpPageProps> = () => {
         <div className={`text-${colors.text.primary} bg-white min-h-screen w-full flex flex-col`}>
             <Header link='/' border>
                 
-                    <Link to={auth.isSignedIn ? '/logout': '/login'}
+                    <Link to={auth.user ? '/logout': '/login'}
                         className={`${typography.small} hover:underline font-medium`}>
-                        {auth.isSignedIn ? 'Log Out': 'Sign In'}
+                        {auth.user ? 'Log Out': 'Sign In'}
                     </Link>
             </Header>
 

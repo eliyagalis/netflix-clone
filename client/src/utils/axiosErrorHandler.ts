@@ -1,9 +1,12 @@
-import { AxiosError } from "axios";
+import axios from "axios";
 
-export const getErrorMessage = (error: unknown): string => {
-  if (error instanceof AxiosError) {
+export const getErrorMessage = (error: any): string => {
+  const isAxiosError = error?.isAxiosError === true;
+
+  if (isAxiosError) {
     return (
-      (error.response?.data as { message: string })?.message ||
+      (error.response?.data as { message?: string })?.message ||  
+      error.message ||
       "An error occurred"
     );
   }

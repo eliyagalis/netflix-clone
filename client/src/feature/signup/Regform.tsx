@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { typography } from '../../data/typography';
 import Button from '../../components/shared/Button';
 import { useNavigate } from 'react-router-dom';
@@ -9,13 +8,16 @@ import { SignupFormData, signupSchema } from '../../schemas/authSchemas';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { nextStep } from '../../store/slices/stepsSlice';
 import { setEmail } from '../../store/slices/signupSlice';
+import { signupRequest } from '../../api/authApi';
+import { login } from '../../store/slices/authSlice';
+import { IProfilePreview } from '../../types/IProfile';
+import { IUser, UserStatus } from '../../types/IUser';
 
 const Regform = () => {
   const dispatch = useAppDispatch();
   const signup = useAppSelector((state) => state.signup);
   const plan = useAppSelector((state) => state.plan);
   const step = useAppSelector((state) => state.step);
-  const auth = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
@@ -33,14 +35,24 @@ const Regform = () => {
     },
   });
 
-  const onSubmit = (data: { email: string; password: string }) => {
-    dispatch(setEmail(data.email));
-    dispatch(nextStep());
-    
-    if(plan.planName) 
-      navigate('/signup/paymentPicker');
-  
-    else navigate('/signup/planform');
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      const res = await (signupRequest(data));
+
+      if (res) {
+        console.log(res);
+        const user:IUser = {profiles: [], status: UserStatus.INITIAL};
+        dispatch(login({user}));
+        dispatch(nextStep());
+        
+        if (plan.planName)
+          navigate('/signup/choosePaymentMethod');
+        else
+          navigate('/signup/planform');
+      }
+    } catch (error) {
+      //toast
+    }
   };
 
   return (

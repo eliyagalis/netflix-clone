@@ -3,14 +3,21 @@ import { images } from '../../data/images'
 import { typography } from '../../data/typography'
 import Button from '../../components/shared/Button'
 import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../../store/store'
+import { UserStatus } from '../../types/IUser'
 
 const Registration = () => {
     const navigate = useNavigate();
+    const auth = useAppSelector((state)=>state.auth);
+    const step = useAppSelector((state)=> state.step);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        navigate('/signup/regform');
+        if (auth.user?.status === UserStatus.INITIAL)
+            navigate('/signup/planform');
+        else
+            navigate('/signup/regform');
     }
 
     return (
@@ -20,7 +27,7 @@ const Registration = () => {
         >
             <img src={images.registration.src} alt={images.registration.alt} className='w-full px-15 py-8 mt-30' />
             <h3 className={`${typography.xxsmall} font-medium`}>
-                STEP 1 OF 3
+                STEP {step.currentStep} OF 3
             </h3>
             <h1 className={`${typography.large} font-bold mb-3`}>
                 Finish setting up your account

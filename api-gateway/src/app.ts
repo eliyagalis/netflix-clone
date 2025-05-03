@@ -11,8 +11,27 @@ const port=process.env.PORT || 3000;
 
 // app.use(express.json());
 // app.use(express.urlencoded({extended:true}));
+<<<<<<< HEAD
 app.use(cors({origin:"*",credentials:true}));
 app.use(cookieParser());
+=======
+
+
+const serviceUrls = [
+    "http://localhost:5174",
+    "http://user-service:3002",
+    "https://payment-service:3003",
+    "http://movie-service:3001",
+    "http://streaming-service:3004"
+  ];
+  
+  app.use(cors({
+    origin: serviceUrls,
+    credentials: true
+  }));
+
+// app.use(cors({origin:"*",credentials:true}));
+>>>>>>> 7ba5020b90e3ec4a90f5a5356c494f40df8466af
 microServiceMiddleware(app);
 app.use(errorHandler);
 
