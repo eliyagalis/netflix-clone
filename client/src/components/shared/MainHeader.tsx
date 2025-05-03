@@ -2,9 +2,11 @@ import React from "react";
 import { images } from "../../data/images";
 import { Link, useLocation } from "react-router-dom";
 import { typography } from "../../data/typography";
+import SearchMovie from "./InputSearchMovie";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { setCurrentProfile } from "../../store/slices/profilesSlice";
 import ProfilesHeaderList from "../../feature/browse/ProfilesHeaderList";
+
 
 type HeaderProps = {
     className?: string;
@@ -71,7 +73,10 @@ const MainHeader: React.FC<HeaderProps> = ({ className, }) => {
                                 </ul>
                             </div>
                         </div>
-
+                        <div className='flex items-center'>
+                            <SearchMovie/>
+                            <p className='text-white'>Logout</p>
+                        </div>
                         <ProfilesHeaderList />
                     </nav>
                 </div>

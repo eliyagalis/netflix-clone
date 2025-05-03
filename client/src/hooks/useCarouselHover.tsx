@@ -1,12 +1,13 @@
 import { useRef, useState, MouseEvent, useEffect } from 'react';
 import { IMovieCard } from '../types/IMovieCard';
+import { ISeriesCard } from '../types/ISeriesCard';
 
 interface UseCarouselHoverProps {
   carouselRef: React.RefObject<HTMLDivElement>;
 }
 
 interface PreviewState {
-  movie: IMovieCard;
+  movie: IMovieCard|ISeriesCard;
   x: number;
   y: number;
   width: number;
@@ -41,7 +42,7 @@ export const useCarouselHover = ({ carouselRef }: UseCarouselHoverProps) => {
     }
   }, [isHoveringCard, isHoveringPreview]);
 
-  const handleEnterTile = (movie: IMovieCard) => (e: MouseEvent<HTMLDivElement>) => {
+  const handleEnterTile = (movie: IMovieCard|ISeriesCard) => (e: MouseEvent<HTMLDivElement>) => {
     if (!carouselRef.current) return;
     
     // Clear any existing timeout

@@ -35,6 +35,7 @@ const kafkaAdmin = async () => {
         },
       ],
     });
+
     console.log('✅ Topic created successfully');
     
     // List all topics to confirm
@@ -43,6 +44,7 @@ const kafkaAdmin = async () => {
     
   } catch (err) {
     console.error('❌ Failed:', err);
+    
   } finally {
     await admin.disconnect();
   }
