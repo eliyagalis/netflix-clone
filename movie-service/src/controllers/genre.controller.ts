@@ -1,11 +1,11 @@
-// src/controllers/genre.controller.ts (new)
+// src/controllers/genre.controller.ts
 import { Request, Response } from 'express';
 import { inject, injectable } from "inversify";
 import { TOKENS } from '../tokens';
 import ITmdbService from '../interfaces/ITmdbService';
 import { handleError } from '../utils/handle-error-request';
 
-@injectable()
+@injectable()  // Make sure this decorator is present
 export default class GenreController {
   constructor(@inject(TOKENS.ITmdbService) private tmdbService: ITmdbService) {}
 
