@@ -32,8 +32,16 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         try {
             const refreshToken = req.cookies.refreshToken;
             console.log("Refresh: " + refreshToken);
-            const response = await axios.post("http://localhost:3002/api/v1/users/refresh", { withCredentials: true });
-
+            const response = await axios.post(
+                "http://user-service:3002/api/v1/users/refresh",
+                {}, // Empty body
+                { 
+                    headers: {
+                        'Cookie': `refreshToken=${refreshToken}` // Set the cookie header
+                    },
+                    withCredentials: true
+                }
+            );
             console.log("Axios response: " + response);
 
             // res.cookie('accessToken', accessToken_res, { httpOnly: true, maxAge: 15 * 60 * 1000, secure: true });
@@ -42,6 +50,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             // req.headers['authorization'] = `Bearer ${accessToken_res}`;
             next();
         } catch (err) {
+            console.log(err)
             errorHandlerFunc(Object.assign(new Error("user unAuthorized"), { status: 401 }), res);
             return; //העתקת תכונות הERR לאובייקט חדש שבתוכו יש גם תכונת סטטוס
         }
