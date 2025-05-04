@@ -1,18 +1,16 @@
-// src/config/inversify.ts (updated)
 import { Container } from "inversify";
-import "reflect-metadata";
+import { TOKENS } from "../tokens";
+import ITmdbService from "../interfaces/ITmdbService";
+import { TMDBService } from "../services/tmdb.service";
 import MovieController from "../controllers/movie.controller";
 import GenreController from "../controllers/genre.controller";
-import { TMDBService } from "../services/tmdb.service";
-import ITmdbService from "../interfaces/ITmdbService";
-import { TOKENS } from "../tokens";
 
-export const container = new Container();
+const container = new Container();
 
-// Services
-container.bind<ITmdbService>(TOKENS.ITmdbService).to(TMDBService).inSingletonScope();
+// Register services
+container.bind<ITmdbService>(TOKENS.ITmdbService).to(TMDBService);
 
-// Controllers
+// Register controllers
 container.bind<MovieController>(TOKENS.MovieController).to(MovieController);
 container.bind<GenreController>(TOKENS.GenreController).to(GenreController);
 
