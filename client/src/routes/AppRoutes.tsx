@@ -65,7 +65,7 @@ const AppRoutes: React.FC = () => {
           <Browse key={currentProfile?.id} />
         </ProtectedRoute>
         } />
-        <Route path='/watch/:id' element={<Watch />} />
+        {/* <Route path='/watch/:id' element={<Watch />} /> */}
       </Route>
 
       <Route path="/payment" element={<PaypalLogic isClicked={false} paymentMethod="paypal" />} />
