@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { nextStep } from '../../store/slices/stepsSlice';
 import { loginRequest } from '../../api/authApi';
 import { login } from '../../store/slices/authSlice';
+import { UserStatus } from '../../types/IUser';
+import { setProfiles } from '../../store/slices/profilesSlice';
 
 const Password = () => {
     const dispatch = useAppDispatch();
@@ -34,10 +36,13 @@ const Password = () => {
     const onSubmit = async (data: { password: string }) => {
         try {
             const user = await loginRequest({email: signup.email, password: data.password});
+            
             dispatch(login({ user }));
+            dispatch(setProfiles(user.profiles ?? []));
+            
             dispatch(nextStep());
 
-            if (user.status?.toString() === 'ACTIVE') {
+            if (user.status?.toString() === UserStatus.ACTIVE) {
                 navigate('/browse');
             } else {
                 navigate('/signup');

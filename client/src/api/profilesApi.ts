@@ -1,4 +1,4 @@
-import { IProfilePreview } from "../types/IProfile";
+import { IProfile, IProfilePreview } from "../types/IProfile";
 import api, { ApiResponse, UserResponse } from "./api";
 
 export const addProfileRequest = async (data:IProfilePreview): Promise<void> => {
@@ -9,3 +9,7 @@ export const updateProfileRequest = async (): Promise<void> => {
   const {data} = await api.put("/api/v1/users/profile");
 };
 
+export const getProfileRequest = async (id:string): Promise<IProfile> => {
+  const {data} = await api.get<IProfile>("/api/v1/users/profile/", { params: { id } });
+  return data;
+}

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IProfilePreview } from '../../types/IProfile';
+import { IProfile, IProfilePreview } from '../../types/IProfile';
 
 interface ProfilesState {
   profiles: IProfilePreview[];
-  currentProfile: IProfilePreview | null;
+  currentProfile: IProfile | null;
 }
 
 const initialState: ProfilesState = {
@@ -24,7 +24,7 @@ const profilesSlice = createSlice({
     removeProfile: (state, action: PayloadAction<string>) => {
       state.profiles = state.profiles.filter(profile => profile.id !== action.payload);
     },
-    setCurrentProfile: (state, action: PayloadAction<IProfilePreview>)=> {
+    setCurrentProfile: (state, action: PayloadAction<IProfile>)=> {
       state.currentProfile = action.payload;
     },
     resetCurrentProfile: (state)=> {

@@ -7,7 +7,7 @@ import { IProfilePreview } from '../../types/IProfile';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Button from '../shared/Button';
 import { colors } from '../../data/colors';
-import { addProfileRequest } from '../../api/profilesApi';
+import { addProfileRequest, getProfileRequest } from '../../api/profilesApi';
 
 const ProfileList: React.FC = () => {
   const { profiles } = useAppSelector((state) => state.profiles);
@@ -26,11 +26,18 @@ const ProfileList: React.FC = () => {
     setEditingProfile(newProfile);
   };
 
-  const handleEditClick = (profile: IProfilePreview) => {
+  const handleEditClick = async (profile: IProfilePreview) => {
     if (isEditing) {
       setEditingProfile(profile);
     } else {
-      dispatch(setCurrentProfile(profile))
+      try {
+        const data = await getProfileRequest(profile.id ?? "");
+        if (data) {
+          dispatch(setCurrentProfile(data));
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
     }
   };
 
