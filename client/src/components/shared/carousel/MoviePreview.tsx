@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { IMovieCard } from '../../../types/IMovieCard';
 import { MoviePreviewInfo } from './MoviePreviewInfo';
 import { ISeriesCard } from '../../../types/ISeriesCard';
+import IMyListItem from '../../../types/IMyListItem';
 
 interface MoviePreviewProps {
   preview: {
-    movie: IMovieCard|ISeriesCard;
+    movie: IMyListItem;
     x: number;
     y: number;
     width: number;
@@ -52,7 +53,7 @@ export const MoviePreview: React.FC<MoviePreviewProps> = ({
       {/* poster */}
       <div style={{ width: '100%', height: preview.height * scale }}>
         <img
-          src={preview.movie.imageUrl}
+          src={preview.movie.poster || ""}
           alt={preview.movie.title}
           className="object-cover w-full h-full"
         />

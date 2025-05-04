@@ -31,9 +31,8 @@ const ProfileList: React.FC = () => {
       setEditingProfile(profile);
     } else {
       try {
-        const data = await getProfileRequest(profile.id ?? "");
+        const data = await getProfileRequest(profile.id || "");
         if (data) {
-          console.log(data);
           dispatch(setCurrentProfile(data));
         }
       } catch (error) {

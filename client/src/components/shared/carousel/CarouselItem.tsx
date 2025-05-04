@@ -1,12 +1,13 @@
 import React, { MouseEvent } from 'react';
 import { IMovieCard } from '../../../types/IMovieCard';
 import { ISeriesCard } from '../../../types/ISeriesCard';
+import IMyListItem from '../../../types/IMyListItem';
 
 interface CarouselItemProps {
-  item: IMovieCard|ISeriesCard;
+  item: IMyListItem;
   index: number;
   isIndexed?: boolean;
-  onMouseEnter: (movie: IMovieCard|ISeriesCard) => (e: MouseEvent<HTMLDivElement>) => void;
+  onMouseEnter: (movie: IMyListItem) => (e: MouseEvent<HTMLDivElement>) => void;
   onMouseLeave: () => void;
 }
 
@@ -28,7 +29,7 @@ export const CarouselItem: React.FC<CarouselItemProps> = ({
                      transition-all duration-300 ease-in-out 
                      group-hover:scale-101 group-hover:z-20 group-hover:shadow-xl 
                      transform origin-center">
-        <img src={item.imageUrl} alt={item.title} className="object-cover w-full h-full" />
+        <img src={item.poster || ""} alt={item.title} className="object-cover w-full h-full" />
       </div>
 
       {isIndexed && (

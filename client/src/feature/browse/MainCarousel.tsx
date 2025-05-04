@@ -8,9 +8,10 @@ import { MoviePreview } from '../../components/shared/carousel/MoviePreview';
 import { useCarouselHover } from '../../hooks/useCarouselHover';
 import { ISeriesCard } from '../../types/ISeriesCard';
 import { ICarouselCard } from '../../types/ICarouselCard';
+import IMyListItem from '../../types/IMyListItem';
 
 type CarouselProps = {
-    movies: ICarouselCard[];
+    movies: IMyListItem[];
     isIndexed?: boolean;
     title?: string;
     isCarousel: boolean;
@@ -51,10 +52,10 @@ export default function MainCarousel({ movies, isIndexed, title = "", isCarousel
                     className={` ${isCarousel ? "carousel overflow-visible overflow-x-scroll flex snap-x snap-mandatory p-2 py-5"
                         : "grid-cols-5 grid-rows-7 p-2 my-7"}`}
                 >
-                    {movies.map((movie: ICarouselCard, idx: number) => (
+                    {movies.map((movie: IMyListItem, idx: number) => (
                         <CarouselItem
                             key={movie.title}
-                            item={movie as ISeriesCard | IMovieCard}
+                            item={movie as IMyListItem}
                             index={idx}
                             isIndexed={isIndexed}
                             onMouseEnter={handleEnterTile}
