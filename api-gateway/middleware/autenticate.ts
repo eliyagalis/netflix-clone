@@ -1,7 +1,8 @@
 import { verifyUser } from "../src/utils/jwt";
 import { Request, Response, NextFunction } from "express";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import errorHandlerFunc from "../src/utils/errorHandlerFunc";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
@@ -13,23 +14,21 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             console.log('Bypassing authentication for public route:', req.path);
             return next();
         }
-        const accessToken= req.cookies.accessToken||req.headers['authorization']?.split(" ")[1];
-        console.log("access token",accessToken);
-        if(!accessToken){
+
+        const accessToken = req.cookies.accessToken || req.headers['authorization']?.split(" ")[1] || req.cookies.firstStepAuth;
+        console.log("Access token found:", accessToken);
+        if (!accessToken) {
             throw new Error("user unauthorized,no valid access token!");
-        }
-        const user=verifyUser(accessToken);
-   
-        if(!user?.userId||!user.email||!user){
-            throw new Error("access token is not valid");
         }
         const user = await verifyUser(accessToken);
         console.log("User found:" + user);
         if (!user) {
             throw new Error("userid  unauthorized,no valid access token!");
         }
-        req.userId = user!.userId
-        req.userEmail=user!.email;
+
+        req.headers["user_id"] = user!.userId; // depending on your user object structure
+        req.headers["email"] = user!.email;
+        
         next();
     }
     catch (err) {
@@ -80,5 +79,3 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         }
     }
 }
-   
-        export default authenticate;
