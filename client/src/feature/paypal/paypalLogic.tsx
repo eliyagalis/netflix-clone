@@ -47,41 +47,56 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
   //   handelDeleteUserSubscription();
   // },[])
   
-  const handleSuccessPayment =useCallback( 
-    async(subscriptionId:string) => {
-      console.log("payment success",subscriptionId);
-      try {
-          const res=await axios.post<CompletedPayRes>('http://localhost:3000/api/v1/payment/paypal/paymentCompleted',{
-            subscriptionId:subscriptionId,
-            planName:planName,
-            paymentMethod:paymentMethod
-          },{
-              headers:{
-                'Content-Type':'application/json'
-              }
-          })
-          console.log("res data:",res.data.message)
-          setSuccessPayment({status:true,msg:"payment process success!"});
-          navigate('/browse')
-        } catch (error) {
-        console.log(error)
-      }
-  },[planName])
-  const checkPlan= useCallback( async (): Promise<string|undefined> => {
-    console.log("plan front:",planName)
+  const handleSuccessPayment = useCallback(async (subscriptionId: string) => {
+    console.log("payment success", subscriptionId);
     try {
-      const response = await axios.post<ValidatePlanRes>('http://localhost:3000/api/v1/payment/paypal/plansCheck', {
-        paymentMethod: "paypal",
-        planName: planName
-      });
+      const res = await axios.post<CompletedPayRes>(
+        'http://localhost:3000/api/v1/payment/paypal/paymentCompleted',
+        {
+          subscriptionId: subscriptionId,
+          planName: planName,
+          paymentMethod: paymentMethod
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true  // Add this
+        }
+      );
+      console.log("res data:", res.data.message);
+      setSuccessPayment({ status: true, msg: "payment process success!" });
+      navigate('/browse');
+    } catch (error) {
+      console.log(error);
+    }
+  }, [planName, paymentMethod, navigate]);
+  const checkPlan = useCallback(async (): Promise<string | undefined> => {
+    console.log("plan front:", planName);
+    try {
+      const response = await axios.post<ValidatePlanRes>(
+        'http://localhost:3000/api/v1/payment/paypal/plansCheck',
+        {
+          paymentMethod: "paypal",
+          planName: planName
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true  // This tells axios to include cookies
+        }
+      );
       return response.data.planId as string;
     } catch (error) {
-      setSuccessPayment({ status: false, msg: (error as AxiosError)?.response?.data?.message || (error as AxiosError).message });
-      setTimeout(()=>{
-        return "";
-      }, 0);
+      setSuccessPayment({ 
+        status: false, 
+        msg: (error as AxiosError)?.response?.data?.message || 
+             (error as AxiosError).message 
+      });
+      return undefined;
     }
-  },[planName])
+  }, [planName]);
     // const afterSuccessfulPayment=()=>{
     //   ( <div>{successPayment.msg}</div>)
     //   setTimeout(()=>{
