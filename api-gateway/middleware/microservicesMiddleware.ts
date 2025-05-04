@@ -38,14 +38,16 @@ export const microServiceMiddleware = (app: Application): void => {
             const newPath = `/api/v1/users${req.path}`;
             return req.path;
         },
-        on:{
-            proxyReq:(proxyReq,req)=>{
-                console.log(req.path,req.originalUrl);
-                proxyReq.setHeader("user_id", req.userId);
-                proxyReq.setHeader("email",req.userEmail!);
+        // on:{
+        //     proxyReq:(proxyReq,req)=>{
+        //         console.log(req.path,req.originalUrl);
+        //         if (!req.path.endsWith('/login') && !req.path.endsWith('/signup') && !req.path.endsWith('/email')){
+        //             proxyReq.setHeader("user_id", req.userId);
+        //             proxyReq.setHeader("email",req.userEmail!);
+        //         }
             
-            }
-        }
+        //     }
+        // }
     })
 )
 

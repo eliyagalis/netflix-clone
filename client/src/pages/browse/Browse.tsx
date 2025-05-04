@@ -23,10 +23,10 @@ const Browse = () => {
       <div className='w-11/12 mx-auto z-999'>
         {/* <LatestTrailer trailer={movies[0]}/> */}
 
-        <MainCarousel title='Top 10' movies={movies} />
+        <MainCarousel isCarousel={true} title='Top 10' movies={movies} />
 
-        <MainCarousel title='Drama' movies={movies} />
-        <MainCarousel title='Action' movies={movies} />
+        <MainCarousel isCarousel={true} title='Drama' movies={movies} />
+        <MainCarousel isCarousel={true} title='Action' movies={movies} />
       </div>
     </div>
   )

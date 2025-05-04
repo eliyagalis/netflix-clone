@@ -87,9 +87,9 @@ const AppRoutes: React.FC = () => {
       <Route
         path="/browse"
         element={
-          <AuthGate requireAuth={true}>
+          // <AuthGate requireAuth={true}>
             <BrowseLayout />
-          </AuthGate>
+          // </AuthGate>
         }
       >
         <Route index element={<Browse key={currentProfile?.id} />} />

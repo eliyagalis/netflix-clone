@@ -9,9 +9,10 @@ type PlayerOverlayContainerProps={
 const PlayerOverlayContainer:React.FC<PlayerOverlayContainerProps>=({turnVolume,ageLimit,isMute}) => {
 
   return (
-    <div className='absolute z-[999] top-1/2 flex flex-row items-end w-full'>
+    <div className='absolute z-[999] top-1/2 flex flex-row items-end w-full justify-end  mt-31'>
       <VolumeIndicator isMute={isMute} onClickVolume={turnVolume} />
-      <MovieAgeLimit ageLimit={ageLimit}/>
+      <MovieAgeLimit ageLimit={ageLimit?ageLimit:16}/>
+
     </div>
   )
 }

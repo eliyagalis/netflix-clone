@@ -30,7 +30,7 @@ import errorHandlerFunc from "../src/utils/errorHandlerFunc";
         try {
             const refreshToken = req.cookies.refreshToken;
             console.log("Refresh: " + refreshToken);
-            const response = await axios.post("http://localhost:3002/api/v1/users/refresh", { withCredentials: true });
+            const response = await axios.post("http://user-service:3002/api/v1/users/refresh", { withCredentials: true });
             // res.cookie('accessToken', accessToken_res, { httpOnly: true, maxAge: 15 * 60 * 1000, secure: true });
             // res.cookie('refreshToken', refreshToken_res, { httpOnly: true, secure: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
 
@@ -42,9 +42,5 @@ import errorHandlerFunc from "../src/utils/errorHandlerFunc";
         }
     }
 }
-     // if (process.env.NODE_ENV === 'development') {
-        //     req.headers["x-user-id"]="550e8400-e29b-41d4-a716-446655440000"
-        //     req.headers["x-user-email"] = 'dev@example.com';
-        //     next();
-        // }
+   
         export default authenticate;
