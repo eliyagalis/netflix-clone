@@ -97,11 +97,12 @@ paypalRouter.patch('/update',(req:Request,res:Response,next:NextFunction)=>{
     (req:Request,res:Response,next:NextFunction)=>{ paymentController.updateSubscription(req,res,next) }
 );
 paypalRouter.get('/getAllSub',(req:Request,res:Response,next:NextFunction)=>{
-      if (process.env.NODE_ENV === 'development') {
-            req.headers["user_id"]="550e8400-e29b-41d4-a716-446655440000"
-            req.headers["email"] = 'dev@example.com';
-            next();
-        }
+    //   if (process.env.NODE_ENV === 'development') {
+    //         req.headers["user_id"]="550e8400-e29b-41d4-a716-446655440000"
+    //         req.headers["email"] = 'dev@example.com';
+    //         next();
+    //     }
+    console.log("arrived to router-getAll sub");
     autenticateRule(req,res,next)},
     [validatePaymentMethodFieldReq,errorValidator],
     (req:Request,res:Response,next:NextFunction)=>{ paymentController.getAllSubscriptions(req,res,next) }

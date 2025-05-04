@@ -120,6 +120,7 @@ export default class PaymentController implements IPaymentController{
         try {
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
             const subscriptions=await this.paymentService.getAllSubscriptions();
+            console.log("subscriptions: ",subscriptions);
             if(!subscriptions || subscriptions.length===0){
                 return res.status(404).json({message:"no subscriptions found"});
             }
