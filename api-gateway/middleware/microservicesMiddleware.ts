@@ -63,7 +63,7 @@ export const microServiceMiddleware = (app: Application): void => {
 
 
     //authenticate להוסיף למידל וור
-    app.use(`${url}/payment`, (req: Request, res: Response, next: NextFunction) => {
+    app.use(`${url}/payment`,authenticate, (req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to payment service...");
         next();
     }, createProxyMiddleware({
@@ -77,7 +77,9 @@ export const microServiceMiddleware = (app: Application): void => {
         on: {
             proxyReq: (proxyReq, req) => {
                 console.log(req.path, req.originalUrl);
-
+                if (req.headers.cookie) {
+                    proxyReq.setHeader('Cookie', req.headers.cookie);
+                }
             },
             proxyRes: async (proxyRes, req, res) => {
                 if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {

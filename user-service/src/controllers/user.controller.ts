@@ -10,6 +10,7 @@ import IUser from '../interfaces/IUser';
 import { date } from 'joi';
 import { UpdateRequestDTO , AddProfileDTO, AddMyListItemDTO }from '../DTOs/update.dto';
 import { profile } from 'node:console';
+import IMyListItem from '../interfaces/IMyListItem';
 
 
 @injectable()
@@ -250,7 +251,7 @@ export class UserController {
       res.status(200).json({message: "Profile Preview", profiles: profilesPreview});
       
     } catch (error) {
-      
+      handleError(res,error);
     }
   }
   async checkEmailExist(req: Request, res: Response) {
@@ -269,5 +270,51 @@ export class UserController {
     } catch (error) {
       handleError(res, error);
     }
-  }  
+  }
+
+  async addToList(req: Request, res: Response) {
+    try {
+      const userId = req.header('user_id');
+      const profileId = req.header('profile_id');
+  
+      const content: AddMyListItemDTO = req.body.data;
+  
+      if (!userId || !profileId) {
+        return res.status(400).json({ message: "User ID or Profile ID not provided" });
+      }
+  
+      const profile = await this.userService.addToMyList(userId, profileId, content);
+  
+      if (!profile){
+        return res.status(404).json({message: "Profile not founded"});
+      }
+          
+      res.status(200).json({messasge: "Item added successfuly"})
+    } catch (error) {
+      handleError(res, error);
+    }
+    
+  }
+
+  async getMyList(req: Request, res: Response){
+    try {
+      const userId = req.header('user_id');
+      const profileId = req.header('profile_id');
+  
+      if (!userId || !profileId) {
+        return res.status(400).json({ message: "User ID or Profile ID not provided" });
+      }
+  
+      const profile = await this.userService.getDetailedProfile(userId, profileId);
+  
+      if (!profile){
+        return res.status(404).json({message: "Profile not founded"});
+      }
+
+      res.status(200).json({message: "My List Found:", list: profile.myList});
+    }
+    catch(error){
+      handleError(res, error);
+    }
+  }
 }

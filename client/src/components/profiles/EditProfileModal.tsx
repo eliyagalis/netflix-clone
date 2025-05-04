@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IProfilePreview } from '../../types/IProfile';
+import { IProfile, IProfilePreview } from '../../types/IProfile';
 import CustomInput from '../shared/CustomInput';
 import Button from '../shared/Button';
 import { colors } from '../../data/colors';
@@ -26,19 +26,23 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ profile, onSave, on
           <img className='w-30' src={profile.avatar} />
           <CustomInput placeholder='Profile Name' value={name} onChange={(e) => setName(e.target.value)} />
         </div>
-      <div className='flex flex-row mt-10 w-30 gap-5'>
-      <Button onClickFunc={handleSave} className='rounded-none px-6' color={colors.buttons.secondary}>
-          Save
-        </Button>
-        <Button onClickFunc={() => profile.id && onDelete(profile.id)} 
-          className='rounded-none px-6 border-1 border-white' border='border-1' color={colors.buttons.dark}>
-          Delete
-        </Button>
-        <Button onClickFunc={onClose} color={colors.buttons.dark} border='border-1' className="rounded-none px-6 border-1 border-white">
-          Cancel
-        </Button>
-        
-      </div>
+        <div className='flex flex-row mt-10 w-30 gap-5'>
+          <Button onClickFunc={handleSave} className='rounded-none px-6' color={colors.buttons.secondary}>
+            Save
+          </Button>
+          {
+            profile.id && (
+              <Button onClickFunc={() => profile.id && onDelete(profile.id)}
+                className='rounded-none px-6 border-1 border-white' border='border-1' color={colors.buttons.dark}>
+                Delete
+              </Button>
+            )
+          }
+          <Button onClickFunc={onClose} color={colors.buttons.dark} border='border-1' className="rounded-none px-6 border-1 border-white">
+            Cancel
+          </Button>
+
+        </div>
       </div>
     </div>
   );

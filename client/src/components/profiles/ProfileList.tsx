@@ -3,10 +3,11 @@ import { addProfile, removeProfile, setCurrentProfile, setProfiles } from '../..
 import ProfileCard from './ProfileCard';
 import AddProfileCard from './AddProfileCard';
 import EditProfileModal from './EditProfileModal';
-import { IProfilePreview } from '../../types/IProfile';
+import { IProfile, IProfilePreview } from '../../types/IProfile';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Button from '../shared/Button';
 import { colors } from '../../data/colors';
+import { addProfileRequest, getProfileRequest } from '../../api/profilesApi';
 
 const ProfileList: React.FC = () => {
   const { profiles } = useAppSelector((state) => state.profiles);
@@ -25,11 +26,19 @@ const ProfileList: React.FC = () => {
     setEditingProfile(newProfile);
   };
 
-  const handleEditClick = (profile: IProfilePreview) => {
+  const handleEditClick = async (profile: IProfilePreview) => {
     if (isEditing) {
       setEditingProfile(profile);
     } else {
-      dispatch(setCurrentProfile(profile))
+      try {
+        const data = await getProfileRequest(profile.id ?? "");
+        if (data) {
+          console.log(data);
+          dispatch(setCurrentProfile(data));
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
     }
   };
 
@@ -39,10 +48,17 @@ const ProfileList: React.FC = () => {
     setIsEditing(false);
   };
 
-  const handleSave = (newProfile: IProfilePreview) => {
-    dispatch(addProfile(newProfile));
-    setEditingProfile(null);
-    setIsEditing(false);
+  const handleSave = async (newProfile: IProfilePreview) => {
+    try {
+      const fullProfile:IProfile = {...newProfile, isKid: false, myList: []};
+      dispatch(addProfile(newProfile));
+      await addProfileRequest(fullProfile);
+      setEditingProfile(null);
+    } catch (error) {
+      
+    } finally {
+      setIsEditing(false);
+    }
   };
 
   return (
