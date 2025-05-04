@@ -27,53 +27,7 @@ const LandingPage = () => {
   const auth = useAppSelector((state) => state.auth);
   const location = useLocation(); // ⬅️ get current path
 
-  const [checkingAuth, setCheckingAuth] = useState(true);
 
-  useEffect(() => {
-    let isMounted = true;
-  
-    const initAuth = async () => {
-      try {
-        console.log("Here we go");
-        
-        const user = await getUserRequest();
-    
-        if (!isMounted) return;
-  
-        dispatch(login({ user }));
-        dispatch(stopUserLoading());
-  
-        // ✅ navigate only if it's during first auth check
-        if (user.status === UserStatus.ACTIVE) {
-          navigate("/browse", { replace: true }); // ✅ replace avoids pushing new history
-        } else if (user.status === UserStatus.INITIAL) {
-          navigate("/signup", { replace: true });
-        }
-  
-      } catch (err) {
-        if (!isMounted) return;
-        dispatch(logout());
-        dispatch(stopUserLoading());
-      } finally {
-        if (isMounted) setCheckingAuth(false);
-      }
-    };
-  
-    initAuth();
-  
-    return () => {
-      isMounted = false;
-    };
-  }, [dispatch, navigate]);
-  
-  if (checkingAuth) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <span className="loading loading-spinner loading-lg text-white"></span>
-      </div>
-    );
-  }
-    // ⬇️ regular landing page content
   return (
     <div className={`${colors.background.darkGray} text-white w-full min-h-screen`}>
       <HelmetHandler page={seo.landing} />

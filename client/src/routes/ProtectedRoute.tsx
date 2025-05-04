@@ -1,23 +1,20 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useAppSelector } from "../store/store";
-import { UserStatus } from "../types/IUser";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStatus } from "../hooks/useAuthStatus";
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { signedIn, loading } = useAuthStatus();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!signedIn) {
+      navigate("/", { replace: true });
+    }
+  }, [signedIn, loading, navigate]);
+
+  if (loading) return <div>Loading...</div>;
+
+  return <>{children}</>;
 }
-
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isLoading } = useAppSelector((state) => state.auth);
-  const location = useLocation();
-
-  if (isLoading) return null;
-  // Add useEffect fetching
-
-  if (user?.status === UserStatus.ACTIVE) {
-    return <>{children}</>;
-  }
-  
-  return <Navigate to="/" replace state={{ from: location }} />;
-};
-
-export default ProtectedRoute;

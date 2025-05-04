@@ -18,7 +18,7 @@ import Regform from '../feature/signup/Regform';
 import Planform from '../feature/signup/Planform';
 import Password from '../feature/signup/Password';
 
-import ProtectedRoute from './ProtectedRoute'; // ✅ Import it
+import { ProtectedRoute } from './ProtectedRoute';
 
 const PaymentPickerPage = lazy(() => import('../pages/PaymentPickerPage'));
 const PaypalOptionPage = lazy(() => import('../pages/PaypalOptionPage'));
