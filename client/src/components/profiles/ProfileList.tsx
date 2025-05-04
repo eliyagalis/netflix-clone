@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { addProfile, removeProfile, setCurrentProfile, setProfiles } from '../../store/slices/profilesSlice';
+import { addProfile, removeProfile, setCurrentProfile } from '../../store/slices/profilesSlice';
 import ProfileCard from './ProfileCard';
 import AddProfileCard from './AddProfileCard';
 import EditProfileModal from './EditProfileModal';
@@ -14,16 +14,19 @@ const ProfileList: React.FC = () => {
   const { loading } = useAuthStatus();
   const dispatch = useAppDispatch();
 
+  // SELECTOR should always be at the top level (not inside useEffect)
+  const stateProfiles = useAppSelector((state) => state.profiles.profiles);
+
   const [profiles, setLocalProfiles] = useState<IProfilePreview[]>([]);
   const [editingProfile, setEditingProfile] = useState<IProfilePreview | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
+  // This effect runs AFTER loading becomes false
   useEffect(() => {
     if (!loading) {
-      const stateProfiles = useAppSelector((state) => state.profiles.profiles);
       setLocalProfiles(stateProfiles);
     }
-  }, [loading]);
+  }, [loading, stateProfiles]); // add stateProfiles to dependency so it stays in sync
 
   if (loading) return <div>Loading...</div>;
 
