@@ -24,15 +24,19 @@ export interface MovieDetails extends Movie {
 }
 export interface MovieResponse {
   page: number;
-  results: Movie[];
+  results: MoviePreview[];
   total_pages: number;
   total_results: number;
 }
 
 export interface MoviePreview {
-  contentId: string, 
-  title: string,
-  poster: string,
-  trailer: string,
-  genres: string[],
+  contentId: string;
+  title: string;
+  poster: string | null;
+  trailer: string | null;
+  genres: string[];
+  ageRestriction?: string;
+  runtime?: number; // For movies - in minutes
+  numberOfSeasons?: number; // For TV shows
+  type: 'movie' | 'tv';
 }
