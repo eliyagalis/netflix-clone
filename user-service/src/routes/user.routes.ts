@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import { container } from "../config/inversify";
+import { request } from "node:http";
 
 const router: Router = Router();
 
@@ -50,6 +51,14 @@ router.get("/profiles", (req: Request, res: Response) => {
 // Create a new profile
 router.post("/profile", (req: Request, res: Response) => {
     userController.addProfile(req, res);
+});
+
+router.get("/profile/list", (req: Request, res: Response) => {
+    userController.getMyList(req, res);
+});
+
+router.post("/profile/list", (req: Request, res: Response) => {
+    userController.addToList(req, res);
 });
 
 // Update a profile

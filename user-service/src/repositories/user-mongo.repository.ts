@@ -68,7 +68,14 @@ export class UserMongoRepository implements IUserRepository {
   async addMyListItem(userId: string, profileId: string, itemDTO: AddMyListItemDTO): Promise<boolean> {
     const myListItem : IMyListItem = {
       contentId: itemDTO.contentId,
+      title: itemDTO.title,
+      poster: itemDTO.poster || null,
+      trailer: itemDTO.trailer || null,
+      genres: itemDTO.genres || [],
       type: itemDTO.type,
+      ageRestriction: itemDTO.ageRestriction,
+      runtime: itemDTO.runtime,
+      numberOfSeasons: itemDTO.numberOfSeasons,
       addedAt: new Date()
     };
 
