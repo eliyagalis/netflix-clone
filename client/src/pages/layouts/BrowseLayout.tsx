@@ -7,8 +7,16 @@ import { login, logout, stopUserLoading } from '../../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../store/store';
 import { ProtectedRoute } from '../../routes/ProtectedRoute';
+import ProfileFeature from '../../feature/browse/ProfileFeature';
 
 const BrowseLayout = () => {
+
+    const profiles = useAppSelector((state) => state.profiles);
+
+    if (!profiles.currentProfile) {
+        return <ProfileFeature />
+    }
+
     return (
         <ProtectedRoute>
 

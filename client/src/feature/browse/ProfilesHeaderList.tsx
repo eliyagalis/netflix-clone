@@ -3,6 +3,9 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { resetCurrentProfile, resetProfiles, setCurrentProfile } from '../../store/slices/profilesSlice';
 import { IProfilePreview } from '../../types/IProfile';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../store/slices/authSlice';
+import { logoutRequest } from '../../api/authApi';
+import { getProfileRequest } from '../../api/profilesApi';
 
 const ProfilesHeaderList = () => {
 
@@ -10,13 +13,16 @@ const ProfilesHeaderList = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const handleProfileSwitch = (profile: IProfilePreview) => {
-        dispatch(setCurrentProfile(profile));
+    const handleProfileSwitch = async (profile: IProfilePreview) => {
+        const fullProfile = await getProfileRequest(profile.id ?? "");
+        dispatch(setCurrentProfile(fullProfile));
         navigate('/browse');
     };
 
     const logoutHandler = () => {
         dispatch(resetProfiles());
+        dispatch(logout());
+        logoutRequest();
         navigate('/logout');
     }
 

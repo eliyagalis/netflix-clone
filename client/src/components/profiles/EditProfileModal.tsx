@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IProfilePreview } from '../../types/IProfile';
+import { IProfile, IProfilePreview } from '../../types/IProfile';
 import CustomInput from '../shared/CustomInput';
 import Button from '../shared/Button';
 import { colors } from '../../data/colors';

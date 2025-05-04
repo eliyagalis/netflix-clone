@@ -19,6 +19,7 @@ import Password from '../feature/signup/Password';
 
 import { ProtectedRoute } from './ProtectedRoute';
 import Watch from '../pages/browse/Watch';
+import MyList from '../pages/browse/MyList';
 
 const PaymentPickerPage = lazy(() => import('../pages/PaymentPickerPage'));
 const PaypalOptionPage = lazy(() => import('../pages/PaypalOptionPage'));
@@ -65,6 +66,7 @@ const AppRoutes: React.FC = () => {
           <Browse key={currentProfile?.id} />
         } />
         {/* <Route path='/watch/:id' element={<Watch />} /> */}
+        <Route path="mylist" element={<MyList />} />
       </Route>
 
       <Route path="/payment" element={<PaypalLogic isClicked={false} paymentMethod="paypal" />} />

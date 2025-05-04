@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getUserRequest } from "../api/authApi";
 import { login } from "../store/slices/authSlice";
+import { setProfiles } from "../store/slices/profilesSlice";
 
 export function useAuthStatus() {
   const auth = useAppSelector((state) => state.auth);
@@ -19,7 +20,9 @@ export function useAuthStatus() {
 
         const res = await getUserRequest();
         setIsAuthenticated(true);
-        dispatch(login({user: res}));
+        dispatch(login(res));
+        dispatch(setProfiles(res.profiles ?? []));
+        
       } catch {
         setIsAuthenticated(false);
       } finally {

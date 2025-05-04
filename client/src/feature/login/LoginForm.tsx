@@ -12,6 +12,7 @@ import { useState } from 'react';
 import Toast from '../../components/shared/Toast';
 import { login } from '../../store/slices/authSlice';
 import { UserStatus } from '../../types/IUser';
+import { setProfiles } from '../../store/slices/profilesSlice';
 
 const LoginForm = () => {
   const [toast, setToast] = useState<string | null>(null);
@@ -35,6 +36,7 @@ const LoginForm = () => {
       setToast(null);
       const user = await loginRequest(data);
       dispatch(login({ user }));
+      dispatch(setProfiles(user.profiles ?? []))
 
       if (user.status === UserStatus.ACTIVE) {
         navigate('/browse');
