@@ -125,12 +125,10 @@ export class UserService implements IUserService {
       throw new Error("Error in the created user")
     }
 
-    partialUser.withId(newUser.id).build()
-
     const user = partialUser.withId(newUser.id).build()
 
     if (!user) {
-      throw new Error("Problem in user build")
+      throw new Error("Error in user build")
     }
 
     const userPayload: IUserPayload = {
