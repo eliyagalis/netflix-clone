@@ -5,7 +5,6 @@ import { useAppSelector } from '../store/store';
 import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
 import Logout from '../pages/Logout';
-import MainMoviesPage from '../pages/MainMoviesPage';
 import PaypalLogic from '../feature/paypal/paypalLogic';
 
 import SignupLayout from '../pages/layouts/SignupLayout';
