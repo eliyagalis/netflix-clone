@@ -6,11 +6,11 @@ import { convertCompilerOptionsFromJson } from "typescript";
 
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    try{
+    try {
         console.log("Cookies received:", req.cookies);
 
 
-        if (req.path.endsWith('/login') || req.path.endsWith('/signup') || req.path.endsWith('/email')){
+        if (req.path.endsWith('/login') || req.path.endsWith('/signup') || req.path.endsWith('/email')) {
             console.log('Bypassing authentication for public route:', req.path);
             return next();
         }
@@ -22,8 +22,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         }
         const user = await verifyUser(accessToken);
         console.log("User found:" + user);
-        if (!user){
-           throw new Error("userid  unauthorized,no valid access token!");
+        if (!user) {
+            throw new Error("userid  unauthorized,no valid access token!");
         }
         next();
     }
@@ -34,21 +34,40 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             console.log("Refresh: " + refreshToken);
             const response = await axios.post(
                 "http://user-service:3002/api/v1/users/refresh",
-                {}, // Empty body
-                { 
+                {},
+                {
+                    withCredentials: true,
                     headers: {
-                        'Cookie': `refreshToken=${refreshToken}` // Set the cookie header
-                    },
-                    withCredentials: true
+                        'Cookie': `refreshToken=${refreshToken}`
+                    }
                 }
             );
-            console.log("Axios response: " + response);
-
-            // res.cookie('accessToken', accessToken_res, { httpOnly: true, maxAge: 15 * 60 * 1000, secure: true });
-            // res.cookie('refreshToken', refreshToken_res, { httpOnly: true, secure: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
-
-            // req.headers['authorization'] = `Bearer ${accessToken_res}`;
-            next();
+           // Extract cookies from the response
+           const setCookieHeaders = response.headers['set-cookie'];
+           if (setCookieHeaders) {
+               // Forward the set-cookie headers to the client
+               setCookieHeaders.forEach((cookieStr: string) => {
+                   res.setHeader('Set-Cookie', cookieStr);
+               });
+               
+               // Parse the cookies to update the request object
+               setCookieHeaders.forEach((cookieStr: string) => {
+                   const match = cookieStr.match(/^([^=]+)=([^;]+)/);
+                   if (match) {
+                       const [, name, value] = match;
+                       if (req.cookies) {
+                           req.cookies[name] = value;
+                       }
+                   }
+               });
+           }
+           
+           // If the users service returns tokens in the response body as well
+           if (response.data.accessToken) {
+               req.headers['authorization'] = `Bearer ${response.data.accessToken}`;
+           }
+           
+           next();
         } catch (err) {
             console.log(err)
             errorHandlerFunc(Object.assign(new Error("user unAuthorized"), { status: 401 }), res);

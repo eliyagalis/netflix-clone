@@ -48,7 +48,7 @@ router.get("/profiles", (req: Request, res: Response) => {
 });
 
 // Create a new profile
-router.post("/profiles", (req: Request, res: Response) => {
+router.post("/profile", (req: Request, res: Response) => {
     userController.addProfile(req, res);
 });
 
