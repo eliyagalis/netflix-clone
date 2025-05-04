@@ -1,5 +1,4 @@
 import ProfileList from '../../components/profiles/ProfileList';
-import { useAppSelector } from '../../store/store';
 
 const ProfileFeature = () => {
     return (

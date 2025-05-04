@@ -7,6 +7,7 @@ import { IProfilePreview } from '../../types/IProfile';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Button from '../shared/Button';
 import { colors } from '../../data/colors';
+import { addProfileRequest } from '../../api/profilesApi';
 
 const ProfileList: React.FC = () => {
   const { profiles } = useAppSelector((state) => state.profiles);
@@ -17,7 +18,7 @@ const ProfileList: React.FC = () => {
 
   const handleAddProfile = async () => {
     const newProfile: IProfilePreview = {
-      id: new Date().getTime().toString(),
+      // id: new Date().getTime().toString(),
       avatar: 'https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha.jpg',
       name: 'New User',
     };
@@ -39,10 +40,16 @@ const ProfileList: React.FC = () => {
     setIsEditing(false);
   };
 
-  const handleSave = (newProfile: IProfilePreview) => {
-    dispatch(addProfile(newProfile));
-    setEditingProfile(null);
-    setIsEditing(false);
+  const handleSave = async (newProfile: IProfilePreview) => {
+    try {
+      await addProfileRequest();
+      dispatch(addProfile(newProfile));
+      setEditingProfile(null);
+    } catch (error) {
+      
+    } finally {
+      setIsEditing(false);
+    }
   };
 
   return (
