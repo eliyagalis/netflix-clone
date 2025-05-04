@@ -3,14 +3,17 @@ import { useAppSelector } from "../store/store";
 import { getUserRequest } from "../api/authApi";
 
 export function useAuthStatus() {
-  const user = useAppSelector((state) => state.auth.user);
+  const auth = useAppSelector((state) => state.auth);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function verifyAuth() {
       try {
-        console.log("trying");
+        if(auth.user?.status) {
+            setIsAuthenticated(true);
+            return;
+        }
         const res = await getUserRequest();
         setIsAuthenticated(res.status? true:false);
       } catch {
@@ -23,7 +26,7 @@ export function useAuthStatus() {
     verifyAuth();
   }, []);
 
-  const signedIn = user || isAuthenticated;
+  const signedIn = auth.user || isAuthenticated;
 
   return { signedIn, loading };
 }

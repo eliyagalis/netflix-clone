@@ -4,7 +4,7 @@ import LatestTrailerContainer from '../../feature/browse/LatestTrailerContainer'
 
 const Browse = () => {
 
-  
+
 
   return (
     <div>
@@ -17,10 +17,10 @@ const Browse = () => {
       <div className='w-11/12 mx-auto z-999'>
         {/* <LatestTrailer trailer={movies[0]}/> */}
 
-        <MainCarousel title='Top 10' movies={movies} />
+        <MainCarousel isCarousel title='Top 10' movies={movies} />
 
-        <MainCarousel title='Drama' movies={movies} />
-        <MainCarousel title='Action' movies={movies} />
+        <MainCarousel isCarousel title='Drama' movies={movies} />
+        <MainCarousel isCarousel title='Action' movies={movies} />
       </div>
     </div>
   )
