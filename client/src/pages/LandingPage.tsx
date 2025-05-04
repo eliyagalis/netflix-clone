@@ -27,7 +27,6 @@ const LandingPage = () => {
   const auth = useAppSelector((state) => state.auth);
   const location = useLocation(); // ⬅️ get current path
 
-
   return (
     <div className={`${colors.background.darkGray} text-white w-full min-h-screen`}>
       <HelmetHandler page={seo.landing} />
