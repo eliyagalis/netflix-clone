@@ -12,7 +12,7 @@ const port=process.env.PORT || 3000;
 
 // app.use(express.json());
 // app.use(express.urlencoded({extended:true}));
-const serviceUrls = [
+const allowedOrigins = [
     "http://localhost:5174",
     "http://user-service:3002",
     "https://payment-service:3003",
@@ -21,7 +21,16 @@ const serviceUrls = [
   ];
   
   app.use(cors({
-    origin: serviceUrls,
+    origin: function(origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true
   }));
 
