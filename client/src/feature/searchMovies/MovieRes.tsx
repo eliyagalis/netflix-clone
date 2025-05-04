@@ -20,59 +20,59 @@ type MoviesPageRes={
 //   pageParams: Number[]; // לדוגמה: [1, 2, 3] אם כבר נטענו 3 עמודים
 // }
 const MovieResults=({ searchTerm }: MovieResultsProps) =>{
-  const [isError, setIsError] = useState(false);
-  const [moviesRes, setMoviesRes] = useState<(IMovieCard|ISeriesCard)[]>([])
-  const navigate=useNavigate();
-  const queryClient = useQueryClient();//נותן גישה ל־cache של react-query (למשל למחיקה).
+  // const [isError, setIsError] = useState(false);
+  // const [moviesRes, setMoviesRes] = useState<(IMovieCard|ISeriesCard)[]>([])
+  // const navigate=useNavigate();
+  // const queryClient = useQueryClient();//נותן גישה ל־cache של react-query (למשל למחיקה).
   
-  const { 
-     data,
-     fetchNextPage, //מביא את העמוד הבא.
-      hasNextPage, 
-      isFetchingNextPage } = useInfiniteQuery<IMediaList, Error>( // מאפשר שליפה מדורגת של נתונים (pagination).
-    { 
-      queryKey: ['movies', searchTerm], 
-      queryFn: async({ pageParam = 1 }) => {
-        try {
-          const moviesFromApi=await axios.get<MoviesPageRes>(`http://localhost:3000/api/v1/movies/search?q=${encodeURIComponent(searchTerm)}&page=${pageParam}&pageSize=20`)
-          // setMoviesRes(prev => [...prev, ...(moviesFromApi.data.movieAndSeries as (IMovieCard | ISeriesCard)[])]);
-          return moviesFromApi.data;
-        } catch (error) {
-          console.log(error);
-          setIsError(true);
-        }
-      },
-      getNextPageParam: (lastObj:MoviesPageRes) => lastObj.page < lastObj.totalPages ? lastObj.page + 1 : undefined, // מחזירה את מספר העמוד הבא, או undefined אם נגמרו העמודים
+  // const { 
+  //    data,
+  //    fetchNextPage, //מביא את העמוד הבא.
+  //     hasNextPage, 
+  //     isFetchingNextPage } = useInfiniteQuery<IMediaList, Error>( // מאפשר שליפה מדורגת של נתונים (pagination).
+  //   { 
+  //     queryKey: ['movies', searchTerm], 
+  //     queryFn: async({ pageParam = 1 }) => {
+  //       try {
+  //         const moviesFromApi=await axios.get<MoviesPageRes>(`http://localhost:3000/api/v1/movies/search?q=${encodeURIComponent(searchTerm)}&page=${pageParam}&pageSize=20`)
+  //         // setMoviesRes(prev => [...prev, ...(moviesFromApi.data.movieAndSeries as (IMovieCard | ISeriesCard)[])]);
+  //         return moviesFromApi.data;
+  //       } catch (error) {
+  //         console.log(error);
+  //         setIsError(true);
+  //       }
+  //     },
+  //     getNextPageParam: (lastObj:MoviesPageRes) => lastObj.page < lastObj.totalPages ? lastObj.page + 1 : undefined, // מחזירה את מספר העמוד הבא, או undefined אם נגמרו העמודים
 
-  })
-  //  const allMovies:(IMovieCard | ISeriesCard)[] =data?.pages.flatMap((lastPage) => lastPage.movieAndSeries) ?? [];
+  // })
+  // //  const allMovies:(IMovieCard | ISeriesCard)[] =data?.pages.flatMap((lastPage) => lastPage.movieAndSeries) ?? [];
 
-  //  סיכום
+  // //  סיכום
   
-  // שדה ב־data	תיאור
-  // pages	מערך של כל הדפים שהוחזרו מהשרת (IMediaList[])
-  // pages[i].movieAndSeries	תוצאות הסרטים והסדרות בעמוד i
-  // pages[i].page	מספר העמוד
-  // pages[i].totalPages	מספר העמודים הכולל
-  // pageParams	הפרמטרים ששימשו לטעינה (בד"כ מספרי עמודים)
+  // // שדה ב־data	תיאור
+  // // pages	מערך של כל הדפים שהוחזרו מהשרת (IMediaList[])
+  // // pages[i].movieAndSeries	תוצאות הסרטים והסדרות בעמוד i
+  // // pages[i].page	מספר העמוד
+  // // pages[i].totalPages	מספר העמודים הכולל
+  // // pageParams	הפרמטרים ששימשו לטעינה (בד"כ מספרי עמודים)
 
-  const sentinelRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!sentinelRef.current || !hasNextPage) 
-      return;
-    const obs = new IntersectionObserver(entries => { // נוצר Observer שצופה מתי האלמנט sentinelRef נכנס לפריים.
-      if (entries[0].isIntersecting) 
-        fetchNextPage();  // כשזה קורה → קוראים ל־fetchNextPage.
-    })
-    obs.observe(sentinelRef.current);
-    return () => obs.disconnect(); // מתנתק אוטומטית כאשר הקומפוננטה מוסרת.
-  }, [fetchNextPage, hasNextPage])
+  // const sentinelRef = useRef<HTMLDivElement>(null)
+  // useEffect(() => {
+  //   if (!sentinelRef.current || !hasNextPage) 
+  //     return;
+  //   const obs = new IntersectionObserver(entries => { // נוצר Observer שצופה מתי האלמנט sentinelRef נכנס לפריים.
+  //     if (entries[0].isIntersecting) 
+  //       fetchNextPage();  // כשזה קורה → קוראים ל־fetchNextPage.
+  //   })
+  //   obs.observe(sentinelRef.current);
+  //   return () => obs.disconnect(); // מתנתק אוטומטית כאשר הקומפוננטה מוסרת.
+  // }, [fetchNextPage, hasNextPage])
 
-  // 4. כפתור סגירה שמנקה גם את ה־cache
-  const handleClose = () => {
-    queryClient.removeQueries({ queryKey: ['movies', searchTerm] });
-    navigate('/browse')  // קודם כל יתנתק מ-MovieResults
-  }
+  // // 4. כפתור סגירה שמנקה גם את ה־cache
+  // const handleClose = () => {
+  //   queryClient.removeQueries({ queryKey: ['movies', searchTerm] });
+  //   navigate('/browse')  // קודם כל יתנתק מ-MovieResults
+  // }
 
   return (
     <div className="bg-black z-[999]">
@@ -83,10 +83,11 @@ const MovieResults=({ searchTerm }: MovieResultsProps) =>{
       // <DefaultSearchComponent/>
       )}
   
-      {/*   שנשים  לאלמנט רפרנס בתחתית הדף כדי לצפות מתי המשתמש הגיע לתחתית  */}
+      //   שנשים  לאלמנט רפרנס בתחתית הדף כדי לצפות מתי המשתמש הגיע לתחתית  
       {hasNextPage && <div ref={sentinelRef} style={{ height: 1 }} />} 
-      {/* כשה־div עם ref={sentinelRef} נכנס לפריים (scroll למטה), אנחנו מביאים עוד עמוד (fetchNextPage()). */}
+      // כשה־div עם ref={sentinelRef} נכנס לפריים (scroll למטה), אנחנו מביאים עוד עמוד (fetchNextPage()).
       {isFetchingNextPage && <span><i className='loading-spinner'></i></span>}
+/*}
     </div>
   )
       {/* <div className="grid gap-4" ref={cardRef}>
@@ -97,7 +98,7 @@ const MovieResults=({ searchTerm }: MovieResultsProps) =>{
             onMouseEnter={handleEnterTile}
             onMouseLeave={handleLeaveTile}
           />
-        ))}
-      </div> */}
+        ))} */}
+      </div>)
 }
 export default MovieResults;
