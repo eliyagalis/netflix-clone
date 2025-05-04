@@ -1,6 +1,6 @@
 import IMyListItem from "../types/IMyListItem";
 
-export const myListMock: Array<IMyListItem> = [
+export const movies: Array<IMyListItem> = [
   {
     contentId: "1",
     title: "Movie 1",
