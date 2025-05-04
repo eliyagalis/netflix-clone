@@ -5,11 +5,14 @@ const MyList = () => {
     const {currentProfile} = useAppSelector((state)=>state.profiles);
 
     return (
-        <div>
+        <div className='flex w-full'>
             {
                 currentProfile?.myList.map((item)=>
                 (
-                    <div key={item.id}>{item.id}</div>
+                    <div key={item.contentId} className='flex flex-col w-20'>
+                        <img src={item.poster || ""} />
+                        <div className='text-lg text-white'>{item.title}</div>
+                    </div>
                 ))
             }
         </div>
