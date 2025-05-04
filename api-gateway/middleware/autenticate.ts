@@ -3,8 +3,6 @@ import { Request, Response, NextFunction } from "express";
 import axios, { AxiosResponse } from "axios";
 import errorHandlerFunc from "../src/utils/errorHandlerFunc";
 import { convertCompilerOptionsFromJson } from "typescript";
-// import { wrapper } from 'axios-cookiejar-support';
-// import { CookieJar } from 'tough-cookie';
 
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
@@ -32,8 +30,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     catch (err) {
         console.log("access token isnt valid- start checking refresh token");
         try {
-            // const jar = new CookieJar();
-            // const client = wrapper(axios.create({ jar }));
             const refreshToken = req.cookies.refreshToken;
             console.log("Refresh: " + refreshToken);
             const response = await axios.post(
