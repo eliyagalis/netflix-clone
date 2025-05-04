@@ -38,16 +38,6 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   }, [])
   
   const handleMuted=()=>{
-      // const player = playerRef.current?.getInternalPlayer();
-      // if (!player) 
-      //   return;
-      // if (player.isMuted()) {
-      //   player.unMute();
-      //   setIsMuted(false)
-      // } else {
-      //   player.mute();
-      //   setIsMuted(true);
-      // }
       if(isMuted){
         setIsMuted(false);
         return;

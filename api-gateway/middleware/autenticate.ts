@@ -21,8 +21,8 @@ import errorHandlerFunc from "../src/utils/errorHandlerFunc";
         if(!user?.userId||!user.email||!user){
             throw new Error("access token is not valid");
         }
-        req.userId = user!.userId
-        req.userEmail=user!.email;
+        // req.userId = user!.userId
+        // req.userEmail=user!.email;
         next();
     }
     catch (err) {
