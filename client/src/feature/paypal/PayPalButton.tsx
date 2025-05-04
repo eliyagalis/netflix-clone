@@ -10,7 +10,8 @@ interface PayPalButtonProps {
 
 const PayPalButton:React.FC<PayPalButtonProps> = ({checkPlan,onSuccess}) => {
     const navigate=useNavigate();
-    const planName=useAppSelector((state)=>state.plan);
+    const planName=useAppSelector((state)=>state.plan.planName);
+    console.log(planName);
   return (
     <PayPalScriptProvider options={{
         clientId:import.meta.env.VITE_CLIENT_ID_PP as string,

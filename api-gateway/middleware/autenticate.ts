@@ -25,7 +25,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         if (!user) {
             throw new Error("userid  unauthorized,no valid access token!");
         }
-
         req.headers["user_id"] = user!.userId; // depending on your user object structure
         req.headers["email"] = user!.email;
         

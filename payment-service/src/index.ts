@@ -2,8 +2,7 @@ import fs from 'fs';
 import https from 'https';
 import app from './app';
 import path from "path";
-
-import { config } from "dotenv";
+import {config} from 'dotenv'
 import { getAccessTokenPayPal } from './config/paypal_accessToken';
 import { dbConnection } from './config/db';
 import PaymentController from './controller/payment.controller';

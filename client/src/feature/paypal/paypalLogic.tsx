@@ -58,7 +58,8 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
           },{
               headers:{
                 'Content-Type':'application/json'
-              }
+              },
+              withCredentials:true,
           })
           console.log("res data:",res.data.message)
           setSuccessPayment({status:true,msg:"payment process success!"});
@@ -73,7 +74,11 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
       const response = await axios.post<ValidatePlanRes>('http://localhost:3000/api/v1/payment/paypal/plansCheck', {
         paymentMethod: "paypal",
         planName: planName
-      });
+      },{
+        headers:{
+          'Content-Type':'application/json',
+          withCredentials: true}
+        });
       return response.data.planId as string;
     } catch (error) {
       setSuccessPayment({ status: false, msg: (error as AxiosError)?.response?.data?.message || (error as AxiosError).message });

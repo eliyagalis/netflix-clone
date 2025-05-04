@@ -63,7 +63,7 @@ export const microServiceMiddleware = (app: Application): void => {
 
 
     //authenticate להוסיף למידל וור
-    app.use(`${url}/payment`, (req: Request, res: Response, next: NextFunction) => {
+    app.use(`${url}/payment`,authenticate,(req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to payment service...");
         next();
     }, createProxyMiddleware({
@@ -74,15 +74,14 @@ export const microServiceMiddleware = (app: Application): void => {
             console.log("path:", `${req.path}`, `${payment_service_url}`);
             return req.path;
         },
-        on: {
+        on:{
             proxyReq: (proxyReq, req) => {
-                console.log(req.path, req.originalUrl);
-
-            },
+           
+          },
             proxyRes: async (proxyRes, req, res) => {
                 if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
                     try {
-                        const userId = req.headers['x-user-id'];
+                        const userId = req.headers['user_id'];
                         const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
                         return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
                     } catch (error) {
@@ -95,6 +94,17 @@ export const microServiceMiddleware = (app: Application): void => {
                 }
             }
             // error:(err,req)=>{console.log(req)}
+                // const userId = req.headers['user_id'];
+                // const email = req.headers['email'];
+
+                // console.log("Forwarding user_id and email to payment-service:", userId, email);
+
+                // if (userId) {
+                //     proxyReq.setHeader('user_id', userId);
+                // }
+                // if (email) {
+                //     proxyReq.setHeader('email', email);
+                // }
         }
     }))
     app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{

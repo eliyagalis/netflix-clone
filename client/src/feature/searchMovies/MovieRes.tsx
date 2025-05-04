@@ -75,22 +75,23 @@ const MovieResults=({ searchTerm }: MovieResultsProps) =>{
   // }
 
   return (
-    <div className="bg-black z-[999]">
-      <button onClick={handleClose} className='top-0 left-0 text-white'>✕</button>
-      {!isError? (
-        <MainCarousel isCarousel={false} movies={moviesRes} />
-      ):( <></>
-      // <DefaultSearchComponent/>
-      )}
+    <></>
+//     <div className="bg-black z-[999]">
+//       <button onClick={handleClose} className='top-0 left-0 text-white'>✕</button>
+//       {!isError? (
+//         <MainCarousel isCarousel={false} movies={moviesRes} />
+//       ):( <></>
+//       // <DefaultSearchComponent/>
+//       )}
   
-      //   שנשים  לאלמנט רפרנס בתחתית הדף כדי לצפות מתי המשתמש הגיע לתחתית  
-      {hasNextPage && <div ref={sentinelRef} style={{ height: 1 }} />} 
-      // כשה־div עם ref={sentinelRef} נכנס לפריים (scroll למטה), אנחנו מביאים עוד עמוד (fetchNextPage()).
-      {isFetchingNextPage && <span><i className='loading-spinner'></i></span>}
-/*}
-    </div>
+//       //   שנשים  לאלמנט רפרנס בתחתית הדף כדי לצפות מתי המשתמש הגיע לתחתית  
+//       {hasNextPage && <div ref={sentinelRef} style={{ height: 1 }} />} 
+//       // כשה־div עם ref={sentinelRef} נכנס לפריים (scroll למטה), אנחנו מביאים עוד עמוד (fetchNextPage()).
+//       {isFetchingNextPage && <span><i className='loading-spinner'></i></span>}
+// /*}
+//     </div>
   )
-      {/* <div className="grid gap-4" ref={cardRef}>
+    {/* <div className="grid gap-4" ref={cardRef}>
         {allMovies.map(item => (
           <CarouselItem 
             index={'id' in item ? item.id : item.serieId}
@@ -99,6 +100,6 @@ const MovieResults=({ searchTerm }: MovieResultsProps) =>{
             onMouseLeave={handleLeaveTile}
           />
         ))} */}
-      </div>)
+      // </div>)
 }
 export default MovieResults;
