@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IProfile, IProfilePreview } from '../../types/IProfile';
+import { IProfilePreview, IProfile } from '../../types/IProfile';
 
 interface ProfilesState {
   profiles: IProfilePreview[];

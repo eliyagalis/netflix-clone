@@ -6,10 +6,10 @@ export const addProfileRequest = async (data:IProfilePreview): Promise<void> => 
 };
 
 export const updateProfileRequest = async (): Promise<void> => {
-  const {data} = await api.put("/api/v1/users/profile");
+  await api.put("/api/v1/users/profile");
 };
 
-export const getProfileRequest = async (id:string): Promise<IProfile> => {
-  const {data} = await api.get<IProfile>("/api/v1/users/profile/", { params: { id } });
+export const getProfileRequest = async (profile_id:string): Promise<IProfile> => {
+  const {data} = await api.get<IProfile>("/api/v1/users/profile/", { headers: { profile_id } });
   return data;
 }
