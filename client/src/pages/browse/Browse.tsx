@@ -6,12 +6,6 @@ import ProfileFeature from '../../feature/browse/ProfileFeature'
 
 const Browse = () => {
 
-  const profiles = useAppSelector((state)=>state.profiles);
-
-  if (!profiles.currentProfile) {
-    return <ProfileFeature />
-  }
-
   return (
     <div>
       {/* <ProfileFeature profiles={[

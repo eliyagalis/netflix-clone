@@ -15,7 +15,16 @@ const serviceUrls = [
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({extended:true}));
+<<<<<<< HEAD
 app.use(cors({origin:serviceUrls,credentials:true}));
+=======
+
+const allowedOrigins = [
+    "http://proxy:3000"
+  ];
+
+app.use(cors({origin:allowedOrigins,credentials:true}));
+>>>>>>> 29adf5cdddd076ec7ca86c348f2918c441a532a0
 app.use('/paypal',(req:Request,res:Response,next:NextFunction)=>{console.log("we made it!!!"); next();},paypalRouter);
 // app.use('/api/v1/payment',router);
 

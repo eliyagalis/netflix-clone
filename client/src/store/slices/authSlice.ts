@@ -4,12 +4,10 @@ import { IUser } from '../../types/IUser';
 
 interface AuthState {
   user: IUser | null;
-  isLoading: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
-  isLoading: true
 };
 
 const authSlice = createSlice({
@@ -18,14 +16,11 @@ const authSlice = createSlice({
   reducers: {
     login(state, action: PayloadAction<{user:IUser}>) {
       state.user = action.payload.user;
-      state.isLoading = false;
     },
     logout(state) {
       state.user = null;
-      state.isLoading = true;
     },
     stopUserLoading(state) {
-      state.isLoading = false;
     }
   },
 });

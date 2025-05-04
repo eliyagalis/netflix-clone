@@ -6,7 +6,6 @@ interface Movie {
   title: string;
   videoUrl: string;
   description: string;
-  // add other fields like thumbnail, genre, etc.
 }
 
 const Watch = () => {
