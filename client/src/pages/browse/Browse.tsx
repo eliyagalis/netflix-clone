@@ -27,6 +27,7 @@ const Browse = () => {
 
         <MainCarousel isCarousel title='Drama' movies={movies} />
         <MainCarousel isCarousel title='Action' movies={movies} />
+
       </div>
     </div>
   )

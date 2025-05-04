@@ -8,18 +8,20 @@ type TrailerMovieProps = {
     playerRef: React.RefObject<ReactPlayer|null>;
     // posterUrl:string;
     isPlaying?:boolean;
+    isMute:boolean;
 
 };
 // isPlaying=true
-const TrailerMovie: React.FC<TrailerMovieProps> = ({url, playerRef}) => {
+const TrailerMovie: React.FC<TrailerMovieProps> = ({url,isMute, playerRef}) => {
 
 return(
   <div className='w-full overflow-hidden object-cover aspect-video'>
       <ReactPlayer
-        ref={playerRef}
+        // ref={playerRef}
         url={url}// או קובץ MP4
         // playing={isPlaying}
-        muted={true}
+        muted={isMute}
+        //{true}
         controls={true}
         width="100%"
         height="100%"
