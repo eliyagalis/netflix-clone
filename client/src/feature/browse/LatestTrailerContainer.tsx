@@ -18,6 +18,7 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   const playerRef = useRef<ReactPlayer>(null);
   // const [isPlaying,setIsPlaying]=useState(false)
   useEffect(() => {
+    
     setTimeout(()=>{
       setIsPoster(true);
     },5000)
@@ -37,16 +38,21 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
   }, [])
   
   const handleMuted=()=>{
-      const player = playerRef.current?.getInternalPlayer();
-      if (!player) 
+      // const player = playerRef.current?.getInternalPlayer();
+      // if (!player) 
+      //   return;
+      // if (player.isMuted()) {
+      //   player.unMute();
+      //   setIsMuted(false)
+      // } else {
+      //   player.mute();
+      //   setIsMuted(true);
+      // }
+      if(isMuted){
+        setIsMuted(false);
         return;
-      if (player.isMuted()) {
-        player.unMute();
-        setIsMuted(false)
-      } else {
-        player.mute();
-        setIsMuted(true);
       }
+      setIsMuted(true);
     }
   // //'https://www.youtube.com/watch?v=PMeHdc25BGE&pp=ygUFbW92aWU%3D'
   // const TrailerMovie: React.FC<TrailerMovieProps> = ({url,initialMuted,isPlaying=true,className,posterUrl}) => {
@@ -55,7 +61,7 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
       {isPoster?
       (
         //isPlaying={isPoster}
-        <TrailerMovie url='https://www.youtube.com/watch?v=PMeHdc25BGE&pp=ygUFbW92aWU%3D' playerRef={playerRef} />
+        <TrailerMovie url='https://www.youtube.com/watch?v=PMeHdc25BGE&pp=ygUFbW92aWU%3D' isMute={isMuted} playerRef={playerRef} />
       ):
       (
         <PosterMovie url="https://s.studiobinder.com/wp-content/uploads/2019/11/All-Marvel-Movies-in-Order-of-Release-Featured-StudioBinder-min.jpg" alt={`${trailer.title} image`} />

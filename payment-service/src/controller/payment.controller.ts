@@ -117,13 +117,10 @@ export default class PaymentController implements IPaymentController{
     }
     async getAllSubscriptions(req:Request,res:Response,next:NextFunction):Promise<Response|void>{
         const {paymentMethod}=req.body;
-        //שליחה ליוזר מיקרו סרביס עם קפקה של קבלת RULES 
-        // if(userEmail.rules!=="admin"){
-        //     return res.status(403).json({message:"unauthorized user"});
-        // }
         try {
             this.paymentService=await this.paymentFacade.getPaymentService(paymentMethod);
             const subscriptions=await this.paymentService.getAllSubscriptions();
+            console.log("subscriptions: ",subscriptions);
             if(!subscriptions || subscriptions.length===0){
                 return res.status(404).json({message:"no subscriptions found"});
             }
