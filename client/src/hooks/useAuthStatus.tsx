@@ -20,7 +20,7 @@ export function useAuthStatus() {
 
         const res = await getUserRequest();
         setIsAuthenticated(true);
-        dispatch(login({user: res}));
+        dispatch(login(res));
         dispatch(setProfiles(res.profiles ?? []));
         
       } catch {

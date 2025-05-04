@@ -18,7 +18,7 @@ const ProfileList: React.FC = () => {
 
   const handleAddProfile = async () => {
     const newProfile: IProfilePreview = {
-      // id: new Date().getTime().toString(),
+      id: new Date().getTime().toString(),
       avatar: 'https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha.jpg',
       name: 'New User',
     };
@@ -42,7 +42,8 @@ const ProfileList: React.FC = () => {
 
   const handleSave = async (newProfile: IProfilePreview) => {
     try {
-      await addProfileRequest();
+      console.log(newProfile);
+      await addProfileRequest(newProfile);
       dispatch(addProfile(newProfile));
       setEditingProfile(null);
     } catch (error) {
