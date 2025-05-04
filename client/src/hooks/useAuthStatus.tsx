@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { getUserRequest } from "../api/authApi";
+import { login } from "../store/slices/authSlice";
 
 export function useAuthStatus() {
   const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function verifyAuth() {
       try {
-        if(auth.user?.status) {
+        if(auth.user) {
             setIsAuthenticated(true);
             return;
         }
+
         const res = await getUserRequest();
-        setIsAuthenticated(res.status? true:false);
+        setIsAuthenticated(true);
+        dispatch(login({user: res}));
       } catch {
         setIsAuthenticated(false);
       } finally {
