@@ -61,9 +61,8 @@ const AppRoutes: React.FC = () => {
       }
       >
 
-        <Route index element={<ProtectedRoute>
+        <Route index element={
           <Browse key={currentProfile?.id} />
-        </ProtectedRoute>
         } />
         <Route path='/watch/:id' element={<Watch />} />
       </Route>
