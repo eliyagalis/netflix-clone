@@ -1,4 +1,4 @@
-import { CreatePaymentPlanDTO, ProducePayEventDTO } from "../DTO'S/paypal.service.dto";
+import { CreatePaymentPlanDTO, PaymentProcessDTO, ProducePayEventDTO } from "../DTO'S/paypal.service.dto";
 import { updatePaypalSubscriptionDTO } from "../DTO'S/subscription.dto";
 import { IPayPalSubscriptionResponse } from "./IPaypalResponses";
 import { IFullPlan } from "./IPlan";
@@ -6,14 +6,14 @@ import { ISubscription } from "./ISubscription";
 import { IUser } from "./IUser";
 
 export interface IPaymentService{
-    // createProduct():Promise<string>,
-    // createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>,
-    // createSubscriptionInit(planName:string):Promise<string>,
+    createPlan(data:CreatePaymentPlanDTO):Promise<IFullPlan>,
+    cancelUserSubscriptionFlow(userId: string): Promise<string>,
+    deletePlan(planName:string):Promise<string>,
     saveSubscription(planName:string,user:IUser,subscription:IPayPalSubscriptionResponse):Promise<ISubscription>,
     existPlanByName(planName:string):Promise<string|null>,
-    existUserOnUserService(userId:string):Promise<boolean>,
     savePlanOnDb(planId:string,planName:string):Promise<IFullPlan>,
-    sendPaymentStatusEvent(paymentData:ProducePayEventDTO):Promise<void>,
+    sendPaymentStatusEvent<T>(paymentData:ProducePayEventDTO<T>):Promise<void>,
+handlePaymentProcess(data:PaymentProcessDTO):Promise<ISubscription>,
     deleteUserFromDb(userId:string):Promise<string>,
     getUserById(userId:string):Promise<IUser|null>,
     approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>,

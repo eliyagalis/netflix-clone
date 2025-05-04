@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { IMovieCard } from '../../../types/IMovieCard';
 import { MoviePreviewInfo } from './MoviePreviewInfo';
+import { ISeriesCard } from '../../../types/ISeriesCard';
 
 interface MoviePreviewProps {
   preview: {
-    movie: IMovieCard;
+    movie: IMovieCard|ISeriesCard;
     x: number;
     y: number;
     width: number;

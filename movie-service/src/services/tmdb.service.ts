@@ -2,6 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { injectable } from 'inversify';
 import { MovieDetails, MovieResponse } from '../interfaces/IMovieable';
+import { IGenre, GenreListResponse } from '../interfaces/IGenre'; // Add this import
 import { getOrSetCache } from '../utils/redis.cache';
 import { handleApiRequest } from '../utils/sideFunctionLogic';
 import fs from 'fs';
@@ -12,10 +13,8 @@ dotenv.config();
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
-
 @injectable()
 export class TMDBService {
-
   private apiUrl: string;
   private apiKey: string;
 
@@ -27,7 +26,6 @@ export class TMDBService {
     this.apiUrl = TMDB_BASE_URL || 'https://api.themoviedb.org/3';
     this.apiKey = TMDB_API_KEY;
   }
- 
 
   private async makeRequest<T>(endpoint: string, params: Record<string, any> = {}): Promise<T> {
     try {
@@ -47,58 +45,121 @@ export class TMDBService {
     }
   }
 
+  // Existing movie-related methods
   async getPopularMovies(page: number = 1): Promise<MovieResponse> {
-    return await handleApiRequest<MovieResponse>("popularMovies",()=>this.makeRequest<MovieResponse>('/movie/popular', { page }));
-    
+    return await handleApiRequest<MovieResponse>(`popularMovies:${page}`, () => 
+      this.makeRequest<MovieResponse>('/movie/popular', { page })
+    );
   }
 
   async getTopRatedMovies(page: number = 1): Promise<MovieResponse> {
-    return await handleApiRequest<MovieResponse>("topRatedMovies",()=>this.makeRequest<MovieResponse>('/movie/top_rated', { page }));
+    return await handleApiRequest<MovieResponse>("topRatedMovies", () => 
+      this.makeRequest<MovieResponse>('/movie/top_rated', { page })
+    );
   }
-
-  // async getNowPlayingMovies(page: number = 1): Promise<MovieResponse> {
-  //   return this.makeRequest<MovieResponse>('/movie/now_playing', { page });
-  // }
 
   async getUpcomingMovies(page: number = 1): Promise<MovieResponse> {
-    return await handleApiRequest<MovieResponse>("upComingMovies",()=>this.makeRequest<MovieResponse>('/movie/upcoming', { page }));
-  
+    return await handleApiRequest<MovieResponse>("upComingMovies", () => 
+      this.makeRequest<MovieResponse>('/movie/upcoming', { page })
+    );
   }
-  async convertMovieToMp4(url:string){
-      ytdl(url, { filter: 'audioandvideo' })
-      .pipe(fs.createWriteStream('public/videos/trailer.mp4'))
-      .on('finish', () => {
-        const file=fs.readFileSync('public/videos/trailer.mp4');
-        return file;
-    });
-  };
   async getMovieDetails(movieId: number): Promise<MovieDetails> {
-    return await handleApiRequest<MovieDetails>(`movieIdDetail:${movieId}`,()=>this.makeRequest<MovieDetails>(`/movie/${movieId}`));
+    return await handleApiRequest<MovieDetails>(`movieIdDetail:${movieId}`, () => 
+      this.makeRequest<MovieDetails>(`/movie/${movieId}`)
+    );
   }
 
   async searchMovies(query: string, page: number = 1): Promise<MovieResponse> {
-    return await handleApiRequest<MovieResponse>(`searchMovies: ${query}`,()=>this.makeRequest<MovieResponse>('/search/movie', { query, page }));
-  }
-
-  async getMoviesByGenre(genreId: number, page: number = 1): Promise<MovieResponse> {
-    return await handleApiRequest<MovieResponse>(`moviesByGenre: ${genreId}`,()=>{this.makeRequest<MovieResponse>('/discover/movie', { 
-      with_genres: genreId,
-      page
-    })});
-
-    // return this.makeRequest<MovieResponse>('/discover/movie', { 
-    //   with_genres: genreId,
-    //   page
-    // });
+    return await handleApiRequest<MovieResponse>(`searchMovies:${query}`, () => 
+      this.makeRequest<MovieResponse>('/search/movie', { query, page })
+    );
   }
 
   async getSimilarMovies(movieId: number, page: number = 1): Promise<MovieResponse> {
-    return await handleApiRequest<MovieResponse>(`similarMoviesById: ${movieId}`,()=>this.makeRequest<MovieResponse>(`/movie/${movieId}/similar`, { page }))
+    return await handleApiRequest<MovieResponse>(`similarMoviesById:${movieId}`, () => 
+      this.makeRequest<MovieResponse>(`/movie/${movieId}/similar`, { page })
+    );
+  }
+
+  // New methods for TV shows
+  async getPopularTvShows(page: number = 1): Promise<MovieResponse> {
+    return await handleApiRequest<MovieResponse>("popularTvShows", () => 
+      this.makeRequest<MovieResponse>('/tv/popular', { page })
+    );
+  }
+
+  async getTopRatedTvShows(page: number = 1): Promise<MovieResponse> {
+    return await handleApiRequest<MovieResponse>("topRatedTvShows", () => 
+      this.makeRequest<MovieResponse>('/tv/top_rated', { page })
+    );
+  }
+
+  async getTvShowDetails(tvId: number): Promise<MovieDetails> {
+    return await handleApiRequest<MovieDetails>(`tvShowDetail:${tvId}`, () => 
+      this.makeRequest<MovieDetails>(`/tv/${tvId}`)
+    );
+  }
+
+  // Genre-related methods
+  async getMovieGenres(): Promise<GenreListResponse> {
+    return await handleApiRequest<GenreListResponse>("movieGenres", () => 
+      this.makeRequest<GenreListResponse>('/genre/movie/list')
+    );
+  }
+
+  async getTvGenres(): Promise<GenreListResponse> {
+    return await handleApiRequest<GenreListResponse>("tvGenres", () => 
+      this.makeRequest<GenreListResponse>('/genre/tv/list')
+    );
+  }
+
+  // Get all genres (both movie and TV)
+  async getAllGenres(): Promise<GenreListResponse> {
+    const [movieGenres, tvGenres] = await Promise.all([
+      this.getMovieGenres(),
+      this.getTvGenres()
+    ]);
+    
+    // Mark each genre with its media type
+    const genres = [
+      ...movieGenres.genres.map(genre => ({ ...genre, mediaType: 'movie' as const })),
+      ...tvGenres.genres.map(genre => ({ ...genre, mediaType: 'tv' as const }))
+    ];
+    
+    return { genres };
+  }
+
+  // Get content by genre and media type
+  async getContentByGenre(genreId: number, mediaType: 'movie' | 'tv' = 'movie', page: number = 1): Promise<MovieResponse> {
+    return await handleApiRequest<MovieResponse>(`${mediaType}ByGenre:${genreId}`, () => 
+      this.makeRequest<MovieResponse>(`/discover/${mediaType}`, {
+        with_genres: genreId,
+        page
+      })
+    );
+  }
+
+  // Multi-search (movies, TV shows, people)
+  async multiSearch(query: string, page: number = 1): Promise<any> {
+    return await handleApiRequest<any>(`multiSearch:${query}`, () => 
+      this.makeRequest<any>('/search/multi', { query, page })
+    );
+  }
+
+  // The existing methods
+  async convertMovieToMp4(url: string) {
+    ytdl(url, { filter: 'audioandvideo' })
+      .pipe(fs.createWriteStream('public/videos/trailer.mp4'))
+      .on('finish', () => {
+        const file = fs.readFileSync('public/videos/trailer.mp4');
+        return file;
+      });
   }
 
   getImageUrl(path: string | null, size: string = 'w500'): string | null {
     if (!path) return null;
     return `https://image.tmdb.org/t/p/${size}${path}`;
   }
-}
 
+  
+}

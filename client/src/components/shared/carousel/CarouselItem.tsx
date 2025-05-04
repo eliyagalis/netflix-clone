@@ -1,11 +1,12 @@
 import React, { MouseEvent } from 'react';
 import { IMovieCard } from '../../../types/IMovieCard';
+import { ISeriesCard } from '../../../types/ISeriesCard';
 
 interface CarouselItemProps {
-  item: IMovieCard;
+  item: IMovieCard|ISeriesCard;
   index: number;
   isIndexed?: boolean;
-  onMouseEnter: (movie: IMovieCard) => (e: MouseEvent<HTMLDivElement>) => void;
+  onMouseEnter: (movie: IMovieCard|ISeriesCard) => (e: MouseEvent<HTMLDivElement>) => void;
   onMouseLeave: () => void;
 }
 

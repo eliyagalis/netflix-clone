@@ -12,6 +12,7 @@ type ButtonProps = {
   type?: "button" | "submit" | "reset";
   border?:string,
   onClickFunc?:()=>void;
+
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   fontSize,
   rounded,
   onClickFunc,
-  border="border-none"
+  border="border-none",
 }) => {
   const navigate = useNavigate();
 

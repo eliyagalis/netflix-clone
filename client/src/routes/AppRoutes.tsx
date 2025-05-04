@@ -5,7 +5,6 @@ import { useAppSelector } from '../store/store';
 import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
 import Logout from '../pages/Logout';
-import MainMoviesPage from '../pages/MainMoviesPage';
 import PaypalLogic from '../feature/paypal/paypalLogic';
 
 import SignupLayout from '../pages/layouts/SignupLayout';
@@ -17,6 +16,8 @@ import Registration from '../feature/signup/Registration';
 import Regform from '../feature/signup/Regform';
 import Planform from '../feature/signup/Planform';
 import Password from '../feature/signup/Password';
+
+import { ProtectedRoute } from './ProtectedRoute';
 
 const PaymentPickerPage = lazy(() => import('../pages/PaymentPickerPage'));
 const PaypalOptionPage = lazy(() => import('../pages/PaypalOptionPage'));
@@ -54,12 +55,17 @@ const AppRoutes: React.FC = () => {
         />
       </Route>
 
-      <Route path="/browse" element={<BrowseLayout />}>
+      <Route path="/browse" element={
+          <ProtectedRoute>
+            <BrowseLayout />
+          </ProtectedRoute>
+
+        }
+      >
         <Route index element={<Browse key={currentProfile?.id} />} />
       </Route>
 
       <Route path="/payment" element={<PaypalLogic isClicked={false} paymentMethod="paypal" />} />
-      <Route path="/mainMoviePage" element={<MainMoviesPage />} />
     </Routes>
   );
 };

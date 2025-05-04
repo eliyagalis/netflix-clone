@@ -100,7 +100,7 @@ export const strings = {
             },
             planform: {
                 basic: {
-                  title: "Basic",
+                  title: "basic",
                   subtitle: "720p",
                   monthlyPrice: "₪32.90",
                   quality: "Good",
@@ -111,7 +111,7 @@ export const strings = {
                   downloadDevices: 1,
                 },
                 standard: {
-                  title: "Standard",
+                  title: "standard",
                   subtitle: "1080p",
                   monthlyPrice: "₪54.90",
                   quality: "Great",
@@ -122,7 +122,7 @@ export const strings = {
                   downloadDevices: 2,
                 },
                 premium: {
-                  title: "Premium",
+                  title: "premium",
                   subtitle: "4K + HDR",
                   monthlyPrice: "₪69.90",
                   quality: "Best",

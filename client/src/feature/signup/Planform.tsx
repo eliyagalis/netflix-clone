@@ -31,10 +31,10 @@ const Planform = () => {
         e.preventDefault();
 
         if (validPlans.includes(selectedPlan)) {
-            dispatch(setPlan(selectedPlan));
+            dispatch(setPlan(selectedPlan.toLowerCase()));
             dispatch(nextStep());
-            if (auth.isSignedIn) {
-                navigate('/signup/paymentPicker');
+            if (auth.user) {
+                navigate('/signup/choosePaymentMethod');
             }
             else
                 navigate('/signup/registration');

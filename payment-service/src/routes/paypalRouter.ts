@@ -10,27 +10,30 @@ config()
 export const paypalRouter:Router=Router();
 const paymentController=container.get<IPaymentController>(Tokens.IPaymentController);
 
-paypalRouter.post('/initP',[
+paypalRouter.get('/initP',
+[
     validatePaymentMethodFieldReq,
     // autenticateRule,
     errorValidator
-],(req:Request,res:Response,next:NextFunction)=>{
+],
+(req:Request,res:Response,next:NextFunction)=>{
     paymentController.saveAllPlansInit(req,res,next);
 });
-paypalRouter.post('/deleteUser', (req:Request,res:Response,next:NextFunction)=>{
+paypalRouter.delete('/deleteUser', (req:Request,res:Response,next:NextFunction)=>{
         console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next()
     },
     [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
     ,(req:Request,res:Response,next:NextFunction)=>{
     paymentController.deleteUser(req,res,next);
 });
+
 paypalRouter.post('/cancel', (req:Request,res:Response,next:NextFunction)=>{
-        console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        console.log(`request headers: userId:${req.headers['user_id']}, email:${req.headers['email']}`);
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next()
     },
     [validateUserIdField,validatePaymentMethodFieldReq,errorValidator]
@@ -39,9 +42,9 @@ paypalRouter.post('/cancel', (req:Request,res:Response,next:NextFunction)=>{
 });
 paypalRouter.post('/plansCheck',
     (req:Request,res:Response,next:NextFunction)=>{
-        console.log(`request headers: userId:${req.headers['x-user-id']}, email:${req.headers['x-user-email']}`);
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        console.log(`request headers: userId:${req.headers['user_id']}, email:${req.headers['email']}`);
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next()
     }
     ,[
@@ -58,8 +61,8 @@ paypalRouter.post('/plansCheck',
         paymentController.validatePlanAndUser(req,res,next);}
 )
 paypalRouter.post('/paymentCompleted',(req:Request,res:Response,next:NextFunction)=>{
-        req.userId = req.headers['x-user-id'] as string;
-        req.userEmail = req.headers['x-user-email'] as string;
+        req.userId = req.headers['user_id'] as string;
+        req.userEmail = req.headers['email'] as string;
         next();
     }, 
     [
@@ -73,7 +76,7 @@ paypalRouter.post('/paymentCompleted',(req:Request,res:Response,next:NextFunctio
         paymentController.approvePaymentProcess(req,res,next) }
 );
 paypalRouter.get('/getSubscription',(req:Request,res:Response,next:NextFunction)=>{
-        req.userId = req.headers['x-user-id'] as string;
+        req.userId = req.header('user_id') as string;
     }, 
      //אולי למחוק ולהשאיר רק בפונקציה
     [ validateUserIdField,validatePaymentMethodFieldReq,errorValidator ],
@@ -82,7 +85,7 @@ paypalRouter.get('/getSubscription',(req:Request,res:Response,next:NextFunction)
     }
 );
 paypalRouter.patch('/update',(req:Request,res:Response,next:NextFunction)=>{
-        req.userId = req.headers['x-user-id'] as string;
+        req.userId = req.headers['user_id'] as string;
     }, 
     [
         validateUserIdField,
@@ -93,41 +96,17 @@ paypalRouter.patch('/update',(req:Request,res:Response,next:NextFunction)=>{
     ],
     (req:Request,res:Response,next:NextFunction)=>{ paymentController.updateSubscription(req,res,next) }
 );
-paypalRouter.get('/getAll',
-    autenticateRule,
+paypalRouter.get('/getAllSub',(req:Request,res:Response,next:NextFunction)=>{
+    //   if (process.env.NODE_ENV === 'development') {
+    //         req.headers["user_id"]="550e8400-e29b-41d4-a716-446655440000"
+    //         req.headers["email"] = 'dev@example.com';
+    //         next();
+    //     }
+    console.log("arrived to router-getAll sub");
+    autenticateRule(req,res,next)},
     [validatePaymentMethodFieldReq,errorValidator],
     (req:Request,res:Response,next:NextFunction)=>{ paymentController.getAllSubscriptions(req,res,next) }
 );
-
-
-
-// export const createOrder=async(userId:string,plan:string)=>{
-//     try{
-//         const accessToken=await getAccessTokenPayPal();
-//         const {data}=await axios.post(`${process.env.PAYPAL_BASEURL}/v2/checkOut/orders`,{
-//             headers:{
-//                 'Content_type':'application/json',
-//                 Authorization:`Bearer ${accessToken}`
-//             },
-//             json:{ //body
-//                 intent:"CAPTURE", //חיוב מיידי 
-//                 //אובייקט עם פרטי העסקה
-//                 purchase_units:[{ 
-//                     amount:{
-//                         currency_code:"USD", //לשלוף את המטבע מהפלאן
-//                         value: "" //לשלוף מהסוג מנוי- לעשות 
-//                     },
-//                     description: "Netflix {סוג מנוי} Subscription"
-//                 }],
-//                 application_context:{
-//                     return_url:"https://{localHost:5174---site.com}/success", //במקרה של הצלחה- דף הצלחה
-//                     cancel_url:"https://{localHost:5174---site.com}/cancel"//במקרה של ביטול תשלום- דף ביטול
-//                 }
-//             }
-//         })
-//         return data;
-//     }catch(err){
-//         console.log("Error creating Paypal order:",err);
-//         throw new Error((err as Error).message);
-//     }
-// }
+// paypalRouter.get('/getAllSub',(req:Request,res:Response,next:NextFunction)=>{
+// createPlan(req:Request,res:Response,next:NextFunction)
+// })

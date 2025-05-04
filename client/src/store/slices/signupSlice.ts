@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SignupFormData } from "../../schemas/authSchemas";
 
 interface SignupState {
   email: string;
+  isRegistered: boolean;
 }
 
 const initialState: SignupState = {
   email: "",
+  isRegistered: false
 };
 
 const signupSlice = createSlice({
@@ -16,8 +17,13 @@ const signupSlice = createSlice({
     setEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;
     },
+    register: (state, action: PayloadAction<string>) => {
+      state.email = action.payload;
+      state.isRegistered = true;
+    },
     resetSignup: (state) => {
       state.email = "";
+      state.isRegistered = false;
     },
   },
 });

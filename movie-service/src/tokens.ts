@@ -1,4 +1,7 @@
+import GenreController from "./controllers/genre.controller";
+
 export const TOKENS = {
      ITmdbService:"ITmdbService",
-     MovieController:"MovieController"
+     MovieController:"MovieController",
+     GenreController: "GenreController"
 }

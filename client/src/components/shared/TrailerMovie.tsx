@@ -1,29 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactPlayer from 'react-player';
-import Button from './Button';
 
 
 // import ytdl from 'ytdl-core';
 type TrailerMovieProps = {
     url: string;
-    initialMuted:boolean;
+    playerRef: React.RefObject<ReactPlayer|null>;
     // posterUrl:string;
     isPlaying?:boolean;
+    isMute:boolean;
+
 };
 // isPlaying=true
-const TrailerMovie: React.FC<TrailerMovieProps> = ({url,initialMuted}) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  
+const TrailerMovie: React.FC<TrailerMovieProps> = ({url,isMute, playerRef}) => {
+
 return(
   <div className='w-full overflow-hidden object-cover aspect-video'>
-    {/* <video
-      src={url} muted={initialMuted}  autoPlay className='w-full object-cover brightness-50'
-    /> */}
-    {/* <iframe src={url}  frameborder="0"></iframe> */}
       <ReactPlayer
+        // ref={playerRef}
         url={url}// או קובץ MP4
-        playing={isPlaying}
-        muted={initialMuted}
+        // playing={isPlaying}
+        muted={isMute}
+        //{true}
         controls={true}
         width="100%"
         height="100%"
@@ -50,11 +48,6 @@ return(
           }
         }}
     />
-      {isPlaying &&(
-        <Button className='rounded-full absolute bg-black hover:bg-gray-400 border-2 border-white z-999'>
-          <i className='fa-solid fa-rotate-right text-white'/>
-        </Button>
-      )}
   </div>
   );
 };

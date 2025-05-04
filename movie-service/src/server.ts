@@ -1,3 +1,4 @@
+// src/server.ts (updated)
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -12,8 +13,11 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({origin:"*",credentials:true}));
 app.use(express.json());
 
-app.use('/api/v1/movies', movieRoutes); //TODO .../v1/movies
-app.use("/api/v1/movies/genres",genreRouter);
+// API routes
+app.use('/api/v1/movies', movieRoutes);
+
+// Netflix-style genre browsing
+app.use('/api/v1/genre', genreRouter);
 
 app.listen(PORT, () => {
   console.log(`Movies microservice running on port ${PORT}`);
