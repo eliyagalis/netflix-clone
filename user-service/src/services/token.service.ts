@@ -16,13 +16,9 @@ export class TokenService implements ITokenService {
     constructor(
         accessTokenSecret: string = process.env.JWT_ACCESS_SECRET || '3f8a61b247c9d8e5f436b912af87e9d0c5a72f1d9b4e87c3586a0df5e98216ab',
         refreshTokenSecret: string = process.env.JWT_REFRESH_SECRET || '7d58f9e2c61b3adfe48c95af7632db85019ba647fcde285a4c6e98b71d26a03c',
-<<<<<<< HEAD
-        accessTokenExpiry: number = 15*60*1000,//process.env.JWT_ACCESS_EXPIRES_IN || 15
-        refreshTokenExpiry: number = 7*1000*60*24//process.env.JWT_REFRESH_EXPIRES_IN || 7
-=======
+
         accessTokenExpiry: number = 15 * 60 * 1000,//process.env.JWT_ACCESS_EXPIRES_IN || 15
         refreshTokenExpiry: number = 7 * 1000 * 60 * 60 * 24//process.env.JWT_REFRESH_EXPIRES_IN || 7
->>>>>>> 3f0e7d8189253128d341ada1cdacefd62e384109
     ) {
         this.accessTokenSecret = accessTokenSecret;
         this.refreshTokenSecret = refreshTokenSecret;
