@@ -6,9 +6,9 @@ type MovieAgeLimitProp={
 }
 const MovieAgeLimit:React.FC<MovieAgeLimitProp> = ({ageLimit}) => {
   return (
-    <div className={`bg-gray-600 border-r-2 border-white flex flex-row `}>
+    <div className={`bg-gray-600 border-l-2 border-white flex flex-row pl-2 pr-2`}>
+      <i className='fa-solid fa-plus text-white items-center pt-2'></i>
       <span className={`${typography.medium}`}>{ageLimit}</span>
-      <i className='fa-solid fa-plus text-white'></i>
     </div>
   )
 }

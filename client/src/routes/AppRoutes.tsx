@@ -59,6 +59,7 @@ const AppRoutes: React.FC = () => {
           <ProtectedRoute>
             <BrowseLayout />
           </ProtectedRoute>
+
         }
       >
         <Route index element={<Browse key={currentProfile?.id} />} />
