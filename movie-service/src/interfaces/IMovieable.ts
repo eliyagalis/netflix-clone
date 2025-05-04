@@ -1,14 +1,15 @@
 export interface Movie {
-    id: number;
-    title: string;
-    overview: string;
-    poster_path: string | null;
-    backdrop_path: string | null;
-    release_date: string;
-    vote_average: number;
-    vote_count: number;
-    genre_ids: number[];
-  }
+  id: number;
+  title: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  release_date: string;
+  vote_average: number;
+  vote_count: number;
+  genre_ids: number[];
+}
+
 export interface MovieDetails extends Movie {
   genres: { id: number; name: string }[];
   runtime: number;
@@ -22,21 +23,17 @@ export interface MovieDetails extends Movie {
     logo_path: string | null;
   }[];
 }
+
 export interface MovieResponse {
   page: number;
-  results: MoviePreview[];
+  results: Movie[];  // Use Movie[] here, not MoviePreview[]
   total_pages: number;
   total_results: number;
 }
 
-export interface MoviePreview {
-  contentId: string;
-  title: string;
-  poster: string | null;
-  trailer: string | null;
-  genres: string[];
-  ageRestriction?: string;
-  runtime?: number; // For movies - in minutes
-  numberOfSeasons?: number; // For TV shows
-  type: 'movie' | 'tv';
+export interface EnhancedMovieDetails extends MovieDetails {
+  poster_url: string | null;
+  backdrop_url: string | null;
+  trailer_url: string | null;
+  age_restriction: string | null;
 }
