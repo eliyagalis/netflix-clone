@@ -46,7 +46,7 @@ const ProfileList: React.FC = () => {
     } else {
       try {
         console.log(profile);
-        const data = await getProfileRequest(profile.id || "");
+        const data = await getProfileRequest(profile.id);
         if (data) {
           dispatch(setCurrentProfile(data));
         }
