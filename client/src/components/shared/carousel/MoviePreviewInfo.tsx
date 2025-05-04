@@ -6,42 +6,60 @@ import Like from '../../../assets/netflix-buttons-svgs/Like';
 import More from '../../../assets/netflix-buttons-svgs/More';
 import Added from '../../../assets/netflix-buttons-svgs/Added'; // Make sure you have this icon
 import IMyListItem from '../../../types/IMyListItem';
-import { useAppSelector } from '../../../store/store';
-import { addToProfileListRequest } from '../../../api/profilesApi';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { addToProfileListRequest, removeFromProfileListRequest } from '../../../api/profilesApi';
+import { useAuthStatus } from '../../../hooks/useAuthStatus';
+import { addMovieToList, removeMovieFromList } from '../../../store/slices/profilesSlice';
 
 interface MoviePreviewInfoProps {
   movie: IMyListItem;
 }
 
 export const MoviePreviewInfo: React.FC<MoviePreviewInfoProps> = ({ movie }) => {
-  const { currentProfile } = useAppSelector((state) => state.profiles);
+  const { loading } = useAuthStatus();
+  const currentProfile = useAppSelector((state) => state.profiles.currentProfile);
+  const dispatch = useAppDispatch();
+
+
+  // Block usage if loading
+  if (loading) {
+    return null; // or a loading spinner
+  }
+
+  if (!currentProfile) {
+    return <div className="text-white">No profile found</div>;
+  }
+
 
   const addToMyListHandler = async (movie: IMyListItem) => {
     try {
-      await addToProfileListRequest( currentProfile?.id || "", movie );
+      const temp:any = currentProfile;
+      await addToProfileListRequest(temp.id || temp._id || " ", movie);
+      dispatch(addMovieToList(movie));
       console.log('Added to list');
     } catch (error) {
       console.error('Failed to add to list', error);
+    } finally {
+
     }
   };
 
   const removeFromMyListHandler = async (movie: IMyListItem) => {
     try {
-      // Call your API or dispatch remove action here
-      console.log('Removed from list:', movie);
+      const temp:any = currentProfile;
+      await removeFromProfileListRequest(temp.id || temp._id || " ", movie.contentId);
+      dispatch(removeMovieFromList(movie.contentId));     
     } catch (error) {
       console.error('Failed to remove from list', error);
     }
   };
-
-  const isInMyList = currentProfile?.myList?.some((item) => item.contentId === movie.contentId);
 
   return (
     <div className="w-full bg-[#181818] p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Play />
-          {isInMyList ? (
+          {currentProfile.myList.includes(movie) ? (
             <Added onClick={() => removeFromMyListHandler(movie)} />
           ) : (
             <Add onClick={() => addToMyListHandler(movie)} />

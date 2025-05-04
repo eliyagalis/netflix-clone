@@ -22,6 +22,7 @@ export function useAuthStatus() {
         setIsAuthenticated(true);
         dispatch(login(res));
         dispatch(setProfiles(res.profiles || []));
+        console.log(res.profiles);
         
       } catch {
         setIsAuthenticated(false);

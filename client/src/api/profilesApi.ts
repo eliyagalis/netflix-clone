@@ -16,5 +16,12 @@ export const getProfileRequest = async (profile_id:string): Promise<IProfile> =>
 }
 
 export const addToProfileListRequest = async (profile_id:string, item:IMyListItem): Promise<void> => {
-  await api.post("/api/v1/users/profile/list", item, { headers: { profile_id } });
+  await api.post("/api/v1/users/profile/list",   
+    { data: item }, 
+    { headers: { profile_id } });
+}
+
+export const removeFromProfileListRequest = async (profile_id:string, itemId:string): Promise<void> => {
+  await api.delete("/api/v1/users/profile/list",   
+    { headers: { profile_id, itemId } });
 }
