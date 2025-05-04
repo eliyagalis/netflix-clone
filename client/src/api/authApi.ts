@@ -2,7 +2,6 @@ import api, { ApiResponse, UserResponse } from "./api";
 import { EmailFormData, LoginFormData, SignupFormData } from "../schemas/authSchemas";
 import { IUser } from "../types/IUser";
 
-
 export const loginRequest = async (
   formData: LoginFormData
 ): Promise<UserResponse> => {

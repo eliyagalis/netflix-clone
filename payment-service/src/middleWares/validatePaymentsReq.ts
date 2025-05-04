@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {body, check, validationResult} from "express-validator"
-const forbiddenTagsRegex = /[<>]/;
-const emailRegex = /^[^<>@\s]+@[^<>@\s]+\.[^<>@\s]+$/;
+export const forbiddenTagsRegex = /[<>]/;
+export const emailRegex = /^[^<>@\s]+@[^<>@\s]+\.[^<>@\s]+$/;
 
 export const validatePaymentMethodFieldReq=
     body("paymentMethod")

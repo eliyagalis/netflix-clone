@@ -13,16 +13,16 @@ export class PlanRepositoryPSql implements IPlanRepository{
     
     constructor(@inject(Tokens.IPlanAdapter) private planAdapter:IPlanAdapter){}
 
-    async createPlan(plan:IFullPlan):Promise<IFullPlan>{
+    async createPlan(plan:IPlan,paypalPlanId:string):Promise<IFullPlan>{
         const validPlanName=plan.plan_name!=='basic' && 
                             plan.plan_name!=='premium'&& 
                             plan.plan_name!=='standard';
-        if( !plan.id||!plan.plan_name || validPlanName || !plan.price || !plan.description|| !plan.billing_interval){
+        if( !paypalPlanId||!plan.plan_name || validPlanName || !plan.price || !plan.description|| !plan.billing_interval){
             throw new Error("Please enter all the parameters!");
         }
         try{
             const newPlan:Plan=await Plan.create({
-                plan_id:plan.id,
+                plan_id:paypalPlanId,
                 name:plan.plan_name as 'basic' | 'premium' | 'standard',
                 price:plan.price,
                 description:plan.description,
@@ -60,48 +60,36 @@ export class PlanRepositoryPSql implements IPlanRepository{
             return null;
         }
     }
-    async updatePlan<K  extends keyof IPlan>(data:UpdatePlanDTO<K>): Promise<IFullPlan|null>{
-        const {planId,property,valueToChange}=data;
-        if(!planId || !property || !valueToChange){
-            console.log("plan Id, property or value to change is required!");
-            return null;
-        }
-        if(property==="description"){
-            console.log("description is not allowed to be changed!");
-            return null;
-        }
-        try{
-            const plan=await this.findPlanById(planId);
-            if(!plan){
-                console.log("Plan not found!");
-                return null;
-            }
-            if (property==="plan_name" && ['basic', 'premium', 'standard'].includes(valueToChange as string)) {
-                plan.name = property as 'basic' | 'premium' | 'standard';
-                plan.description=`{plan.name} plan`;
-            }
-            else if(property==="billing_interval" && ['monthly', 'annual'].includes(valueToChange as string)){
-                plan.billing_interval = valueToChange as 'monthly' | 'annual';
-            }
-            else if(property==="price" && typeof valueToChange==="number"){
-                plan.price = valueToChange;
-            }
-            await plan.save();
-            return this.planAdapter.convertPlanToIFullPlan(plan);
-        }catch(err){
-            console.log("Error on updating plan: ",err);
-            return null;
-        }
-    }
-    async deletePlan(planName: string): Promise<string|null>{
-        if(!planName||!['basic,standard,premium'].includes(planName)){
+    // async updatePlan<K  extends keyof IPlan>(data:UpdatePlanDTO<K>): Promise<IFullPlan|null>{
+    //     const {planId,property,valueToChange}=data;
+    //     if(!planId || !property || !valueToChange){
+    //         console.log("plan Id, property or value to change is required!");
+    //         return null;
+    //     }
+    //     if(property==="description"){
+    //         console.log("description is not allowed to be changed!");
+    //         return null;
+    //     }
+    //     try{
+    //         const plan=await this.findPlanById(planId);
+    //         if(!plan){
+    //             console.log("Plan not found!");
+    //             return null;
+    //         }
+
+    //         plan[property]=valueToChange
+    //         await plan.save();
+    //         return this.planAdapter.convertPlanToIFullPlan(plan);
+    //     }catch(err){
+    //         console.log("Error on updating plan: ",err);
+    //         return null;
+    //     }
+    // }
+    async deletePlan(planName: string): Promise<string>{
+        if(!planName || !['basic,standard,premium'].includes(planName)){
             throw new Error("plan name is missed or unvalid");
         }
         try {
-            const plan=await this.findPlanByName(planName);
-            if(!plan){
-                throw new Error("plan is not exist");
-            }
             await Plan.destroy({
                 where:{
                     plan_name:planName
@@ -113,5 +101,5 @@ export class PlanRepositoryPSql implements IPlanRepository{
             throw new Error((error as Error).message);
         }    
     }
-
+    
 }

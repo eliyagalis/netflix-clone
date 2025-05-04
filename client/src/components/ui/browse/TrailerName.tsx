@@ -7,7 +7,7 @@ type TrailerName={
 }
 const TrailerName = ({name,isBigger}) => {
   return (
-    <div className={`${isBigger? typography.xlarge: typography.large}`}>{name}</div>
+    <div className={`${isBigger? 'text-8xl': `text-8xl mb-8`} text-center italic font-extrabold my-4 mb-7`}>{name}</div>
   )
 }
 
