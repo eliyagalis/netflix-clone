@@ -75,8 +75,7 @@ const MovieResults=({ searchTerm }: MovieResultsProps) =>{
   // }
 
   return (
-    <div className="results-container bg-black z-[999]">
-{/*}
+    <div className="bg-black z-[999]">
       <button onClick={handleClose} className='top-0 left-0 text-white'>✕</button>
       {!isError? (
         <MainCarousel isCarousel={false} movies={moviesRes} />

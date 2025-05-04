@@ -29,6 +29,7 @@ const SearchMovie = () => {
     const onSubmit = async(data:searchMoviesFormData ) => {
       console.log("submit")
       setSearchIsClicked(prev=>({...prev,afterInputFilled:true}));
+      navigate(`/search?q=${data.textInput}`)
       // return (<MovieResults searchTerm={data.textInput}/>)
       // try {
 
@@ -58,7 +59,6 @@ const SearchMovie = () => {
             <MovieResults searchTerm={textValue}/>
           )}
       </>
-
       ):(
         <button 
           onClick={()=>{
