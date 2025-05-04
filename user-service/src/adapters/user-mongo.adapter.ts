@@ -14,7 +14,7 @@ export default class MongoUserAdapter implements IUserAdapter {
   /**
    * Converts a MongoDB user model to a domain user
    */
-  public toDomainUser(mongoUser: IMongoUser ): IUser {
+  public toDomainUser(mongoUser: IMongoUser): IUser {
 
     return {
       id: mongoUser._id.toString(),
@@ -77,34 +77,45 @@ export default class MongoUserAdapter implements IUserAdapter {
       name: profile.name || 'Unnamed Profile',
       avatar: profile.avatar || 'default-avatar.png',
       isKid: profile.isKid !== undefined ? profile.isKid : false,
-      myList: profile.myList 
-        ? profile.myList.map(item => this.toDbMyListItem(item)) 
+      myList: profile.myList
+        ? profile.myList.map(item => this.toDbMyListItem(item))
         : []
     };
   }
   /**
-   * Converts a domain list item to a MongoDB list item model
+   * Converts a MongoDB list item to a domain list item
    */
   public toDomainMyListItem(mongoListItem: IMongoMyListItem): IMyListItem {
     return {
-      id: mongoListItem._id?.toString(),
       contentId: mongoListItem.contentId,
+      title: mongoListItem.title,
+      poster: mongoListItem.poster,
+      trailer: mongoListItem.trailer,
+      genres: mongoListItem.genres,
       type: mongoListItem.type,
+      ageRestriction: mongoListItem.ageRestriction,
+      runtime: mongoListItem.runtime,
+      numberOfSeasons: mongoListItem.numberOfSeasons,
       addedAt: mongoListItem.addedAt
     };
   }
-
   /**
    * Converts a domain list item to a MongoDB list item model
    */
   public toDbMyListItem(myListItem: Partial<IMyListItem>): IMongoMyListItem {
     // Create a complete MongoDB list item with default values
     return {
-      _id: myListItem.id ? new Types.ObjectId(myListItem.id) : new Types.ObjectId(),
       contentId: myListItem.contentId || '',
+      title: myListItem.title || '',
+      poster: myListItem.poster || null,
+      trailer: myListItem.trailer || null,
+      genres: myListItem.genres || [],
       type: myListItem.type || 'movie',
+      ageRestriction: myListItem.ageRestriction,
+      runtime: myListItem.runtime,
+      numberOfSeasons: myListItem.numberOfSeasons,
       addedAt: myListItem.addedAt || new Date()
     };
   }
-
 }
+
