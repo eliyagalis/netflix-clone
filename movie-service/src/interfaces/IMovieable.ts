@@ -28,3 +28,11 @@ export interface MovieResponse {
   total_pages: number;
   total_results: number;
 }
+
+export interface MoviePreview {
+  contentId: string, 
+  title: string,
+  poster: string,
+  trailer: string,
+  genres: string[],
+}
