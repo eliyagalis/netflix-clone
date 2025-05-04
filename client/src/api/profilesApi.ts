@@ -11,7 +11,7 @@ export const updateProfileRequest = async (): Promise<void> => {
 };
 
 export const getProfileRequest = async (profile_id:string): Promise<IProfile> => {
-  const {data} = await api.get<any>("/api/v1/users/profile/", { headers: { profile_id } });
+  const {data} = await api.get<{profile: IProfile}>("/api/v1/users/profile/", { headers: { profile_id } });
   return data.profile;
 }
 

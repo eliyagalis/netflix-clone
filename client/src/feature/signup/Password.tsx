@@ -37,7 +37,7 @@ const Password = () => {
         try {
             const user = await loginRequest({email: signup.email, password: data.password});
             
-            dispatch(login({ user }));
+            dispatch(login(user));
             dispatch(setProfiles(user.profiles ?? []));
             
             dispatch(nextStep());

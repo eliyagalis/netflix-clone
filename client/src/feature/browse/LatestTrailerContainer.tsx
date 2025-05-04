@@ -5,9 +5,10 @@ import { ICarouselCard } from '../../types/ICarouselCard';
 import DetailsBigMovieContainer from '../../components/ui/browse/DetailsBigMovieContainer';
 import PlayerOverlayContainer from '../../components/ui/browse/PlayerOverlayContainer';
 import ReactPlayer from 'react-player';
+import IMyListItem from '../../types/IMyListItem';
 
 type LatestTrailerProps = {
-  trailer: ICarouselCard;
+  trailer: IMyListItem;
 }
 
 const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
@@ -70,7 +71,7 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
         <DetailsBigMovieContainer title='MOVIE' description='Lorem ipsum bala bala bala bala balalalaa dsfsdfsgr cdsvfdbfgthnhnhgnfvsfdgtbfdcsdefdx fefefefsfs' mediaType='movie'/>
       </div>
       <div>
-        <PlayerOverlayContainer turnVolume={handleMuted} isMute={isMuted} ageLimit={Number(trailer.ageRating)} />
+        <PlayerOverlayContainer turnVolume={handleMuted} isMute={isMuted} ageLimit={Number(trailer.ageRestriction)} />
 
       </div>
     </div>

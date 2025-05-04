@@ -14,7 +14,6 @@ const ProfileList: React.FC = () => {
   const { loading } = useAuthStatus();
   const dispatch = useAppDispatch();
 
-  // SELECTOR should always be at the top level (not inside useEffect)
   const stateProfiles = useAppSelector((state) => state.profiles.profiles);
 
   const [profiles, setLocalProfiles] = useState<IProfilePreview[]>([]);
