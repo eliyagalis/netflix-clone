@@ -75,7 +75,6 @@ const MainHeader: React.FC<HeaderProps> = ({ className, }) => {
                         </div>
                         <div className='flex items-center'>
                             <SearchMovie/>
-                            <p className='text-white'>Logout</p>
                         </div>
                         <ProfilesHeaderList />
                     </nav>
