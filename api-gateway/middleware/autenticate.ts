@@ -21,12 +21,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         const user=verifyUser(accessToken);
    
         if(!user?.userId||!user.email||!user){
-            throw new Error("access token is not valid");
-        }
-        const user = await verifyUser(accessToken);
-        console.log("User found:" + user);
-        if (!user) {
-            throw new Error("userid  unauthorized,no valid access token!");
+            throw new Error("access token is not valid, user unauthorized");
         }
         req.userId = user!.userId
         req.userEmail=user!.email;
