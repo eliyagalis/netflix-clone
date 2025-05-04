@@ -1,12 +1,14 @@
 import axios from "axios";
-import { application, Application } from "express";
-import { createProxyMiddleware } from "http-proxy-middleware";
-import { rateLimit } from "express-rate-limit";
+import { application, Application, json} from "express";
+import {createProxyMiddleware} from "http-proxy-middleware";
+import  { rateLimit } from "express-rate-limit";
 import { config } from "dotenv";
 import { Router } from "express";
 import { NextFunction, Request, Response } from "express";
 import { authenticate } from "./autenticate";
 import { errorHandler } from "./errorHandler";
+
+
 
 config();
 const router = Router();
@@ -17,36 +19,46 @@ const streaming_service_url = process.env.STREAMING_SERVICE_URL;
 const url = "/api/v1"
 
 export const microServiceMiddleware = (app: Application): void => {
-    const limiter = rateLimit({
-        windowMs: 15 * 60 * 1000,
-        max: 200,
-        message: "Too many requests from this IP, please try again"
-    })
-    app.use(limiter);
+    // const limiter = rateLimit({
+    //     windowMs: 15 * 60 * 1000,
+    //     max: 200,
+    //     message: "Too many requests from this IP, please try again"
+    // })
+    // app.use(limiter);
 
     if (!payment_service_url || !users_service_url || !movies_service_url || !streaming_service_url) {
         throw new Error("One or more environment variables are missing");
     }
 
-    app.use(`${url}/users`, (req: Request, res: Response, next: NextFunction) => {
-
+    app.use(`${url}/users`,authenticate,async (req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to users service...");
         next();
     }, authenticate, createProxyMiddleware({
         target: users_service_url,
         changeOrigin: true,
         secure: false,
-        pathRewrite: (path, req) => { return `/api/v1/users${req.path}` }
+        pathRewrite: (path, req) => { 
+            const newPath = `/api/v1/users${req.path}`;
+            const queryString = new URLSearchParams(req.query as any).toString();
+            
+            return queryString ? `${newPath}?${queryString}` : newPath;
+        },
+        
     }))
 
     app.use(`${url}/movies`, (req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to movies service...", req.originalUrl);
-        console.log(req.path);
         next();
     }, createProxyMiddleware({
         target: movies_service_url,
         changeOrigin: true,
-        pathRewrite: (path, req) => { return `/api/v1/movies${req.path}` }
+        pathRewrite: (path, req) => { 
+            const newPath = `/api/v1/movies${req.path}`;
+            const queryString = new URLSearchParams(req.query as any).toString();
+            
+            return queryString ? `${newPath}?${queryString}` : newPath;
+        },
+        followRedirects: true
     }));
 
 
@@ -65,38 +77,29 @@ export const microServiceMiddleware = (app: Application): void => {
         on: {
             proxyReq: (proxyReq, req) => {
                 console.log(req.path, req.originalUrl);
+
             },
             proxyRes: async (proxyRes, req, res) => {
                 if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
                     try {
                         const userId = req.headers['x-user-id'];
-                        const userServiceResult = await axios.post('/loginAfterPayment', { userId: userId }, { headers: { 'Content-Type': 'application/json' } })
-                        return res.status(200).json({ message: "user's payment process completed succesfully", user: userServiceResult.data });
+                        const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
+                        return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
                     } catch (error) {
                         console.log("something went wrong")
                         throw new Error("something went wrong");
                     }
                 }
-                else {
+                else{
                     return res;
                 }
-            },
+            }
+            // error:(err,req)=>{console.log(req)}
         }
     }))
-    //('/streaming')
-    app.use(`${url}/playMovie`, authenticate, (req: Request, res: Response, next: NextFunction) => {
-        console.log("Moving to stream service...");
-        console.log(req.path);
-        next();
-    },
-        createProxyMiddleware({
-            target: streaming_service_url,
-            changeOrigin: true,
-            pathRewrite: (path, req) => { return `/api/v1/movies${req.path}` }
-        }))
-    // app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
-    //     console.log("somethimg went wrong, Moving to error handler...");
-    //     next(errorHandler)
-    // })
+    app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{
+        console.log("somethimg went wrong, Moving to error handler...");
+        next(errorHandler)
+    })
 }
 

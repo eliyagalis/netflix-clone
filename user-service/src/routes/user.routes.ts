@@ -19,6 +19,10 @@ router.post("/logout", (req: Request, res: Response) => {
     userController.logout(req, res);
 });
 
+router.post("/refresh", (req: Request, res: Response) => {
+    userController.refreshToken(req, res);
+});
+
 // User information routes
 router.get("/", (req: Request, res: Response) => {
     userController.getUser(req, res);
@@ -44,7 +48,7 @@ router.get("/profiles", (req: Request, res: Response) => {
 });
 
 // Create a new profile
-router.post("/profiles", (req: Request, res: Response) => {
+router.post("/profile", (req: Request, res: Response) => {
     userController.addProfile(req, res);
 });
 

@@ -1,11 +1,16 @@
 import { IMovieCard } from "./IMovieCard";
+import { ISeriesCard } from "./ISeriesCard";
 
-export interface IMovieList {
-    title: string;
-    movies: IMovieCard[];
-}
+// interface IMediaType{
+//     title: string;
+// }
+// export interface IMovieList extends IMediaType{
+//     movies: IMovieCard[];
+// }
 
-export interface ISeriesList {
-    title: string;
-    series: IMovieCard[];
+// export interface ISeriesList extends IMediaType {
+//     series: ISeriesCard[];
+// }
+export interface IMediaList{
+    movieAndSeries: (IMovieCard| ISeriesCard)[];
 }

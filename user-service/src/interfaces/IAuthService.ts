@@ -5,6 +5,6 @@ export default interface IAuthSrvice {
     
     login(userPayload: IUserPayload, password: string, hashedPassword: string): Promise<ITokenResponse>;
 
-    refreshAccessToken(refreshToken: string): string;
+    refreshAccessToken(refreshToken: string): Promise<ITokenResponse>;
     
 }

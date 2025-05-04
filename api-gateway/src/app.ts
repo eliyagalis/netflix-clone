@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import {config} from 'dotenv';
 import cors from 'cors';
 import axios from 'axios';
+import cookieParser from 'cookie-parser';
 import { microServiceMiddleware } from '../middleware/microservicesMiddleware';
 import { errorHandler } from '../middleware/errorHandler';
 config();
@@ -25,6 +26,8 @@ const serviceUrls = [
     origin: serviceUrls,
     credentials: true
   }));
+
+  app.use(cookieParser());
 
 // app.use(cors({origin:"*",credentials:true}));
 microServiceMiddleware(app);
