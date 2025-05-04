@@ -1,10 +1,16 @@
 import MainCarousel from '../../feature/browse/MainCarousel'
 import { movies } from '../../data/mock'
 import LatestTrailerContainer from '../../feature/browse/LatestTrailerContainer'
+import { useAppSelector } from '../../store/store'
+import ProfileFeature from '../../feature/browse/ProfileFeature'
 
 const Browse = () => {
 
+  const profiles = useAppSelector((state)=>state.profiles);
 
+  if (!profiles.currentProfile) {
+    return <ProfileFeature />
+  }
 
   return (
     <div>
