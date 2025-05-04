@@ -11,6 +11,7 @@ import { loginRequest } from '../../api/authApi';
 import { useState } from 'react';
 import Toast from '../../components/shared/Toast';
 import { login } from '../../store/slices/authSlice';
+import { UserStatus } from '../../types/IUser';
 
 const LoginForm = () => {
   const [toast, setToast] = useState<string | null>(null);
@@ -35,7 +36,7 @@ const LoginForm = () => {
       const user = await loginRequest(data);
       dispatch(login({ user }));
 
-      if (user.status?.toString() === 'ACTIVE') {
+      if (user.status === UserStatus.ACTIVE) {
         navigate('/browse');
       } else {
         navigate('/signup');

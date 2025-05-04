@@ -1,7 +1,6 @@
-import React, {useCallback, useEffect, useState } from 'react'
+import React, {useCallback, useState } from 'react'
 import PayPalButton from './PayPalButton';
-import axios from 'axios';
-import { AxiosError } from 'axios';
+import axios,{ AxiosError } from 'axios';
 import { typography } from '../../data/typography';
 import { useAppSelector } from '../../store/store';
 import { useNavigate } from 'react-router-dom';

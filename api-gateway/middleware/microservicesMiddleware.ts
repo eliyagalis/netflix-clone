@@ -1,14 +1,11 @@
 import axios from "axios";
-import { application, Application, json} from "express";
+import { Application} from "express";
 import {createProxyMiddleware} from "http-proxy-middleware";
 import  { rateLimit } from "express-rate-limit";
 import { config } from "dotenv";
-import { Router } from "express";
-import { NextFunction, Request, Response } from "express";
-import { authenticate } from "./autenticate";
+import authenticate from './autenticate';
+import { NextFunction, Request, Response,Router  } from "express";
 import { errorHandler } from "./errorHandler";
-
-
 
 config();
 const router = Router();
@@ -32,19 +29,27 @@ export const microServiceMiddleware = (app: Application): void => {
 
     app.use(`${url}/users`,authenticate,async (req:Request,res:Response,next:NextFunction)=>{
         console.log("Moving to users service...");
-        next();
-    }, authenticate, createProxyMiddleware({
-        target: users_service_url,
-        changeOrigin: true,
-        secure: false,
-        pathRewrite: (path, req) => { 
+        next(); 
+    },createProxyMiddleware({
+        target:users_service_url,
+        changeOrigin:true,
+        secure:false,
+        pathRewrite: (path,req)=>{ 
             const newPath = `/api/v1/users${req.path}`;
-            const queryString = new URLSearchParams(req.query as any).toString();
-            
-            return queryString ? `${newPath}?${queryString}` : newPath;
+            return req.path;
         },
-        
-    }))
+        // on:{
+        //     proxyReq:(proxyReq,req)=>{
+        //         console.log(req.path,req.originalUrl);
+        //         if (!req.path.endsWith('/login') && !req.path.endsWith('/signup') && !req.path.endsWith('/email')){
+        //             proxyReq.setHeader("user_id", req.userId);
+        //             proxyReq.setHeader("email",req.userEmail!);
+        //         }
+            
+        //     }
+        // }
+    })
+)
 
     app.use(`${url}/movies`, (req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to movies service...", req.originalUrl);
@@ -52,37 +57,48 @@ export const microServiceMiddleware = (app: Application): void => {
     }, createProxyMiddleware({
         target: movies_service_url,
         changeOrigin: true,
-        pathRewrite: (path, req) => { 
-            const newPath = `/api/v1/movies${req.path}`;
+
+        pathRewrite: (path,req)=>{  const newPath = `/api/v1/movies${req.path}`;
             const queryString = new URLSearchParams(req.query as any).toString();
-            
             return queryString ? `${newPath}?${queryString}` : newPath;
         },
-        followRedirects: true
-    }));
+        followRedirects: true,
+        on:{
+            proxyReq:(proxyReq,req)=>{
+                proxyReq.setHeader("user_id", req.userId);
+            }
+        }})
+    )
 
 
     //authenticate להוסיף למידל וור
     app.use(`${url}/payment`, (req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to payment service...");
-        next();
-    }, createProxyMiddleware({
-        target: payment_service_url,
-        changeOrigin: true,
-        secure: false,
-        pathRewrite: (path, req) => {
-            console.log("path:", `${req.path}`, `${payment_service_url}`);
+        next(); 
+    },authenticate,createProxyMiddleware({
+        target:payment_service_url,
+        changeOrigin:true,
+        secure:false,
+        pathRewrite:(path,req)=>{
+            console.log("path:",`${req.path}`,`${payment_service_url}`);
             return req.path;
         },
-        on: {
-            proxyReq: (proxyReq, req) => {
-                console.log(req.path, req.originalUrl);
-
+        on:{
+            proxyReq:(proxyReq,req)=>{
+                console.log(req.path,req.originalUrl);
+                proxyReq.setHeader("user_id", req.userId);
+                if(req.userEmail && req.path.includes("/paymentCompleted")){
+                    proxyReq.setHeader("email",req.userEmail!);
+                }
+                // if (process.env.NODE_ENV === 'development') {
+                //     proxyReq.setHeader("user_id","550e8400-e29b-41d4-a716-446655440000");
+                //     proxyReq.setHeader("email","dev@gmail.com");
+                // }
             },
             proxyRes: async (proxyRes, req, res) => {
                 if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
                     try {
-                        const userId = req.headers['x-user-id'];
+                        const userId = req.headers['user_id'];
                         const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
                         return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
                     } catch (error) {
@@ -103,3 +119,4 @@ export const microServiceMiddleware = (app: Application): void => {
     })
 }
 
+ 
