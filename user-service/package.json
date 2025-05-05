@@ -4,14 +4,11 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:unit": "jest --testPathIgnorePatterns=integration",
     "dev": "nodemon src/index.ts"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "./src/test/setup.ts"
-    ]
   },
   "keywords": [
     "user",
@@ -35,7 +32,7 @@
     "@types/node": "^22.13.14",
     "@types/supertest": "^6.0.3",
     "install": "^0.13.0",
-    "jest": "^29.7.0",
+
     "jest-extended": "^4.0.2",
     "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.9",
