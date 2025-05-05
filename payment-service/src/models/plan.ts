@@ -7,8 +7,7 @@ export class Plan extends Model{
         type:DataType.STRING,
         primaryKey:true,
         allowNull:false,
-        unique:true,
-        // defaultValue:DataType.UUIDV4
+        unique:true
     })
     plan_id!:string;
     @Column({

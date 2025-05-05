@@ -17,6 +17,7 @@ import Regform from '../feature/signup/Regform';
 import Planform from '../feature/signup/Planform';
 import Password from '../feature/signup/Password';
 import MyList from '../pages/browse/MyList';
+import { ProtectedRoute } from './ProtectedRoute';
 
 const PaymentPickerPage = lazy(() => import('../pages/PaymentPickerPage'));
 const PaypalOptionPage = lazy(() => import('../pages/PaypalOptionPage'));
@@ -47,7 +48,7 @@ const AppRoutes: React.FC = () => {
         <Route
           path="paypalOption"
           element={
-            <Suspense fallback={<span className="loading loading-spinner loading-md loading-primary" />}>
+            <Suspense fallback={<span className="loading loading-spinner loading-lg loading-primary items-center justify-center" />}>
               <PaypalOptionPage />
             </Suspense>
           }
@@ -55,7 +56,10 @@ const AppRoutes: React.FC = () => {
       </Route>
 
       <Route path="/browse" element={
-        <BrowseLayout />
+        <ProtectedRoute>
+
+          <BrowseLayout />
+        </ProtectedRoute>
       }
       >
 
