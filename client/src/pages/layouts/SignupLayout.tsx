@@ -48,7 +48,7 @@ const SignupLayout: React.FC<SignUpPageProps> = () => {
 
             </Header>
 
-            <main className="flex-1 max-w-270 w-11/12 mx-auto flex flex-col">
+            <main className="flex-1 max-w-270 w-11/12 mx-auto flex flex-col text-black">
                 <Outlet />
             </main>
 
