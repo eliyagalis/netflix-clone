@@ -3,13 +3,16 @@ import { IPayPalSubscriptionCancellationResponse, IPayPalSubscriptionResponse } 
 
     export const getSubscriptionById=async(subscriptionId:string,accessToken:string):Promise<IPayPalSubscriptionResponse|null>=>{
         try{
-            const response= await axios.get(`${process.env.PAYPAL_BASEURL}/v1/billing/subscriptions/${subscriptionId}`,{
+            console.log("sub in subID in PP FUNC before send api-----",subscriptionId);
+            console.log(`base url:  ${process.env.PAYPAL_BASEURL}`);
+            const response= await axios.get(`${process.env.PAYPAL_BASEURL}v1/billing/subscriptions/${subscriptionId}`,{
                 headers:{
                     "Authorization":`Bearer ${accessToken}`,
                     "Content-Type":"application/json"
                 }
             })
-            return response.data as IPayPalSubscriptionResponse; //החזרת התגובה של Paypal
+            console.log("sub from paypal-----------",response.data)
+            return response.data; //החזרת התגובה של Paypal
         }catch(err){
             console.log("Error find subscription Id in paypal");
             throw new Error((err as Error).message);

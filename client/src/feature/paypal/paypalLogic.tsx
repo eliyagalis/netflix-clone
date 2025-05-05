@@ -1,9 +1,10 @@
 import React, {useCallback, useState } from 'react'
 import PayPalButton from './PayPalButton';
-import axios,{ AxiosError } from 'axios';
+import axios from 'axios';
 import { typography } from '../../data/typography';
 import { useAppSelector } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 // import { useNavigate } from 'react-router-dom';
 interface PaypalLogicProps {
@@ -47,40 +48,7 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
   //   handelDeleteUserSubscription();
   // },[])
   
-<<<<<<< HEAD
-  const handleSuccessPayment =useCallback( 
-    async(subscriptionId:string) => {
-      console.log("payment success",subscriptionId);
-      try {
-          const res=await axios.post<CompletedPayRes>('http://localhost:3000/api/v1/payment/paypal/paymentCompleted',{
-            subscriptionId:subscriptionId,
-            planName:planName,
-            paymentMethod:paymentMethod
-          },{
-              headers:{
-                'Content-Type':'application/json'
-              },
-              withCredentials:true,
-          })
-          console.log("res data:",res.data.message)
-          setSuccessPayment({status:true,msg:"payment process success!"});
-          navigate('/browse')
-        } catch (error) {
-        console.log(error)
-      }
-  },[planName])
-  const checkPlan= useCallback( async (): Promise<string|undefined> => {
-    console.log("plan front:",planName)
-    try {
-      const response = await axios.post<ValidatePlanRes>('http://localhost:3000/api/v1/payment/paypal/plansCheck', {
-        paymentMethod: "paypal",
-        planName: planName
-      },{
-        headers:{
-          'Content-Type':'application/json',
-          withCredentials: true}
-        });
-=======
+
   const handleSuccessPayment = useCallback(async (subscriptionId: string) => {
     console.log("payment success", subscriptionId);
     try {
@@ -121,7 +89,6 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
           withCredentials: true  // This tells axios to include cookies
         }
       );
->>>>>>> 29adf5cdddd076ec7ca86c348f2918c441a532a0
       return response.data.planId as string;
     } catch (error) {
       setSuccessPayment({ 

@@ -15,12 +15,15 @@ import PaymentController from "../controller/payment.controller";
 import { EventBus } from "../kafka/eventSub";
 import { IKafkaProducer, KafkaProducer } from "../kafka/producer";
 import { IEventBus } from "../interfaces/KafkasInterfaces";
+import { MongoToPostgresAdapter } from "../adapters/userAdapter";
+import { IUserAdapter } from "../interfaces/IUserAdapter";
 
 
 const container=new Container();
 
 
 container.bind<IPlanAdapter>(Tokens.IPlanAdapter).to(PlanAdapter);
+container.bind<IUserAdapter>(Tokens.IUserAdapter).to(MongoToPostgresAdapter);
 //context= אובייקט שמאפשר גישה למידע על ההקשרים מתוך השירות שנרצה להחזיר ומספק לך אפשרות למשוך תלויות נוספות מה-Container 
 // בתוך הפונקציה הדינמית שלך, ובכך להחזיר את השירות המתאים.
 container.bind<IPlanRepository>(Tokens.IPlanRepository).to(PlanRepositoryPSql);

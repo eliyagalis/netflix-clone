@@ -17,6 +17,7 @@ import { IUser } from "../../interfaces/IUser";
 import { EventBus} from "../../kafka/eventSub";
 import { EventTypes } from "../../utils/eventTypes-enum";
 import { IEventBus, IPaymentSuccessEvent, ISubscriptionCanceledEvent } from "../../interfaces/KafkasInterfaces";
+import { IUserAdapter } from "src/interfaces/IUserAdapter";
 // import { producePaymentEvent } from "src/kafka/producer";
 
 
@@ -26,7 +27,7 @@ export default class PayPalService implements IPaymentService{
         @inject(Tokens.IPlanRepository) private planRepository:IPlanRepository,
         @inject(Tokens.ISubscriptionRepository) private subscriptionRepository:ISubscriptionRepository,
         @inject(Tokens.IUserRepository) private userRepository:IUserRepository,
-        @inject(Tokens.IEventBus) private eventBus: IEventBus
+        @inject(Tokens.IEventBus) private eventBus: IEventBus,
     ){}
     // static getProductId(): string | null {
     //     return this.productId;
@@ -93,8 +94,10 @@ export default class PayPalService implements IPaymentService{
     async approveSubscription(subscriptionId:string):Promise<IPayPalSubscriptionResponse>{
         try {
             const accessToken=await getAccessTokenPayPal();
+            console.log("paypal AcessToken-----------------",accessToken);
+            console.log("subscriptionId is:----------",subscriptionId);
             const createdPayPalSub=await getSubscriptionById(subscriptionId,accessToken);//מפייפאל
-            if(!createdPayPalSub||createdPayPalSub.status!=="ACTIVE"){
+            if(!createdPayPalSub||(createdPayPalSub.status!=="ACTIVE"&& !createdPayPalSub.status.includes('PENDING'))){
                 throw new Error("subscription not found or not active");
             }
             return createdPayPalSub as IPayPalSubscriptionResponse;
@@ -133,7 +136,7 @@ export default class PayPalService implements IPaymentService{
                 plan: plan,
                 paypalData: {
                     id: subscription.id,
-                    status: subscription.status,
+                    status: subscription.status.includes('PENDING')||subscription.status==="ACTIVE"? "active":subscription.status,
                     plan_id: subscription.plan_id,
                     start_time: subscription.start_time,
                     create_time: new Date().toISOString(),
@@ -157,11 +160,13 @@ export default class PayPalService implements IPaymentService{
                 await this.cancelSubscription(userId,true);
                 throw new Error("user already have a subscription");
             }
+            console.log("subscription id-",subscriptionId);
             const paypalSubscription=await this.approveSubscription(subscriptionId);
-
-            if(!paypalSubscription||paypalSubscription.status!=="ACTIVE"){
-                console.log("paypal didnt return any sub or sub isnt active:(")
-                throw new Error("payment process was not succeeded");
+            if (!paypalSubscription) {
+                throw new Error("Subscription not found in PayPal system");
+            }
+             if (paypalSubscription.status !== "ACTIVE" && !paypalSubscription.status.includes('PENDING')) {
+                throw new Error(`Subscription status is ${paypalSubscription.status}, not active or pending`);
             }
             const user:IUser=await this.createUser(userId,userEmail!);
             console.log("user created successfully");
@@ -184,7 +189,7 @@ export default class PayPalService implements IPaymentService{
             throw new Error("subscription Id or user ID is required!")
         }
         try{
-            const param= userId? userId:subscriptionId;
+            const param= userId? userId.toString():subscriptionId;
             const subscription=await this.subscriptionRepository.getSubscriptionWithDetails(param);
             return subscription? subscription as ISubscription:null;
         }catch(err){
@@ -209,12 +214,6 @@ export default class PayPalService implements IPaymentService{
             throw new Error((error as Error).message);
         }
     }
-    // async cancelSubscripton{
-    //     await this.paymentService.cancelSubscription(userId,false);
-    //     await this.paymentService.deleteUserFromDb(userId);
-    //     await this.paymentService.sendPaymentStatusEvent({userId,subscriptionId:null,status:"cancelled"});
-
-    // }
     async cancelUserSubscriptionFlow(userId: string): Promise<string> {
         try {
             await this.cancelSubscription(userId,false);

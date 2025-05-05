@@ -8,6 +8,7 @@ import { ISubscription } from "../interfaces/ISubscription";
 import { PlanRepositoryPSql } from "./plan.repository";
 import UserRepository, { IUserRepository } from "./user.repository";
 import IPlanRepository from "../interfaces/IPlanRepository";
+import { IUserAdapter } from "src/interfaces/IUserAdapter";
 
 export interface ISubscriptionRepository {
     createSubscription( data:CreateSubscriptionDTO ): Promise<ISubscription> ,
@@ -23,7 +24,8 @@ export interface ISubscriptionRepository {
 export class SubscriptionRepository implements ISubscriptionRepository {
     constructor(
         @inject(Tokens.IPlanRepository) private planRepository:IPlanRepository,
-        @inject(Tokens.IUserRepository) private userRepository:IUserRepository
+        @inject(Tokens.IUserRepository) private userRepository:IUserRepository,
+
     ) {}
    
     async createSubscription( data:CreateSubscriptionDTO ): Promise<ISubscription> {
@@ -47,7 +49,6 @@ export class SubscriptionRepository implements ISubscriptionRepository {
                 end_date: data.end_date? new Date(data.end_date) : null,
                 status: data.paypalData.status.toLowerCase() as "active"|"cancelled"|"expired",
                 user: data.user,
-                // renewal_date: data. ? new Date(renewal_date):null,
                 plan:data.plan
             })
             paypalSubscription.save();
