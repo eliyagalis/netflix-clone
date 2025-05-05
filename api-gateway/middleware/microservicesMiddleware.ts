@@ -63,7 +63,7 @@ export const microServiceMiddleware = (app: Application): void => {
 
 
     //authenticate להוסיף למידל וור
-    app.use(`${url}/payment`,authenticate, (req: Request, res: Response, next: NextFunction) => {
+    app.use(`${url}/payment`,authenticate,(req: Request, res: Response, next: NextFunction) => {
         console.log("Moving to payment service...");
         next();
     }, createProxyMiddleware({
@@ -74,29 +74,28 @@ export const microServiceMiddleware = (app: Application): void => {
             console.log("path:", `${req.path}`, `${payment_service_url}`);
             return req.path;
         },
-        on: {
+        on:{
             proxyReq: (proxyReq, req) => {
                 console.log(req.path, req.originalUrl);
                 if (req.headers.cookie) {
                     proxyReq.setHeader('Cookie', req.headers.cookie);
                 }
             },
-            proxyRes: async (proxyRes, req, res) => {
-                if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
-                    try {
-                        const userId = req.headers['x-user-id'];
-                        const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
-                        return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
-                    } catch (error) {
-                        console.log("something went wrong")
-                        throw new Error("something went wrong");
-                    }
-                }
-                else{
-                    return res;
-                }
-            }
-            // error:(err,req)=>{console.log(req)}
+            // proxyRes: async (proxyRes, req, res) => {
+            //     if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
+            //         try {
+            //             const userId = req.headers['user_id'];
+            //             const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
+            //             return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
+            //         } catch (error) {
+            //             console.log("something went wrong",error);
+            //             throw new Error("something went wrong");
+            //         }
+            //     }
+            //     else{
+            //         return res;
+            //     }
+            // }
         }
     }))
     app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{

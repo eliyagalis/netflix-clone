@@ -79,7 +79,9 @@ paypalRouter.get('/getSubscription',(req:Request,res:Response,next:NextFunction)
         req.userId = req.header('user_id') as string;
     }, 
      //אולי למחוק ולהשאיר רק בפונקציה
-    [ validateUserIdField,validatePaymentMethodFieldReq,errorValidator ],
+    [
+        //  validateUserIdField,
+        validatePaymentMethodFieldReq,errorValidator ],
     (req:Request,res:Response,next:NextFunction)=>{
         paymentController.getSubscription(req,res,next)
     }
