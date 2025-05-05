@@ -13,14 +13,16 @@ export function useAuthStatus() {
   useEffect(() => {
     async function verifyAuth() {
       try {
-        if(auth.user) {
-            setIsAuthenticated(true);
-            return;
+        if (auth.user) {
+          setIsAuthenticated(true);
+          setLoading(false);
+          return;
         }
 
         const res = await getUserRequest();
         setIsAuthenticated(true);
         dispatch(login(res));
+        console.log(res);
         dispatch(setProfiles(res.profiles || []));
         console.log(res.profiles);
         

@@ -7,7 +7,7 @@ import Button from '../../shared/Button';
 import { IoIosInformationCircleOutline } from "react-icons/io";
 type MovieDetails={
     title:string;
-    description:string;
+    description?:string;
     mediaType:string;
 }
 const DetailsBigMovieContainer:React.FC<MovieDetails> = ({title,description,mediaType}) => {

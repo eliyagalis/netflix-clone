@@ -16,9 +16,6 @@ import Registration from '../feature/signup/Registration';
 import Regform from '../feature/signup/Regform';
 import Planform from '../feature/signup/Planform';
 import Password from '../feature/signup/Password';
-
-import { ProtectedRoute } from './ProtectedRoute';
-import Watch from '../pages/browse/Watch';
 import MyList from '../pages/browse/MyList';
 
 const PaymentPickerPage = lazy(() => import('../pages/PaymentPickerPage'));

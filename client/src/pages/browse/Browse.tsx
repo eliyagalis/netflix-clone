@@ -1,27 +1,62 @@
+import { useEffect, useState } from 'react'
 import MainCarousel from '../../feature/browse/MainCarousel'
-import { movies } from '../../data/mock'
 import LatestTrailerContainer from '../../feature/browse/LatestTrailerContainer'
-import { useAppSelector } from '../../store/store'
-import ProfileFeature from '../../feature/browse/ProfileFeature'
+import IMyListItem from '../../types/IMyListItem'
+import { getPopularMoviesRequest, getTopRatedMoviesRequest, getUpcomingMoviesRequest } from '../../api/moviesApi'
 
 const Browse = () => {
+  const [movies, setMovies] = useState<{
+    popular: IMyListItem[],
+    topRated: IMyListItem[],
+    upcoming: IMyListItem[]
+  }>({
+    popular: [],
+    topRated: [],
+    upcoming: []
+  })
+
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      setLoading(true)
+      try {
+        const [popularData, topRatedData, upcomingData] = await Promise.all([
+          getPopularMoviesRequest(),
+          getTopRatedMoviesRequest(),
+          getUpcomingMoviesRequest()
+        ])
+
+        setMovies({
+          popular: popularData,
+          topRated: topRatedData,
+          upcoming: upcomingData
+        })
+
+      } catch (err) {
+        console.error('Error fetching movies:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMovies()
+  }, [])
+
+  if (loading) {
+    return <div className="text-center mt-10 text-white">Loading movies...</div>
+  }
 
   return (
     <div>
-      {/* <ProfileFeature profiles={[
-        {id:'1', avatar: '', name: 'Daniel'},
-        {id:'2', avatar: '', name: 'Adele'},
-        {id:'3', avatar: '', name: 'Eliya'},
-        ]} limit={5}/> */}
-      <LatestTrailerContainer trailer={movies[0]} />
-      <div className='w-11/12 mx-auto z-999'>
-        {/* <LatestTrailer trailer={movies[0]}/> */}
+      {movies.popular.length > 0 && (
+        <LatestTrailerContainer trailer={movies.popular[0]} />
+      )}
 
-        <MainCarousel isCarousel title='Top 10' movies={movies} />
-
-        <MainCarousel isCarousel title='Drama' movies={movies} />
-        <MainCarousel isCarousel title='Action' movies={movies} />
-
+      <div className="w-11/12 mx-auto z-999">
+        <MainCarousel isCarousel title="Popular" movies={movies.popular} />
+        <MainCarousel isCarousel title="Top Rated" movies={movies.topRated} />
+        <MainCarousel isCarousel title="Upcoming" movies={movies.upcoming} />
       </div>
     </div>
   )

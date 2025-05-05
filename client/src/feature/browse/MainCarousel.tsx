@@ -15,6 +15,7 @@ type CarouselProps = {
     isIndexed?: boolean;
     title?: string;
     isCarousel: boolean;
+    fetchingFunc?: string;
 };
 
 const SCALE = 1.25;
@@ -54,7 +55,7 @@ export default function MainCarousel({ movies, isIndexed, title = "", isCarousel
                 >
                     {movies.map((movie: IMyListItem, idx: number) => (
                         <CarouselItem
-                            key={movie.title}
+                            key={movie.contentId}
                             item={movie as IMyListItem}
                             index={idx}
                             isIndexed={isIndexed}

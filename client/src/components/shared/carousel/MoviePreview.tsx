@@ -27,7 +27,6 @@ export const MoviePreview: React.FC<MoviePreviewProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Trigger entrance animation after mounting
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -50,16 +49,14 @@ export const MoviePreview: React.FC<MoviePreviewProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {/* poster */}
       <div style={{ width: '100%', height: preview.height * scale }}>
         <img
-          src={preview.movie.poster || ""}
+          src={preview.movie.backdrop || ""}
           alt={preview.movie.title}
           className="object-cover w-full h-full"
         />
       </div>
 
-      {/* info card */}
       <MoviePreviewInfo movie={preview.movie} />
     </div>
   );

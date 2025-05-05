@@ -20,7 +20,7 @@ export const CarouselItem: React.FC<CarouselItemProps> = ({
 }) => {
   return (
     <div
-      key={item.title}
+      key={item.contentId}
       onMouseEnter={onMouseEnter(item)}
       onMouseLeave={onMouseLeave}
       className="relative flex-none basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 snap-start px-[2px] group z-10"
@@ -29,7 +29,7 @@ export const CarouselItem: React.FC<CarouselItemProps> = ({
                      transition-all duration-300 ease-in-out 
                      group-hover:scale-101 group-hover:z-20 group-hover:shadow-xl 
                      transform origin-center">
-        <img src={item.poster || ""} alt={item.title} className="object-cover w-full h-full" />
+        <img src={item.backdrop || ""} alt={item.title} className="object-cover w-full h-full" />
       </div>
 
       {isIndexed && (

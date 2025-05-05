@@ -26,15 +26,7 @@ const profilesSlice = createSlice({
       state.profiles = state.profiles.filter(profile => profile.id !== action.payload);
     },
     setCurrentProfile: (state, action: PayloadAction<IProfile>) => {
-      if (profile) {
-        const { _id, ...rest } = profile;
-        state.currentProfile = {
-          ...rest,
-          id: _id?.toString() || profile.id,
-        };
-      } else {
-        state.currentProfile = null;
-      }
+      state.currentProfile = action.payload;
     },
     resetCurrentProfile: (state) => {
       state.currentProfile = null;

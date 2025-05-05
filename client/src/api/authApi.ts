@@ -29,8 +29,8 @@ export const checkEmailExist = async (formData: EmailFormData): Promise<ApiRespo
 };
 
 export const getUserRequest = async (): Promise<IUser> => {
-  const { data } = await api.get<{user:IUser}>("/api/v1/users/");
-  return data.user;
+  const { data } = await api.get<any>("/api/v1/users/");
+  return data.data;
 };
 
 export const logoutRequest = async (): Promise<void> => {
