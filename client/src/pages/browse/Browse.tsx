@@ -49,7 +49,7 @@ const Browse = () => {
 
   return (
     <div>
-      {movies.popular.length > 0 && (
+        {movies.popular.length > 0 && (
         <LatestTrailerContainer trailer={movies.popular[0]} />
       )}
 
