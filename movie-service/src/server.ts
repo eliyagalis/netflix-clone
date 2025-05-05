@@ -10,7 +10,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({origin:"*",credentials:true}));
+const allowedOrigins = [
+  "http://localhost:5174",
+  "http://user-service:3002",
+  "https://payment-service:3003",
+  "http://movie-service:3000",
+  "http://streaming-service:3004",
+  "*"
+];
+
+app.use(cors({origin: allowedOrigins ,credentials:true}));
 app.use(express.json());
 
 // API routes

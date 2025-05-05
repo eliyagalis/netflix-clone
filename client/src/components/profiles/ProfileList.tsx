@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { addProfile, removeProfile, setCurrentProfile, setProfiles } from '../../store/slices/profilesSlice';
+import React, { useEffect, useState } from 'react';
+import { addProfile, removeProfile, setCurrentProfile } from '../../store/slices/profilesSlice';
 import ProfileCard from './ProfileCard';
 import AddProfileCard from './AddProfileCard';
 import EditProfileModal from './EditProfileModal';
@@ -8,13 +8,26 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import Button from '../shared/Button';
 import { colors } from '../../data/colors';
 import { addProfileRequest, getProfileRequest } from '../../api/profilesApi';
+import { useAuthStatus } from '../../hooks/useAuthStatus';
 
 const ProfileList: React.FC = () => {
-  const { profiles } = useAppSelector((state) => state.profiles);
+  const { loading } = useAuthStatus();
   const dispatch = useAppDispatch();
 
+  const stateProfiles = useAppSelector((state) => state.profiles.profiles);
+
+  const [profiles, setLocalProfiles] = useState<IProfilePreview[]>([]);
   const [editingProfile, setEditingProfile] = useState<IProfilePreview | null>(null);
-  const [isEditing, setIsEditing] = useState<boolean>(false); // NEW
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  // This effect runs AFTER loading becomes false
+  useEffect(() => {
+    if (!loading) {
+      setLocalProfiles(stateProfiles);
+    }
+  }, [loading, stateProfiles]); // add stateProfiles to dependency so it stays in sync
+
+  if (loading) return <div>Loading...</div>;
 
   const handleAddProfile = async () => {
     const newProfile: IProfilePreview = {
@@ -31,9 +44,9 @@ const ProfileList: React.FC = () => {
       setEditingProfile(profile);
     } else {
       try {
-        const data = await getProfileRequest(profile.id ?? "");
+        console.log(profile.name);
+        const data = await getProfileRequest(profile.id);
         if (data) {
-          console.log(data);
           dispatch(setCurrentProfile(data));
         }
       } catch (error) {
@@ -44,18 +57,20 @@ const ProfileList: React.FC = () => {
 
   const handleDelete = (id: string) => {
     dispatch(removeProfile(id));
+    setLocalProfiles((prev) => prev.filter((p) => p.id !== id));
     setEditingProfile(null);
     setIsEditing(false);
   };
 
   const handleSave = async (newProfile: IProfilePreview) => {
     try {
-      const fullProfile:IProfile = {...newProfile, isKid: false, myList: []};
+      const fullProfile: IProfile = { ...newProfile, isKid: false, myList: [] };
       dispatch(addProfile(newProfile));
+      setLocalProfiles((prev) => [...prev, newProfile]);
       await addProfileRequest(fullProfile);
       setEditingProfile(null);
     } catch (error) {
-      
+      console.error('Failed to save profile', error);
     } finally {
       setIsEditing(false);
     }
@@ -73,8 +88,8 @@ const ProfileList: React.FC = () => {
       </div>
 
       <Button
-        color={isEditing? colors.buttons.primary : colors.buttons.dark} 
-        border={isEditing? 'border-none' : 'border border-gray-400 rounded-none'}
+        color={isEditing ? colors.buttons.primary : colors.buttons.dark}
+        border={isEditing ? 'border-none' : 'border border-gray-400 rounded-none'}
         className={`mt-10 text-white px-6 py-2 
         ${!isEditing && 'hover:bg-white hover:text-black'}
         transition hover:cursor-pointer`}

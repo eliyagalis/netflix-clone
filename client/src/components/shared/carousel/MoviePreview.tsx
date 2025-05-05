@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { IMovieCard } from '../../../types/IMovieCard';
 import { MoviePreviewInfo } from './MoviePreviewInfo';
 import { ISeriesCard } from '../../../types/ISeriesCard';
+import IMyListItem from '../../../types/IMyListItem';
 
 interface MoviePreviewProps {
   preview: {
-    movie: IMovieCard|ISeriesCard;
+    movie: IMyListItem;
     x: number;
     y: number;
     width: number;
@@ -26,7 +27,6 @@ export const MoviePreview: React.FC<MoviePreviewProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Trigger entrance animation after mounting
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -49,16 +49,14 @@ export const MoviePreview: React.FC<MoviePreviewProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {/* poster */}
       <div style={{ width: '100%', height: preview.height * scale }}>
         <img
-          src={preview.movie.imageUrl}
+          src={preview.movie.backdrop || ""}
           alt={preview.movie.title}
           className="object-cover w-full h-full"
         />
       </div>
 
-      {/* info card */}
       <MoviePreviewInfo movie={preview.movie} />
     </div>
   );

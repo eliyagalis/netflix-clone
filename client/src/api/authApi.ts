@@ -28,12 +28,7 @@ export const checkEmailExist = async (formData: EmailFormData): Promise<ApiRespo
   return data;
 };
 
-// export const getUserRequest = async (): Promise<IUser> => {
-//   const { data } = await api.get<IUser>("/api/v1/users/");
-//   return data;
-// };
-
-export const getUserRequest = async (): Promise<any> => {
+export const getUserRequest = async (): Promise<IUser> => {
   const { data } = await api.get<any>("/api/v1/users/");
   return data.data;
 };
@@ -41,8 +36,3 @@ export const getUserRequest = async (): Promise<any> => {
 export const logoutRequest = async (): Promise<void> => {
   await api.post("/api/v1/users/logout");
 };
-
-export const getNewAccessToken = async (): Promise<string> => {
-    const { data } = await api.post<{ token: string }>("/api/v1/users/refresh");
-    return data.token;
-  };

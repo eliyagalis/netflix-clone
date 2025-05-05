@@ -278,7 +278,8 @@ export class UserController {
       const profileId = req.header('profile_id');
   
       const content: AddMyListItemDTO = req.body.data;
-  
+      console.log(userId + " | "+ profileId);
+
       if (!userId || !profileId) {
         return res.status(400).json({ message: "User ID or Profile ID not provided" });
       }

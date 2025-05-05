@@ -42,7 +42,7 @@ const Regform = () => {
       if (res) {
         console.log(res);
         const user:IUser = {profiles: [], status: UserStatus.INITIAL};
-        dispatch(login({user}));
+        dispatch(login(user));
         dispatch(nextStep());
         
         if (plan.planName)

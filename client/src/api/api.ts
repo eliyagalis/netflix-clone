@@ -21,27 +21,50 @@ export interface UserResponse extends IUser {
   message?: string;
 }
 
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+export interface Movie {
+  id: number;
+  title: string;
+  overview: string;
+  posterPath: string;
+  releaseDate: string;
+}
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+export interface MovieResponse {
+  results: Movie[];
+}
 
-      try {
-        await api.post("/api/v1/users/refresh");
+export interface MovieDetailsResponse {
+  id: number;
+  title: string;
+  overview: string;
+  genres: { id: number; name: string }[];
+  runtime: number;
+  releaseDate: string;
+  posterPath: string;
+  backdropPath: string;
+}
 
-        // Retry the original request
-        return api(originalRequest);
-      } catch (refreshError) {
-        store.dispatch(logout());
-        return Promise.reject(refreshError);
-      }
-    }
+// api.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const originalRequest = error.config;
 
-    return Promise.reject(error);
-  }
-);
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+
+//       try {
+//         await api.post("/api/v1/users/refresh");
+
+//         // Retry the original request
+//         return api(originalRequest);
+//       } catch (refreshError) {
+//         store.dispatch(logout());
+//         return Promise.reject(refreshError);
+//       }
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
 
 export default api;
