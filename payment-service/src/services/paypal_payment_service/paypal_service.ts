@@ -7,17 +7,15 @@ import { IPayPalPlanResponse, IPayPalSubscriptionResponse} from "../../interface
 import { createPaypalPlan, deletePlan } from "../payPal_requests/plan_request";
 import { cancelPaypalSubscription, getSubscriptionById, updatePaypalSubscription } from "../payPal_requests/subscription_request";
 import { ISubscription } from "../../interfaces/ISubscription";
-import { ISubscriptionRepository} from "../../repositories/subscription";
+import { ISubscriptionRepository} from "../../interfaces/ISubscriptionRepository";
 import { CreateSubscriptionDTO, updatePaypalSubscriptionDTO } from "../../DTO'S/subscription.dto";
 import { IUserRepository } from "../../repositories/user.repository";
 import { CreatePaymentPlanDTO, PaymentProcessDTO, ProducePayEventDTO } from "../../DTO'S/paypal.service.dto";
 import { IPaymentService } from "../../interfaces/IPaymentService";
 import IPlanRepository from "../../interfaces/IPlanRepository";
 import { IUser } from "../../interfaces/IUser";
-import { EventBus} from "../../kafka/eventSub";
 import { EventTypes } from "../../utils/eventTypes-enum";
 import { IEventBus, IPaymentSuccessEvent, ISubscriptionCanceledEvent } from "../../interfaces/KafkasInterfaces";
-import { IUserAdapter } from "src/interfaces/IUserAdapter";
 // import { producePaymentEvent } from "src/kafka/producer";
 
 
@@ -156,6 +154,7 @@ export default class PayPalService implements IPaymentService{
         const {userId,subscriptionId,userEmail,planName}=data;
        try {
             const existUserSubscription=await this.getSubscription(userId);
+            console.log(existUserSubscription);
             if(existUserSubscription && existUserSubscription.status==="active"){
                 await this.cancelSubscription(userId,true);
                 throw new Error("user already have a subscription");

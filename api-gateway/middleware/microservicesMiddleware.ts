@@ -81,33 +81,21 @@ export const microServiceMiddleware = (app: Application): void => {
                     proxyReq.setHeader('Cookie', req.headers.cookie);
                 }
             },
-            proxyRes: async (proxyRes, req, res) => {
-                if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
-                    try {
-                        const userId = req.headers['user_id'];
-                        const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
-                        return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
-                    } catch (error) {
-                        console.log("something went wrong",error);
-                        throw new Error("something went wrong");
-                    }
-                }
-                else{
-                    return res;
-                }
-            }
-            // error:(err,req)=>{console.log(req)}
-                // const userId = req.headers['user_id'];
-                // const email = req.headers['email'];
-
-                // console.log("Forwarding user_id and email to payment-service:", userId, email);
-
-                // if (userId) {
-                //     proxyReq.setHeader('user_id', userId);
-                // }
-                // if (email) {
-                //     proxyReq.setHeader('email', email);
-                // }
+            // proxyRes: async (proxyRes, req, res) => {
+            //     if (req.path.includes("/paymentCompleted") && proxyRes.statusCode === 200) {
+            //         try {
+            //             const userId = req.headers['user_id'];
+            //             const userServiceResult=await axios.post('/loginAfterPayment',{userId:userId},{headers: { 'Content-Type': 'application/json' }})
+            //             return res.status(200).json({message:"user's payment process completed succesfully",user:userServiceResult.data});
+            //         } catch (error) {
+            //             console.log("something went wrong",error);
+            //             throw new Error("something went wrong");
+            //         }
+            //     }
+            //     else{
+            //         return res;
+            //     }
+            // }
         }
     }))
     app.use('*',authenticate,(req:Request,res:Response,next:NextFunction)=>{

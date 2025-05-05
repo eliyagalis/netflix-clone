@@ -2,9 +2,11 @@ import React, {useCallback, useState } from 'react'
 import PayPalButton from './PayPalButton';
 import axios from 'axios';
 import { typography } from '../../data/typography';
-import { useAppSelector } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { UserStatus } from '../../types/IUser';
+import { setUserStatus } from '../../store/slices/authSlice';
 
 // import { useNavigate } from 'react-router-dom';
 interface PaypalLogicProps {
@@ -29,7 +31,9 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
 
   const navigate=useNavigate()
   const [successPayment, setSuccessPayment] = useState({status:false,msg:""});
-  const planName=useAppSelector((state)=>state.plan.planName)
+  const planName=useAppSelector((state)=>state.plan.planName);
+  const dispatch=useAppDispatch();
+  const userStatus:UserStatus=useAppSelector((state)=>state.auth.user?.status);
   // useEffect(() => { //למחוק אחר כך כשיהיה יוזר--
   //   const handelDeleteUserSubscription=async()=>{
   //     if(successPayment.status){
@@ -68,11 +72,15 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
       );
       console.log("res data:", res.data.message);
       setSuccessPayment({ status: true, msg: "payment process success!" });
-      navigate('/browse');
+      dispatch(setUserStatus(UserStatus.ACTIVE));
+      setTimeout(()=>{
+        navigate('/browse');
+      },4000);
     } catch (error) {
       console.log(error);
+      
     }
-  }, [planName, paymentMethod, navigate]);
+  }, [planName]);
   const checkPlan = useCallback(async (): Promise<string | undefined> => {
     console.log("plan front:", planName);
     try {
@@ -86,7 +94,7 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
           headers: {
             'Content-Type': 'application/json'
           },
-          withCredentials: true  // This tells axios to include cookies
+          withCredentials: true 
         }
       );
       return response.data.planId as string;
@@ -110,10 +118,9 @@ const PaypalLogic:React.FC<PaypalLogicProps> = ({paymentMethod,isClicked}:Paypal
     <>
       <PayPalButton clicked={isClicked} onSuccess={handleSuccessPayment} checkPlan={checkPlan}/>
       {successPayment.status&&(
-        <div className={`text-success font-medium ${typography.small}`}>
+        <div className={`text-green-700 font-medium ${typography.small}`}>
             payment process success
-            
-
+            <span className='loading loading-spinner loading-lg loading-success pl-3'/>
         </div>
       ) }
       {/* afterSuccessfulPayment() */}

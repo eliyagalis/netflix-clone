@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import { ISubscriptionRepository, SubscriptionRepository } from "../repositories/subscription";
+import { SubscriptionRepository } from "../repositories/subscription";
 import { Tokens } from "../utils/tokens";
 import { PlanRepositoryPSql } from "../repositories/plan.repository";
 import IPlanRepository from "../interfaces/IPlanRepository";
@@ -17,6 +17,7 @@ import { IKafkaProducer, KafkaProducer } from "../kafka/producer";
 import { IEventBus } from "../interfaces/KafkasInterfaces";
 import { MongoToPostgresAdapter } from "../adapters/userAdapter";
 import { IUserAdapter } from "../interfaces/IUserAdapter";
+import { ISubscriptionRepository } from "src/interfaces/ISubscriptionRepository";
 
 
 const container=new Container();

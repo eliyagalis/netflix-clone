@@ -43,6 +43,7 @@ const PayPalButton:React.FC<PayPalButtonProps> = ({checkPlan,onSuccess}) => {
                 }}
                 onError={async(error) => {
                     console.error("Error creating subscription:", error);
+                    
                     navigate('/signup/planform') // Add a route for choosing a plan
                 }}
             />

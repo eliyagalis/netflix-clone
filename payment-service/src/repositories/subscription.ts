@@ -9,14 +9,9 @@ import { PlanRepositoryPSql } from "./plan.repository";
 import UserRepository, { IUserRepository } from "./user.repository";
 import IPlanRepository from "../interfaces/IPlanRepository";
 import { IUserAdapter } from "src/interfaces/IUserAdapter";
+import { ISubscriptionRepository } from "src/interfaces/ISubscriptionRepository";
 
-export interface ISubscriptionRepository {
-    createSubscription( data:CreateSubscriptionDTO ): Promise<ISubscription> ,
-    getSubscriptionWithDetails(subscriptionId?:string,userId?:string): Promise<ISubscription|null>,
-    cancelPostgreSqlSubscription(subscriptionId:string):Promise<string>,
-    getAllSubscriptions():Promise<Subscription[]|null>,
-    updateSubscription<T extends keyof ISubscription>(property:T,valueToChange:ISubscription[T],subscription:ISubscription) : Promise<ISubscription>
-}
+
 
 //קודם כל מקבלת פרטים של היוזר ושומרת אותם->>
 // אחר כך בודקת את סוג המנוי שרוצה ופותחת UBSCRIPTION חדש 
@@ -113,12 +108,7 @@ export class SubscriptionRepository implements ISubscriptionRepository {
             return null;
         }    
     }
-    //עדיין יתבצעו בדיקות בזמן קומפילציה והרצה על T 
-    // בANY לא
-
-    // מבטיח שבזמן הקומפילציה טייפ סקריפט 
-    //  יבדוק את סוג הערכים שמועברים לפונקציה ויתאים אותם לסוגים שנמצאים במודל 
-    // Subscription.
+ 
     async updateSubscription<T extends keyof ISubscription>(
         property:T,   //אחד מהשדות המוגדרים במודל מנוי
         valueToChange:ISubscription[T], //טיפוס מסוג הערך של השדה שמסומן באמצעות T
