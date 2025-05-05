@@ -18,7 +18,6 @@ const BrowseLayout = () => {
     }
 
     return (
-        <ProtectedRoute>
 
             <div className="flex flex-col min-h-screen bg-[#141414] text-white">
                 <MainHeader />
@@ -31,7 +30,6 @@ const BrowseLayout = () => {
                     <Footer />
                 </footer>
             </div>
-        </ProtectedRoute>
     )
 }
 
