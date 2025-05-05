@@ -65,7 +65,7 @@ const LatestTrailerContainer:React.FC<LatestTrailerProps> = ({trailer}) => {
         <TrailerMovie url='https://www.youtube.com/watch?v=PMeHdc25BGE&pp=ygUFbW92aWU%3D' isMute={isMuted} playerRef={playerRef} />
       ):
       (
-        <PosterMovie url="https://s.studiobinder.com/wp-content/uploads/2019/11/All-Marvel-Movies-in-Order-of-Release-Featured-StudioBinder-min.jpg" alt={`${trailer.title} image`} />
+        <PosterMovie url="https://resizing.flixster.com/tnpPlqni3WxsPYA_FTnZHGa6Pmg=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p26092215_v_h9_ab.jpg" alt={`${trailer.title} image`} />
       )}
       <div className='absolute top-1/2 flex flex-row text-end z-[999] w-full justify-between'>
         <DetailsBigMovieContainer title='Lost in Love' mediaType='movie'/>
