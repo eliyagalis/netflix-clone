@@ -75,14 +75,6 @@ export class UserController {
     // profilePreview  
   }
 
-  async loginAfterPayment(req: Request, res: Response) {
-    try {
-      
-    } catch (error) {
-      handleError(res, error);
-    }
-  }
-
   /**
    * Refresh access token using refresh token
    */
