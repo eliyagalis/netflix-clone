@@ -48,7 +48,7 @@ const AppRoutes: React.FC = () => {
         <Route
           path="paypalOption"
           element={
-            <Suspense fallback={<span className="loading loading-spinner loading-md loading-primary" />}>
+            <Suspense fallback={<span className="loading loading-spinner loading-lg loading-primary items-center justify-center" />}>
               <PaypalOptionPage />
             </Suspense>
           }

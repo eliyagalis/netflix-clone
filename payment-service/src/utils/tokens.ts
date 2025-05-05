@@ -5,6 +5,7 @@ export const Tokens={
     name:process.env.DB_NAME,
     password:process.env.DB_PASS,
     IPlanAdapter:"IPlanAdapter",
+    IUserAdapter:"IUserAdapter",
     IPlanRepository:"IPlanRepository",
     ISubscriptionRepository:"ISubscriptionRepository",
     IProductPaypalRequest:"IProductPaypalRequest",
