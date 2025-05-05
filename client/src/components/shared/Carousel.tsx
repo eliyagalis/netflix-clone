@@ -3,9 +3,10 @@ import { CarouselArrow } from "./carousel/CarouselArrow";
 import { IMovieCard } from "../../types/IMovieCard";
 import LandingCarouselCard from "../landing-page/LandingCarouselCard";
 import { ICarouselCard } from "../../types/ICarouselCard";
+import IMyListItem from "../../types/IMyListItem";
 
 type CarouselProps = {
-    movies: Array<IMovieCard>;
+    movies: Array<IMyListItem>;
     isIndexed?: boolean;
     setFloatingPoster: Function;
 }
@@ -31,8 +32,8 @@ const Carousel:React.FC<CarouselProps> = ({ movies, setFloatingPoster, isIndexed
                 ref={carouselRef} 
                 className="carousel carousel-start rounded-box overflow-x-scroll scroll-smooth p-4 h-50 sm:h-50 md:h-60 lg:h-70"
             >
-                {movies.map((m: ICarouselCard, index: number) => (
-                    <LandingCarouselCard key={m.id} m={m} 
+                {movies.map((m: IMyListItem, index: number) => (
+                    <LandingCarouselCard key={m.contentId} m={m} 
                         index={index} setFloatingPoster={setFloatingPoster} />
                 ))}
             </div>

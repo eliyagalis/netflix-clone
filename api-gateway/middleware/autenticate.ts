@@ -10,7 +10,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         console.log("Cookies received:", req.cookies);
 
 
-        if (req.path.endsWith('/login') || req.path.endsWith('/signup') || req.path.endsWith('/email')) {
+        if (req.path.endsWith('/login') || req.path.endsWith('/signup') || req.path.endsWith('/email') || req.path.endsWith('/popular')) {
             console.log('Bypassing authentication for public route:', req.path);
             return next();
         }

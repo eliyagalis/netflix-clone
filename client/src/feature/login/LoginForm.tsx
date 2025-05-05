@@ -35,8 +35,8 @@ const LoginForm = () => {
     try {
       setToast(null);
       const user = await loginRequest(data);
-      dispatch(login({ user }));
-      dispatch(setProfiles(user.profiles ?? []))
+      dispatch(login(user));
+      dispatch(setProfiles(user.profiles ?? []));
 
       if (user.status === UserStatus.ACTIVE) {
         navigate('/browse');
